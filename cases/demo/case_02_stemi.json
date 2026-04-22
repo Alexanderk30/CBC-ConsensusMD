@@ -1,0 +1,37 @@
+{
+  "case_id": "demo-02-stemi",
+  "demographics": {
+    "age": 62,
+    "sex": "M"
+  },
+  "chief_complaint": "Crushing chest pain for the past hour.",
+  "history_of_present_illness": "Sudden onset of substernal chest pressure radiating to left jaw and left arm, started one hour ago while mowing the lawn. Associated with nausea, one episode of vomiting, profuse diaphoresis. Rates the pain 9/10. Not relieved by rest. No prior similar episodes.",
+  "past_medical_history": [
+    "Hypertension (on lisinopril)",
+    "Hyperlipidemia (on atorvastatin)",
+    "Type 2 diabetes (on metformin)"
+  ],
+  "medications": [
+    "lisinopril 10 mg daily",
+    "atorvastatin 40 mg nightly",
+    "metformin 500 mg BID"
+  ],
+  "social_history": "40 pack-year smoking history, quit last year. Occasional alcohol.",
+  "family_history": "Father died of MI at age 58. Brother had CABG at 55.",
+  "vitals": {
+    "hr": 98,
+    "bp_systolic": 148,
+    "bp_diastolic": 92,
+    "rr": 20,
+    "spo2": 96,
+    "temp_c": 36.8
+  },
+  "physical_exam": "Diaphoretic, in obvious distress. Lungs clear to auscultation bilaterally. Heart regular, no murmur. Extremities without edema. No JVD. Peripheral pulses equal bilaterally.",
+  "initial_workup": {
+    "ekg": "Sinus rhythm at 98. 2 mm ST elevation in leads II, III, aVF with reciprocal ST depression in I and aVL. No Q waves yet.",
+    "troponin_i": "Pending at time of presentation.",
+    "cxr": "Unremarkable. No pulmonary edema, no widened mediastinum.",
+    "bmp": "Na 138, K 4.2, Cr 0.9, glucose 142.",
+    "cbc": "WBC 8.4, Hgb 14.1, Plt 220."
+  }
+}
