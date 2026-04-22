@@ -201,7 +201,7 @@ async def _call_anthropic(
 ) -> dict[str, Any]:
     from anthropic import AsyncAnthropic
 
-    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60)
     tool_schema = _output_json_schema(output_schema)
 
     response = await client.messages.create(
@@ -225,6 +225,15 @@ async def _call_anthropic(
             }
         ],
         tool_choice={"type": "tool", "name": _TOOL_NAME},
+    )
+
+    logger.info(
+        "anthropic call: model=%s in=%d out=%d cache_read=%s cache_create=%s",
+        model,
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        getattr(response.usage, "cache_read_input_tokens", None),
+        getattr(response.usage, "cache_creation_input_tokens", None),
     )
 
     for block in response.content:
@@ -257,6 +266,7 @@ async def _call_openrouter(
     client = AsyncOpenAI(
         api_key=os.environ["OPENROUTER_API_KEY"],
         base_url="https://openrouter.ai/api/v1",
+        timeout=60,
     )
 
     schema = _output_json_schema(output_schema)
@@ -274,6 +284,14 @@ async def _call_openrouter(
             {"role": "user", "content": user_content},
         ],
         response_format={"type": "json_object"},
+    )
+
+    logger.info(
+        "openrouter call: model=%s in=%d out=%d total=%d",
+        model,
+        response.usage.prompt_tokens,
+        response.usage.completion_tokens,
+        response.usage.total_tokens,
     )
 
     content = response.choices[0].message.content or ""
