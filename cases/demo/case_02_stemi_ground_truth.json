@@ -1,0 +1,18 @@
+{
+  "case_id": "demo-02-stemi",
+  "archetype": "clean-consensus",
+  "demo_role": "Calibration proof. Shows the system matches clinician confidence on obvious cases and isn't trying to manufacture uncertainty.",
+  "correct_primary_diagnosis": "Acute inferior ST-elevation myocardial infarction (STEMI)",
+  "expected_outcome": "converged",
+  "expected_commitment_on_convergence": "committed",
+  "distinguishing_test": {
+    "test_name": "Serial troponin; emergent cardiac catheterization with coronary angiography",
+    "rationale": "EKG already diagnostic (2mm ST elevation in II/III/aVF with reciprocal depression in I/aVL). Troponin confirms myocyte injury. Cath identifies culprit vessel (RCA or dominant LCx) and enables PCI."
+  },
+  "correct_deprioritized_diagnoses": [
+    "Aortic dissection — ruled out by EKG pattern, equal peripheral pulses, unremarkable chest X-ray with no widened mediastinum",
+    "Pericarditis — ruled out by localized inferior ST elevation with reciprocal depression (not diffuse), no PR depression",
+    "Esophageal rupture / Boerhaave syndrome — vomiting pattern does not precede pain, no subcutaneous emphysema"
+  ],
+  "narrative_notes": "Textbook inferior STEMI in a maximally risk-loaded patient. The system should reach committed-level consensus in 1-2 rounds with antagonist failing to produce a credible challenge. Essential to the calibration story — without this, the demo reads as a zebra-detector; with it, the system reads as calibrated."
+}

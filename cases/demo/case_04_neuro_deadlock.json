@@ -1,0 +1,38 @@
+{
+  "case_id": "demo-04-neuro-deadlock",
+  "demographics": {
+    "age": 34,
+    "sex": "F"
+  },
+  "chief_complaint": "Something is wrong with my nerves and no one can tell me what.",
+  "history_of_present_illness": "4-month history of episodic neurological symptoms. Four months ago: numbness and tingling in left leg lasting 3 weeks, resolved spontaneously. Two months ago: brief episode (5 days) of blurred vision in right eye, described as looking through wax paper, with some eye pain on movement. Resolved. Ongoing: intermittent fatigue, occasional migratory joint aches (knees, wrists), memory feels foggy. Two weeks ago returned from a 2-week camping trip in upstate New York and Vermont border. Does not recall a tick bite but was in the woods constantly. Had one episode of fever and malaise after returning that resolved in 3 days.",
+  "past_medical_history": [
+    "Generalized anxiety disorder",
+    "Seasonal allergies"
+  ],
+  "medications": [
+    "Escitalopram 10 mg daily"
+  ],
+  "social_history": "Non-smoker. Occasional alcohol. Works as a graphic designer, recently stressed about a project deadline.",
+  "family_history": "Maternal aunt with multiple sclerosis. No family history of Lyme disease or autoimmune conditions.",
+  "vitals": {
+    "hr": 78,
+    "bp_systolic": 118,
+    "bp_diastolic": 72,
+    "rr": 14,
+    "spo2": 99,
+    "temp_c": 36.8
+  },
+  "physical_exam": "Alert, cooperative. Cranial nerves grossly intact, though patient reports right eye still feels not quite right. Motor strength 5/5 throughout. Sensation reports mild decreased sensation over left anterior thigh. Reflexes 2+ symmetric. Gait normal. Romberg negative. No meningeal signs. No rash on full skin survey. No joint effusions on exam. No lymphadenopathy.",
+  "initial_workup": {
+    "bmp": "Normal: Na 140, K 4.3, Cr 0.7.",
+    "cbc": "Normal: WBC 6.8, Hgb 13.2, Plt 280.",
+    "tsh": "1.8 (normal).",
+    "esr": "24 mm/h (mildly elevated, reference <20).",
+    "b12": "Normal.",
+    "ferritin": "Normal.",
+    "lyme_serology": "Not yet sent.",
+    "mri_brain_spine": "Not yet performed.",
+    "lp_csf": "Not yet performed."
+  }
+}

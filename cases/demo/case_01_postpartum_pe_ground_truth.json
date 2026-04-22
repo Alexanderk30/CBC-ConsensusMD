@@ -1,0 +1,16 @@
+{
+  "case_id": "demo-01-postpartum-pe",
+  "archetype": "life-saving-catch",
+  "demo_role": "Emotional peak of demo arc. The moment that makes the judge remember the project.",
+  "correct_primary_diagnosis": "Pulmonary embolism",
+  "expected_outcome": "converged",
+  "expected_commitment_on_convergence": "leading",
+  "distinguishing_test": {
+    "test_name": "D-dimer, with CT pulmonary angiography if positive or clinical suspicion high",
+    "rationale": "Wells score in this patient is >=4.5 (tachycardia contributes 1.5; PE as-likely-or-more-likely than alternative adds 3). D-dimer is highly sensitive in this clinical context; CT-PA confirms."
+  },
+  "correct_deprioritized_diagnoses": [
+    "Anxiety attack / panic disorder exacerbation — does not explain SpO2 94% or tachycardia of this degree in a high-VTE-risk postpartum patient"
+  ],
+  "narrative_notes": "Life-threatening diagnosis masquerading as benign. The probabilistic frame alone is likely to anchor on anxiety (known history + recent SSRI start + postpartum emotional stress + largely benign exam). The eliminative frame should catch PE: postpartum is approximately 5x the non-pregnant VTE baseline risk, family history of VTE is present, tachycardia + borderline hypoxia + pleuritic pain form a classic at-risk triad. The antagonist should challenge the anxiety diagnosis on the specific finding of SpO2 94% ('anxiety does not cause hypoxia'), prompting the probabilistic specialist to update."
+}

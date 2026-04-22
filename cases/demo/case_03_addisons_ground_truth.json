@@ -1,0 +1,17 @@
+{
+  "case_id": "demo-03-addisons",
+  "archetype": "belief-update",
+  "demo_role": "Shows the architecture working — a specialist visibly changes its mind during debate under adversarial pressure. The graph animates a node shifting position.",
+  "correct_primary_diagnosis": "Primary adrenal insufficiency (Addison's disease), likely autoimmune in the context of existing Hashimoto's thyroiditis (autoimmune polyglandular syndrome type II pattern)",
+  "expected_outcome": "converged",
+  "expected_commitment_on_convergence": "leading",
+  "distinguishing_test": {
+    "test_name": "Morning cortisol with ACTH stimulation test",
+    "rationale": "Low morning cortisol with inappropriately elevated ACTH confirms primary adrenal insufficiency. Follow-up anti-21-hydroxylase antibodies support autoimmune etiology; consider APS-II workup given Hashimoto's context."
+  },
+  "correct_deprioritized_diagnoses": [
+    "Depression with somatic symptoms / chronic fatigue syndrome / functional disorder — does not explain hyperkalemia, hyponatremia, or hyperpigmentation of palmar creases and gums",
+    "Occult malignancy with paraneoplastic features — remains possible but less likely given the autoimmune-permissive context (Hashimoto's, family history of type 1 diabetes)"
+  ],
+  "narrative_notes": "Classic Addison's pattern misdiagnosed as depression. Cannot-miss signals: hyperpigmentation of palmar creases and gums (nearly pathognomonic for primary adrenal insufficiency), significant orthostatic hypotension with reflex tachycardia, hyponatremia with hyperkalemia, salt craving, existing autoimmune disease fitting the APS-II pattern. The probabilistic specialist is likely to start with depression / chronic fatigue (high base rate + prior clinician anchoring). The antagonist should challenge on 'depression does not cause hyperkalemia, hyponatremia, or hyperpigmentation of the gums — these are metabolic findings requiring a metabolic explanation.' The probabilistic specialist then visibly updates. This is the money moment on the debate graph."
+}

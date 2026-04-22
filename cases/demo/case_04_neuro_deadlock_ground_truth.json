@@ -1,0 +1,39 @@
+{
+  "case_id": "demo-04-neuro-deadlock",
+  "archetype": "deadlock",
+  "demo_role": "Signature safety feature. Shows the system fails gracefully — deadlock is the architecture's load-bearing insurance against overconfidence.",
+  "expected_outcome": "deadlocked",
+  "competing_hypotheses": [
+    {
+      "diagnosis": "Multiple sclerosis (relapsing-remitting)",
+      "supporting_evidence": [
+        "Two discrete neurological episodes separated in time and space (lower-limb paresthesia resolving spontaneously, then optic neuritis-like episode with eye pain on movement)",
+        "Maternal aunt with MS (genetic component present)",
+        "Age and sex demographics consistent with typical MS onset"
+      ],
+      "distinguishing_test": "MRI brain and spine with and without contrast; CSF analysis for oligoclonal bands if imaging supports"
+    },
+    {
+      "diagnosis": "Neuroborreliosis (Lyme disease with CNS / PNS involvement)",
+      "supporting_evidence": [
+        "Recent 2-week exposure in known endemic region (upstate NY / Vermont border)",
+        "Post-exposure febrile illness that resolved in 3 days",
+        "Migratory joint aches, a recognized Lyme feature",
+        "Possible cranial neuropathy (persistent right-eye symptoms)"
+      ],
+      "distinguishing_test": "Two-tier Lyme serology (ELISA followed by Western blot); CSF analysis if serology is positive"
+    },
+    {
+      "diagnosis": "Functional neurological disorder with anxiety overlay",
+      "supporting_evidence": [
+        "Prior generalized anxiety disorder",
+        "Current high-stress context (work deadline)",
+        "Episodic resolving symptoms with largely normal objective exam"
+      ],
+      "distinguishing_test": "Diagnosis of exclusion — only after MS and neuroborreliosis are ruled out. Optic neuritis with eye pain on movement and the electrolyte/ESR pattern are atypical for purely functional etiology; independent support is weak."
+    }
+  ],
+  "recommended_next_action": "Neurology referral with MRI brain/spine with contrast and Lyme serology (ELISA then Western blot) ordered before evaluation, so results are available at the appointment.",
+  "referral_urgency": "urgent",
+  "narrative_notes": "Genuinely ambiguous presentation where three hypotheses remain credible with the available data. The correct system output is a structured referral with the specific distinguishing tests for each hypothesis — not a confident single diagnosis. This is the signature deadlock-as-safety-feature case. The visualization at debate end should show three stable clusters, not convergence. In the pitch: 'For a rural clinician without access to specialists, this is the output they actually need: not a guess, but a structured next step.'"
+}

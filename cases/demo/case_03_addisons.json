@@ -1,0 +1,35 @@
+{
+  "case_id": "demo-03-addisons",
+  "demographics": {
+    "age": 42,
+    "sex": "F"
+  },
+  "chief_complaint": "I'm exhausted all the time and I almost fainted yesterday.",
+  "history_of_present_illness": "5-month history of progressive fatigue, decreased appetite with 12-lb weight loss, and intermittent nausea. Over the past 6 weeks, increasing dizziness on standing. Yesterday nearly lost consciousness when standing up from a chair. Reports unusual salt cravings, eating pickles straight from the jar. Has been seen twice in the past 4 months and told she has depression or possible chronic fatigue syndrome.",
+  "past_medical_history": [
+    "Hashimoto's thyroiditis on levothyroxine (well-controlled per recent TSH)",
+    "Otherwise healthy"
+  ],
+  "medications": [
+    "Levothyroxine 75 mcg daily"
+  ],
+  "social_history": "Non-smoker. No drug use. Married, two children. Elementary school teacher, on medical leave for past two weeks due to fatigue.",
+  "family_history": "Mother has type 1 diabetes. Aunt has thyroid problems.",
+  "vitals": {
+    "hr": 96,
+    "bp_systolic": 98,
+    "bp_diastolic": 62,
+    "rr": 16,
+    "spo2": 99,
+    "temp_c": 36.6,
+    "orthostatic_vitals": "Supine HR 96 / BP 98/62; Standing HR 118 / BP 82/54. Significant orthostatic drop with reflex tachycardia."
+  },
+  "physical_exam": "Thin, tired-appearing. Skin shows hyperpigmentation of palmar creases, gums, and old scar on left knee. Lungs clear. Heart regular, no murmur. Abdomen soft, mildly tender in epigastrium. No edema. No goiter.",
+  "initial_workup": {
+    "bmp": "Sodium 128 (low), potassium 5.4 (high), glucose 74, BUN 22, creatinine 0.9.",
+    "cbc": "Mild normocytic anemia: Hgb 11.2, WBC 6.4, Plt 240.",
+    "tsh": "2.1 (normal range 0.4 to 4.5) on levothyroxine.",
+    "morning_cortisol": "Pending at time of presentation.",
+    "acth_stim_test": "Not yet performed."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "case_id": "demo-01-postpartum-pe",
+  "demographics": {
+    "age": 28,
+    "sex": "F",
+    "relevant_context": "G1P1, 18 days postpartum from uncomplicated vaginal delivery"
+  },
+  "chief_complaint": "I can't catch my breath and I'm scared.",
+  "history_of_present_illness": "Over the past 24 hours, progressive shortness of breath with intermittent sharp right-sided chest pain, worse on deep inspiration. No fever, no cough, no hemoptysis. Has been more anxious since delivery; started sertraline 50 mg two weeks ago for postpartum anxiety. Sleep has been poor. Reports her heart feels like it's pounding. Denies leg swelling or pain. Has not been walking much, mostly bedrest with the baby.",
+  "past_medical_history": [
+    "Anxiety disorder, well-controlled on sertraline",
+    "No prior DVT or PE",
+    "Otherwise healthy"
+  ],
+  "medications": [
+    "sertraline 50 mg daily (started 2 weeks ago)"
+  ],
+  "social_history": "Non-smoker. No drug use. Lives with partner.",
+  "family_history": "No known thrombophilia. Mother had blood clots in her legs in her 50s.",
+  "vitals": {
+    "hr": 112,
+    "bp_systolic": 118,
+    "bp_diastolic": 74,
+    "rr": 22,
+    "spo2": 94,
+    "temp_c": 37.2
+  },
+  "physical_exam": "Anxious-appearing, mildly tachypneic. Lungs clear to auscultation bilaterally. Heart regular, tachycardic, no murmur. Calves without swelling, non-tender. No JVD. Skin warm and dry. No focal neurological deficits.",
+  "initial_workup": {
+    "ekg": "Sinus tachycardia at 112. No ST changes. No S1Q3T3 pattern. No right heart strain morphology.",
+    "bmp": "Normal: Na 139, K 4.1, Cr 0.8, glucose 92.",
+    "cbc": "Unremarkable: WBC 7.8, Hgb 12.4, Plt 245.",
+    "cxr": "Not yet performed at time of initial assessment.",
+    "d_dimer": "Not yet drawn at time of initial assessment.",
+    "troponin": "Not indicated based on initial clinical read."
+  }
+}
