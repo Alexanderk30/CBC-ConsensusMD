@@ -1,0 +1,29 @@
+{
+  "case_id": "demo-05-endometriosis",
+  "archetype": "belief-update",
+  "demo_role": "Classically underdiagnosed condition (average 7 to 10-year diagnostic delay) where the correct diagnosis has been systematically dismissed as normal periods + IBS + anxiety. Demonstrates recognition of a pattern whose unifying mechanism is obscured when each symptom cluster is treated in isolation.",
+  "correct_primary_diagnosis": "Endometriosis",
+  "expected_outcome": "converged",
+  "expected_commitment_on_convergence": "leading",
+  "distinguishing_test": {
+    "test_name": "Pelvic MRI with dedicated endometriosis protocol; diagnostic laparoscopy remains the histologic gold standard",
+    "rationale": "TVUS has limited sensitivity for surface endometriosis and is often reported as normal despite active disease (as in this case). MRI with appropriate protocols can identify deep infiltrating endometriosis, cul-de-sac implants, and bowel/bladder involvement. Diagnostic laparoscopy with tissue biopsy provides histologic confirmation and opportunity for concurrent ablation or excision. Leading-level commitment is appropriate because imaging is non-diagnostic but does not exclude endometriosis; definitive diagnosis still requires laparoscopy."
+  },
+  "correct_deprioritized_diagnoses": [
+    "Irritable bowel syndrome — does not explain deep dyspareunia, infertility, or the cyclic coupling of GI symptoms with menstrual timing",
+    "Primary dysmenorrhea — severity, progressive worsening, and associated dyspareunia / infertility / dyschezia exceed typical primary dysmenorrhea",
+    "Generalized anxiety disorder — does not explain posterior cul-de-sac nodularity or cyclic physiologic symptoms locked to menstrual cycle day",
+    "Uterine fibroids — TVUS unremarkable for fibroids despite the family history",
+    "Interstitial cystitis / bladder pain syndrome — no urinary symptoms; urinalysis negative",
+    "Chronic pelvic inflammatory disease — no history of STIs, no cervical motion tenderness, no discharge"
+  ],
+  "key_clinical_signals": [
+    "Cyclic GI symptoms tied specifically to menstrual timing (dyschezia, bloating peaking days -1 to +3 of cycle) — not an IBS pattern",
+    "Deep dyspareunia worst in the pre-menstrual week, with posterior cul-de-sac nodularity on exam — classic for endometriosis with rectovaginal involvement",
+    "14 months of unprotected intercourse without conception — infertility prevalence in endometriosis is 30 to 50%",
+    "Maternal + grandmother history of early hysterectomy for 'fibroids' — may have been undiagnosed endometriosis or adenomyosis; familial clustering of endometriosis is well-documented",
+    "Younger sister with chronic pelvic pain (not yet evaluated) — further suggests familial pattern",
+    "Normal TVUS does NOT exclude endometriosis — surface disease is typically invisible on ultrasound"
+  ],
+  "narrative_notes": "The probabilistic specialist is likely to anchor on the three prior PCP diagnoses (IBS + primary dysmenorrhea + anxiety) given their high base rates in young women. The mechanistic specialist should recognize that a single mechanism — ectopic endometrial tissue causing cyclic inflammation across multiple pelvic organs — unifies the GI / sexual / reproductive / pain symptoms more parsimoniously than three separate diagnoses. The eliminative specialist should flag endometriosis as cannot-miss given subfertility and family history. Expected antagonist challenge: 'IBS does not produce deep dyspareunia, does not produce cul-de-sac nodularity on exam, and its exacerbations are not temporally locked to menstrual cycle day.' Demo relevance: not immediately life-threatening but profoundly life-altering, and the kind of diagnosis where earlier recognition materially changes outcomes (fertility preservation, targeted pain management, quality of life). Also illustrates diagnostic gender bias — women with this pattern are underdiagnosed for an average of 7 to 10 years."
+}

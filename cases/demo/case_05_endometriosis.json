@@ -1,0 +1,43 @@
+{
+  "case_id": "demo-05-endometriosis",
+  "demographics": {
+    "age": 29,
+    "sex": "F",
+    "relevant_context": "Attempting conception × 14 months; nulligravid"
+  },
+  "chief_complaint": "I'm tired of being told this is just bad periods.",
+  "history_of_present_illness": "Progressively worsening pelvic pain over 6 years. Severe dysmenorrhea since menarche at age 12, initially attributed to normal periods. Over the past 3 years pain has become debilitating — missing 2 to 3 days of work per month. Pain begins 24 to 48 hours before menses, peaks on days 1 to 2, described as knife-like and cramping in the lower pelvis with radiation to low back and inner thighs. Reports associated cyclic GI symptoms: bloating, diarrhea alternating with constipation, and painful bowel movements specifically around menses (dyschezia, days -1 through +3 of cycle). Between cycles, bowel habits are mostly normal. Deep dyspareunia for past 2 years — particularly with certain positions, worst in the week before menses. Has been trying to conceive with her husband for 14 months with no success; has not yet seen a fertility specialist. Has seen her PCP four times over the past 2 years; diagnosed variously as 'primary dysmenorrhea,' 'probable IBS,' and 'generalized anxiety,' started on an SSRI 8 months ago. Pain management has been limited to OTC NSAIDs and a brief trial of combined hormonal contraception, stopped 5 months ago because the patient is trying to conceive.",
+  "past_medical_history": [
+    "Generalized anxiety disorder (PCP diagnosis, 2 years ago; on SSRI)",
+    "Irritable bowel syndrome (PCP clinical diagnosis; no GI workup performed)",
+    "Primary dysmenorrhea (longstanding)"
+  ],
+  "medications": [
+    "Sertraline 50 mg daily",
+    "Ibuprofen 600-800 mg PRN (daily during menses)",
+    "Prenatal vitamin"
+  ],
+  "social_history": "Non-smoker. Occasional alcohol, no drug use. Middle school teacher. Married 3 years. Actively trying to conceive × 14 months.",
+  "family_history": "Mother had 'heavy, painful periods' and underwent hysterectomy at age 40 for 'fibroids or something like that — they never really explained it.' Maternal grandmother also had early hysterectomy in her 40s. One younger sister with ongoing chronic pelvic pain; not yet formally evaluated.",
+  "vitals": {
+    "hr": 76,
+    "bp_systolic": 112,
+    "bp_diastolic": 70,
+    "rr": 14,
+    "spo2": 99,
+    "temp_c": 36.7
+  },
+  "physical_exam": "Alert, mildly uncomfortable-appearing but not in acute distress. Abdomen soft with mild tenderness in bilateral lower quadrants; no rebound or guarding; no palpable masses. Pelvic exam: external genitalia normal. Speculum: cervix without discharge or lesions. Bimanual: uterus anteverted, mobile but tender; possible nodularity palpated in posterior cul-de-sac, patient reports sharp pain on posterior palpation. Adnexa non-tender, no discrete masses appreciated. Rectovaginal exam: tenderness posterior to cervix; patient states 'that is the pain I feel during sex.' No rectal masses.",
+  "initial_workup": {
+    "cbc": "Normal: WBC 7.2, Hgb 13.4, Plt 260.",
+    "cmp": "Normal.",
+    "tsh": "1.6 (normal).",
+    "urinalysis": "Negative for nitrites, leukocytes, blood.",
+    "urine_pregnancy": "Negative.",
+    "transvaginal_ultrasound": "Uterus 8.2 x 4.6 x 5.1 cm, anteverted, normal contour. Endometrium 7 mm, trilaminar. Both ovaries normal size and appearance, no masses or endometriomas. No free fluid in cul-de-sac. Official read: normal study.",
+    "crp": "6 mg/L (mildly elevated, reference <5).",
+    "ca_125": "Not yet ordered.",
+    "mri_pelvis": "Not yet performed.",
+    "diagnostic_laparoscopy": "Not yet discussed with patient."
+  }
+}
