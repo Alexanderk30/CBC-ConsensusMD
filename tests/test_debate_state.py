@@ -556,6 +556,52 @@ def test_antagonist_input_previous_challenge_response_summary_reflects_movement(
     assert pc.specialist_response_summary == "moved_toward_challenge"
 
 
+def test_antagonist_input_round_3_includes_all_prior_challenges():
+    """A round-3 antagonist call must see both round-1 and round-2 challenges."""
+    s = _seeded_state()
+    # Round 1 antagonist challenges Pericarditis.
+    s.record_antagonist(_challenge(1, alternative="Pericarditis"))
+    s.record_specialists(
+        1,
+        {
+            "probabilistic": _rn(
+                "probabilistic",
+                primary="Pericarditis",
+                position="primary_diagnosis_changed",
+            ),
+            "mechanistic": _rn(
+                "mechanistic",
+                primary="Pericarditis",
+                position="primary_diagnosis_changed",
+            ),
+            "eliminative": _rn("eliminative", position="maintained"),
+        },
+    )
+    # Round 2 antagonist challenges Aortic dissection.
+    s.record_antagonist(_challenge(2, alternative="Aortic dissection"))
+    s.record_specialists(
+        2,
+        {
+            "probabilistic": _rn(
+                "probabilistic",
+                primary="Aortic dissection",
+                position="primary_diagnosis_changed",
+            ),
+            "mechanistic": _rn("mechanistic", primary="Pericarditis", position="maintained"),
+            "eliminative": _rn("eliminative", position="maintained"),
+        },
+    )
+    inp = s.build_antagonist_input(round_num=3)
+    assert len(inp.previous_challenges) == 2
+    by_round = {p.round: p for p in inp.previous_challenges}
+    assert by_round[1].challenge_alternative == "Pericarditis"
+    assert by_round[1].specialist_response_summary == "moved_toward_challenge"
+    assert by_round[2].challenge_alternative == "Aortic dissection"
+    # Round 2: pre = round 1 (2 Pericarditis, 1 STEMI), post = round 2
+    # (1 Aortic dissection, 1 Pericarditis, 1 STEMI). One moved toward AD.
+    assert by_round[2].specialist_response_summary == "partially_moved"
+
+
 def test_antagonist_input_ignores_ncc_in_previous_challenges():
     s = _seeded_state()
     s.record_antagonist(_ncc(1))

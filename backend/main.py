@@ -9,12 +9,15 @@ Endpoints:
     GET  /cases/{case_id}         — fetch a single PatientCase JSON
     WS   /ws/debate               — stream a debate (see README.md)
 
-CORS is permissive (allows all origins) — this is a local demo; tighten in
-production.
+CORS is permissive for origin but rejects credentialed requests — the
+browser will refuse `allow_origins=["*"]` + `allow_credentials=True`, and
+this demo doesn't use cookies, so drop credentials rather than pin origins.
 """
 from __future__ import annotations
 
+import json
 import logging
+import re
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -40,12 +43,16 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(ws_router)
+
+
+# case_id must be the conservative slug form to keep path construction safe.
+_CASE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9\-]{0,63}$")
 
 
 @app.get("/health")
@@ -55,7 +62,7 @@ def health() -> dict[str, str]:
 
 @app.get("/cases")
 def list_cases() -> list[dict[str, str]]:
-    """List demo cases with their case_id, archetype (from ground truth), and a one-line summary."""
+    """List demo cases with their case_id, archetype, and a one-line summary."""
     out: list[dict[str, str]] = []
     for path in sorted(CASES_DIR.glob("case_*.json")):
         if "_ground_truth" in path.name:
@@ -67,12 +74,10 @@ def list_cases() -> list[dict[str, str]]:
         gt_path = path.with_name(path.stem + "_ground_truth.json")
         archetype = None
         if gt_path.exists():
-            import json as _json
-
             try:
-                gt = _json.loads(gt_path.read_text())
+                gt = json.loads(gt_path.read_text())
                 archetype = gt.get("archetype")
-            except (_json.JSONDecodeError, OSError):
+            except (json.JSONDecodeError, OSError):
                 pass
         out.append(
             {
@@ -87,16 +92,18 @@ def list_cases() -> list[dict[str, str]]:
 
 @app.get("/cases/{case_id}")
 def get_case(case_id: str) -> dict:
+    if not _CASE_ID_PATTERN.fullmatch(case_id):
+        raise HTTPException(status_code=400, detail="invalid case_id format")
     path = CASES_DIR / f"{case_id}.json"
-    if not path.exists():
-        for candidate in CASES_DIR.glob("case_*.json"):
-            if "_ground_truth" in candidate.name:
-                continue
-            try:
-                case = PatientCase.model_validate_json(candidate.read_text())
-            except ValidationError:
-                continue
-            if case.case_id == case_id:
-                return case.model_dump(mode="json")
-        raise HTTPException(status_code=404, detail=f"case {case_id!r} not found")
-    return PatientCase.model_validate_json(path.read_text()).model_dump(mode="json")
+    if path.exists():
+        return PatientCase.model_validate_json(path.read_text()).model_dump(mode="json")
+    for candidate in CASES_DIR.glob("case_*.json"):
+        if "_ground_truth" in candidate.name:
+            continue
+        try:
+            case = PatientCase.model_validate_json(candidate.read_text())
+        except ValidationError:
+            continue
+        if case.case_id == case_id:
+            return case.model_dump(mode="json")
+    raise HTTPException(status_code=404, detail=f"case {case_id!r} not found")

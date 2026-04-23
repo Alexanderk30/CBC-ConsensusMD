@@ -266,6 +266,13 @@ class DebateState:
         return dict(self._anon_id_by_role)
 
     def check_termination(self) -> TerminationState:
+        """Convergence vs. deadlock vs. continue.
+
+        Note: `run_debate` reaches deadlock by falling off the for-loop
+        (no explicit check_termination call inside the loop). The deadlock
+        branch here is defensive — useful for external callers querying
+        state after the fact, and kept green by `test_termination_deadlock_at_max_rounds_without_convergence`.
+        """
         if self._survival_count >= 2:
             return "converged"
         if self.current_round >= self.max_rounds and self.current_round > 0:

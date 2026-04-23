@@ -193,7 +193,12 @@ def _print_summary(report: EvalReport) -> None:
     print()
     print("Per-case:")
     for r in report.results:
-        icon = "?" if r.error else ("✓" if r.outcome_match and (r.primary_match or r.expected_outcome == "deadlocked") else "✗")
+        if r.error:
+            icon = "ERR "
+        elif r.outcome_match and (r.primary_match or r.expected_outcome == "deadlocked"):
+            icon = "OK  "
+        else:
+            icon = "FAIL"
         extra = f" ({r.actual_primary!r})" if r.actual_primary else ""
         err = f" ERROR: {r.error}" if r.error else ""
         print(
