@@ -1,0 +1,424 @@
+/* Caduceus — Medical Debate: shared styles (ported from design handoff) */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --ink-0: oklch(0.96 0.006 85);
+  --ink-1: oklch(0.98 0.005 85);
+  --ink-2: oklch(0.93 0.008 85);
+  --ink-3: oklch(0.85 0.010 85);
+  --bone-0: oklch(0.22 0.030 210);
+  --bone-1: oklch(0.38 0.028 210);
+  --bone-2: oklch(0.55 0.022 210);
+  --bone-3: oklch(0.68 0.018 210);
+  --artery: oklch(0.55 0.14 30);
+  --artery-dim: oklch(0.72 0.08 30);
+  --artery-glow: oklch(0.62 0.16 30);
+  --vein: oklch(0.48 0.10 230);
+  --ichor: oklch(0.58 0.12 155);
+  --serif: 'Fraunces', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+
+.cad-root {
+  background: var(--ink-0);
+  color: var(--bone-0);
+  font-family: var(--sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.cad-mono { font-family: var(--mono); letter-spacing: 0.02em; }
+.cad-serif { font-family: var(--serif); font-feature-settings: 'ss01'; }
+.cad-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-2); }
+.cad-meta { font-family: var(--mono); font-size: 10px; color: var(--bone-3); letter-spacing: 0.06em; }
+
+.cad-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+.cad-node-ring {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-3);
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+}
+.cad-node-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed var(--ink-3);
+  opacity: 0.5;
+  animation: cad-rotate 60s linear infinite;
+}
+.cad-node-ring::after {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1px solid oklch(0.85 0.010 85 / 0.8);
+}
+@keyframes cad-rotate { to { transform: rotate(360deg); } }
+
+.cad-node.speaking .cad-node-ring {
+  border-color: var(--bone-0);
+  box-shadow: 0 0 0 2px var(--bone-0), 0 0 24px oklch(0.22 0.030 210 / 0.2);
+}
+.cad-node.antagonist .cad-node-ring {
+  border-color: var(--artery-dim);
+  background: linear-gradient(180deg, oklch(0.97 0.020 30), oklch(0.93 0.030 30));
+}
+.cad-node.antagonist.speaking .cad-node-ring {
+  border-color: var(--artery);
+  box-shadow: 0 0 0 2px var(--artery), 0 0 40px oklch(0.55 0.14 30 / 0.35);
+}
+.cad-node.challenged .cad-node-ring {
+  animation: cad-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes cad-shake {
+  10%, 90% { transform: translate(-1px, 0); }
+  20%, 80% { transform: translate(2px, 0); }
+  30%, 50%, 70% { transform: translate(-3px, 0); }
+  40%, 60% { transform: translate(3px, 0); }
+}
+
+.cad-node-glyph {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--bone-1);
+  font-weight: 400;
+  font-style: italic;
+}
+.cad-node.antagonist .cad-node-glyph { color: var(--artery-glow); }
+
+.cad-node-label {
+  position: absolute;
+  top: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+.cad-node-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bone-1);
+}
+.cad-node.antagonist .cad-node-name { color: var(--artery-glow); }
+.cad-node-role {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--bone-2);
+  margin-top: 3px;
+}
+
+.cad-conf {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: oklch(0.90 0.008 85);
+  overflow: hidden;
+}
+.cad-conf-fill {
+  height: 100%;
+  background: var(--bone-1);
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-node.antagonist .cad-conf-fill { background: var(--artery); }
+
+.cad-utter {
+  position: absolute;
+  max-width: 260px;
+  padding: 10px 14px;
+  background: oklch(0.99 0.004 85 / 0.98);
+  border: 1px solid var(--ink-3);
+  border-left: 2px solid var(--bone-1);
+  font-family: var(--serif);
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--bone-0);
+  z-index: 20;
+  backdrop-filter: blur(4px);
+  animation: cad-utter-in 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-utter.antagonist { border-left-color: var(--artery); }
+.cad-utter.antagonist::before {
+  content: 'CHALLENGE';
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  background: var(--artery);
+  color: oklch(0.99 0 0);
+  padding: 2px 6px;
+  font-weight: 600;
+}
+.cad-utter.consensus { border-left-color: var(--ichor); }
+.cad-utter-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--bone-3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+@keyframes cad-utter-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cad-serpent { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.cad-serpent-shadow { stroke: oklch(0.04 0 0 / 0.8); stroke-width: 6; filter: blur(4px); }
+.cad-serpent-body { stroke: var(--bone-1); stroke-width: 1.5; stroke-dasharray: 1 3; animation: cad-slither 1.5s linear infinite; }
+.cad-serpent-body.antagonist { stroke: var(--artery); stroke-width: 2; }
+.cad-serpent-body.consensus { stroke: var(--ichor); stroke-width: 2; animation: cad-slither 3s linear infinite; }
+@keyframes cad-slither { to { stroke-dashoffset: -16; } }
+
+.cad-serpent-head { fill: var(--bone-0); filter: drop-shadow(0 0 4px var(--bone-0)); }
+.cad-serpent-head.antagonist { fill: var(--artery-glow); filter: drop-shadow(0 0 6px var(--artery)); }
+
+.cad-panel {
+  background: oklch(0.99 0.004 85 / 0.92);
+  border: 1px solid var(--ink-3);
+  backdrop-filter: blur(8px);
+}
+.cad-panel-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cad-tx-row {
+  padding: 8px 14px;
+  border-bottom: 1px solid oklch(0.90 0.008 85);
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+.cad-tx-row.active { background: oklch(0.94 0.010 85); }
+.cad-tx-who {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--bone-2);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+.cad-tx-who.antagonist { color: var(--artery); }
+.cad-tx-who.consensus { color: var(--ichor); }
+.cad-tx-text {
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--bone-0);
+}
+
+.cad-btn {
+  background: transparent;
+  border: 1px solid var(--ink-3);
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cad-btn:hover:not(:disabled) {
+  border-color: var(--bone-1);
+  color: var(--bone-0);
+  background: oklch(0.94 0.010 85);
+}
+.cad-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.cad-btn.primary { border-color: var(--artery); color: var(--artery); }
+.cad-btn.primary:hover:not(:disabled) { background: var(--artery); color: var(--ink-0); }
+
+.cad-vital {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--bone-2);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.cad-vital-val { color: var(--bone-0); font-weight: 500; }
+
+.cad-case {
+  border: 1px solid var(--ink-3);
+  padding: 14px 16px;
+  background: oklch(0.97 0.006 85 / 0.6);
+}
+.cad-case-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--bone-0);
+  margin-bottom: 2px;
+}
+
+.cad-verdict {
+  background: linear-gradient(180deg, oklch(0.98 0.012 155 / 0.5), oklch(0.96 0.015 155 / 0.3));
+  border: 1px solid var(--ichor);
+  padding: 18px 20px;
+  position: relative;
+}
+.cad-verdict::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid oklch(0.58 0.12 155 / 0.3);
+  pointer-events: none;
+}
+.cad-verdict.deadlocked {
+  background: linear-gradient(180deg, oklch(0.98 0.015 85 / 0.5), oklch(0.96 0.018 85 / 0.3));
+  border-color: var(--bone-2);
+}
+
+.cad-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--artery);
+  display: inline-block;
+  animation: cad-pulse 1.2s ease-in-out infinite;
+}
+.cad-pulse.green { background: var(--ichor); animation-duration: 2s; }
+.cad-pulse.bone { background: var(--bone-1); }
+@keyframes cad-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.4; box-shadow: 0 0 0 4px transparent; }
+}
+
+.cad-timeline {
+  height: 36px;
+  position: relative;
+  border-top: 1px solid var(--ink-3);
+  border-bottom: 1px solid var(--ink-3);
+  background: oklch(0.94 0.008 85);
+}
+.cad-playhead {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--bone-0);
+  box-shadow: 0 0 0 1px var(--bone-0);
+  transition: left 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.cad-clash {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+.cad-clash-ring {
+  border: 1px solid var(--artery);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: cad-clash-expand 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+@keyframes cad-clash-expand {
+  from { width: 0; height: 0; opacity: 1; border-width: 2px; }
+  to { width: 140px; height: 140px; opacity: 0; border-width: 0.5px; }
+}
+
+.cad-diff-row {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid oklch(0.90 0.008 85);
+  align-items: center;
+}
+.cad-diff-name {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--bone-0);
+}
+.cad-diff-name.dim { color: var(--bone-3); }
+.cad-diff-bar {
+  height: 3px;
+  background: oklch(0.90 0.008 85);
+  position: relative;
+  margin-top: 3px;
+}
+.cad-diff-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: var(--bone-1);
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-diff-bar-fill.lead { background: var(--ichor); }
+.cad-diff-bar-fill.dissent { background: var(--artery); }
+.cad-diff-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bone-1);
+  text-align: right;
+}
+
+.cad-crest {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.15;
+  z-index: 2;
+}
+
+.cad-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-3), transparent);
+  margin: 10px 0;
+}
+
+.cad-case-list-item {
+  border: 1px solid var(--ink-3);
+  padding: 14px 16px;
+  background: oklch(0.97 0.006 85 / 0.7);
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.cad-case-list-item:hover {
+  border-color: var(--bone-1);
+  background: oklch(0.94 0.010 85);
+}
+.cad-case-list-item.selected {
+  border-color: var(--bone-0);
+  background: oklch(0.93 0.012 85);
+}
+.cad-case-list-item.selected::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--bone-0);
+}
