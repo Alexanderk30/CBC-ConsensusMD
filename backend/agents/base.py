@@ -201,7 +201,7 @@ async def _call_anthropic(
 ) -> dict[str, Any]:
     from anthropic import AsyncAnthropic
 
-    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=60)
+    client = AsyncAnthropic(api_key=os.environ["ANTHROPIC_API_KEY"], timeout=120)
     tool_schema = _output_json_schema(output_schema)
 
     response = await client.messages.create(
@@ -266,7 +266,7 @@ async def _call_openrouter(
     client = AsyncOpenAI(
         api_key=os.environ["OPENROUTER_API_KEY"],
         base_url="https://openrouter.ai/api/v1",
-        timeout=60,
+        timeout=120,
     )
 
     schema = _output_json_schema(output_schema)
