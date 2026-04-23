@@ -5,7 +5,7 @@
     "sex": "F"
   },
   "chief_complaint": "Something is wrong with my nerves and no one can tell me what.",
-  "history_of_present_illness": "4-month history of episodic neurological symptoms. Four months ago: numbness and tingling in left leg lasting 3 weeks, resolved spontaneously. Two months ago: brief episode (5 days) of blurred vision in right eye, described as looking through wax paper, with some eye pain on movement. Resolved. Ongoing: intermittent fatigue, occasional migratory joint aches (knees, wrists), memory feels foggy. Two weeks ago returned from a 2-week camping trip in upstate New York and Vermont border. Does not recall a tick bite but was in the woods constantly. Had one episode of fever and malaise after returning that resolved in 3 days.",
+  "history_of_present_illness": "4-month history of episodic neurological symptoms. Four months ago: numbness and tingling in left leg lasting 3 weeks, resolved spontaneously. Two months ago: brief episode (5 days) of blurred vision in right eye, described as looking through wax paper; patient denies pain with eye movement but reports 'discomfort' that she attributed to tiredness. Resolved. Ongoing: intermittent fatigue, occasional migratory joint aches (knees, wrists), memory feels foggy. Symptoms have tended to worsen during high-stress weeks and improve when she takes weekend breaks away from work — patient herself raised this pattern unprompted. Two weeks ago returned from a 2-week camping trip in upstate New York and Vermont border. Does not recall a tick bite but was in the woods constantly. Mid-trip noticed a 'red splotch about the size of a quarter' on her left thigh that she attributed to a plant reaction; it faded over about a week without treatment. Had one episode of fever and malaise after returning that resolved in 3 days.",
   "past_medical_history": [
     "Generalized anxiety disorder",
     "Seasonal allergies"
@@ -14,7 +14,7 @@
     "Escitalopram 10 mg daily"
   ],
   "social_history": "Non-smoker. Occasional alcohol. Works as a graphic designer, recently stressed about a project deadline.",
-  "family_history": "Maternal aunt with multiple sclerosis. No family history of Lyme disease or autoimmune conditions.",
+  "family_history": "Maternal aunt had a chronic neurological condition diagnosed in her 50s that the patient cannot specify — she has been told it was 'either MS or some autoimmune thing, they were never sure.' No family history of Lyme disease.",
   "vitals": {
     "hr": 78,
     "bp_systolic": 118,
@@ -23,12 +23,13 @@
     "spo2": 99,
     "temp_c": 36.8
   },
-  "physical_exam": "Alert, cooperative. Cranial nerves grossly intact, though patient reports right eye still feels not quite right. Motor strength 5/5 throughout. Sensation reports mild decreased sensation over left anterior thigh. Reflexes 2+ symmetric. Gait normal. Romberg negative. No meningeal signs. No rash on full skin survey. No joint effusions on exam. No lymphadenopathy.",
+  "physical_exam": "Alert, cooperative. Cranial nerves grossly intact, though patient reports right eye still feels not quite right. Motor strength 5/5 throughout. Sensation reports mild decreased sensation over left anterior thigh. Reflexes 2+ symmetric. Gait normal. Romberg negative. No meningeal signs. No rash currently on full skin survey (any possible EM has resolved per patient report). Right knee with mild warmth and trace effusion on palpation; left knee unremarkable. No lymphadenopathy.",
   "initial_workup": {
     "bmp": "Normal: Na 140, K 4.3, Cr 0.7.",
     "cbc": "Normal: WBC 6.8, Hgb 13.2, Plt 280.",
     "tsh": "1.8 (normal).",
-    "esr": "24 mm/h (mildly elevated, reference <20).",
+    "esr": "38 mm/h (moderately elevated, reference <20).",
+    "crp": "12 mg/L (elevated, reference <5).",
     "b12": "Normal.",
     "ferritin": "Normal.",
     "lyme_serology": "Not yet sent.",
