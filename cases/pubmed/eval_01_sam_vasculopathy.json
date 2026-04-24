@@ -3,15 +3,15 @@
   "demographics": {
     "age": 41,
     "sex": "M",
-    "relevant_context": "No prior medical or surgical history. No medications. Source paper did not record specific vitals at presentation; the values below are synthesized to match the documented narrative ('acutely ill but hemodynamically stable', no fever, cardiovascular and pulmonary exams unremarkable).",
+    "relevant_context": "No prior medical or surgical history. No medications. Source paper did not record specific vitals at presentation; the values below are synthesized to match the documented narrative ('acutely ill-appearing but hemodynamically stable').",
     "allergies": "NKDA"
   },
   "chief_complaint": "Acute abdominal pain with nausea, onset earlier today at work.",
   "history_of_present_illness": "Patient was at work when he acutely became unwell. Abdominal pain began abruptly and is described as worse with movement and with deep inspiration. He had one episode of vomiting and persistent nausea. He denies fever, chest pain, shortness of breath, cough, or urinary symptoms. No preceding trauma. No recent travel. No recent illness. No prior episodes of similar pain. Brought himself to the emergency department when pain did not improve.",
   "past_medical_history": [],
   "medications": [],
-  "social_history": "Denies tobacco, alcohol, illicit drug use per patient report. Works in an office setting.",
-  "family_history": "Noncontributory. No known vascular disease, aneurysms, autoimmune disease, or connective tissue disorders in first-degree relatives.",
+  "social_history": "Denies tobacco, alcohol, illicit drug use. Works in an office setting.",
+  "family_history": "Noncontributory.",
   "vitals": {
     "hr": 98,
     "bp_systolic": 128,
@@ -20,22 +20,20 @@
     "spo2": 98,
     "temp_c": 37.0
   },
-  "physical_exam": "General: Acutely ill-appearing adult male, alert and oriented. Cardiovascular: Regular rate and rhythm, no murmurs, rubs, or bruits auscultated. Pulmonary: Clear to auscultation bilaterally, no increased work of breathing. Abdominal: Non-distended. Diffuse tenderness on palpation, most prominent in the epigastric region and left flank. No guarding, no rebound tenderness. Bowel sounds present. Extremities: No peripheral edema. Peripheral pulses intact and symmetric, no asymmetric tenderness. Neurologic: Grossly non-focal.",
+  "physical_exam": "General: Acutely ill-appearing adult male, alert and oriented. Cardiovascular: Regular rate and rhythm, no murmurs. Pulmonary: Clear to auscultation bilaterally. Abdominal: Non-distended. Diffuse tenderness on palpation, most prominent in the epigastric region and left flank. No guarding, no rebound tenderness. Bowel sounds present. Extremities: Peripheral pulses intact and symmetric, no edema. Neurologic: Grossly non-focal.",
   "initial_workup": {
     "labs": {
-      "cbc": "Hemoglobin 15.8 g/dL (normal range 14.0-18.0). Platelets 333 x10^9/L (normal 150-450). WBC 9.12 x10^9/L (normal 4.00-10.00).",
-      "chemistry": "Electrolytes within normal limits. Renal function normal. Liver function tests normal. Lipase normal. CPK normal. LDH normal.",
-      "inflammatory_markers": "CRP 55 mg/L (upper limit of normal 5 mg/L). ESR 23 mm/h (upper limit of normal 10 mm/h) — mildly elevated.",
+      "cbc": "Hemoglobin 15.8 g/dL. Platelets 333 x10^9/L. WBC 9.12 x10^9/L. All within normal limits.",
+      "chemistry": "Electrolytes, renal function, liver function tests, lipase, CPK, LDH all within normal limits.",
+      "inflammatory_markers": "CRP 55 mg/L (ULN 5). ESR 23 mm/h (ULN 10). Both mildly elevated.",
       "coagulation": "PT, PTT, INR within normal limits.",
-      "thyroid": "TSH normal.",
-      "infectious_serology": "HIV negative. RPR/Treponema pallidum negative. Hepatitis B surface antigen and core antibody negative. Hepatitis C antibody negative.",
-      "autoimmune_workup": "Complement C3 and C4 normal. Antinuclear antibody negative. ANCA (both c-ANCA and p-ANCA) negative.",
-      "urinalysis": "No hematuria, proteinuria, or casts. Unremarkable.",
-      "arterial_blood_gas": "Acid-base and oxygenation parameters unremarkable."
+      "urinalysis": "Unremarkable. No hematuria.",
+      "arterial_blood_gas": "Unremarkable.",
+      "pending": "Autoimmune panel (ANA, ANCA, complement) sent, not yet resulted. Hepatitis B and C serology sent, not yet resulted. HIV pending."
     },
     "imaging": {
-      "abdominal_xray": "No free air. No bowel obstruction pattern. No pathological findings.",
-      "ct_angiography_abdomen": "Dissection of the coeliac trunk with wall-adhering thrombus causing moderate luminal narrowing. Dissection of the splenic artery with infarction of the lower pole of the spleen. No evidence of bowel ischemia or bowel obstruction. No pathology identified in the liver, pancreas, kidneys, or adrenal glands. No atherosclerotic disease of the aorta or its branches. No 'string of beads' appearance."
+      "abdominal_xray": "No free air. No bowel obstruction pattern.",
+      "ct_angiography_abdomen": "Dissection of the coeliac trunk with a wall-adhering thrombus causing moderate luminal narrowing. Dissection of the splenic artery with infarction of the lower pole of the spleen. No bowel ischemia. No bowel obstruction. Other solid organs appear normal."
     }
   }
 }
