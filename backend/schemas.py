@@ -12,9 +12,12 @@ The load-bearing validators:
 """
 from __future__ import annotations
 
+import logging
 from typing import Annotated, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -237,10 +240,21 @@ class SpecialistRound0Output(_Strict):
     def _primary_matches_first_differential(self) -> "SpecialistRound0Output":
         first = self.differential[0].diagnosis_name
         if self.primary_diagnosis != first:
-            raise ValueError(
-                "primary_diagnosis must equal differential[0].diagnosis_name "
-                f"({self.primary_diagnosis!r} vs {first!r})."
+            # LLM phrasing drift between primary_diagnosis and
+            # differential[0].diagnosis_name is a common failure mode
+            # (e.g. "with splenic infarction" vs "isolated"). Hard-rejecting
+            # costs us the whole round + retry-chain on what is usually just
+            # a string-formatting inconsistency, not a semantic disagreement.
+            # Canonicalize onto the differential entry — it's the structured
+            # row with commitment + evidence attached — and log so we can
+            # spot prompt-level drift over time.
+            logger.warning(
+                "coerced primary_diagnosis to match differential[0].diagnosis_name "
+                "(%r -> %r)",
+                self.primary_diagnosis,
+                first,
             )
+            self.primary_diagnosis = first
         return self
 
     @model_validator(mode="after")

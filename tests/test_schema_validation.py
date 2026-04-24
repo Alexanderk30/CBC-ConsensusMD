@@ -278,15 +278,24 @@ def test_round0_valid_all_three_frames():
         assert out.reasoning.frame == frame
 
 
-def test_round0_rejects_primary_diagnosis_mismatch():
-    with pytest.raises(ValidationError, match="primary_diagnosis"):
-        SpecialistRound0Output(
+def test_round0_coerces_primary_diagnosis_to_first_differential(caplog):
+    """When primary_diagnosis doesn't match differential[0].diagnosis_name,
+    the validator canonicalizes primary_diagnosis onto the differential
+    entry rather than hard-rejecting. Hard-rejection was costing full
+    debate rounds on what is usually just LLM phrasing drift
+    ('dissection with splenic infarction' vs 'isolated dissection')."""
+    with caplog.at_level("WARNING", logger="backend.schemas"):
+        out = SpecialistRound0Output(
             differential=_differential_two(),
             primary_diagnosis="Something else entirely",
             recommended_next_step="CT-PA",
             reasoning_frame="probabilistic",
             reasoning=_probabilistic_reasoning(),
         )
+    assert out.primary_diagnosis == out.differential[0].diagnosis_name
+    assert any("coerced primary_diagnosis" in rec.message for rec in caplog.records), (
+        "expected a WARNING log entry when coercion fires"
+    )
 
 
 def test_round0_rejects_reasoning_frame_mismatch():
@@ -347,19 +356,22 @@ def test_roundN_valid():
     assert out.position_change == "confidence_raised"
 
 
-def test_roundN_inherits_primary_mismatch_rule():
-    with pytest.raises(ValidationError, match="primary_diagnosis"):
-        SpecialistRoundNOutput(
-            differential=_differential_two(),
-            primary_diagnosis="WRONG",
-            recommended_next_step="CT-PA",
-            reasoning_frame="probabilistic",
-            reasoning=_probabilistic_reasoning(),
-            position_change="maintained",
-            response_to_challenge=ResponseToChallenge(
-                challenge_addressed=False, position_justification="n/a"
-            ),
-        )
+def test_roundN_inherits_primary_coercion_rule():
+    """RoundN inherits the coercion behavior from Round0: mismatched
+    primary_diagnosis gets canonicalized onto differential[0].diagnosis_name
+    rather than raising."""
+    out = SpecialistRoundNOutput(
+        differential=_differential_two(),
+        primary_diagnosis="WRONG",
+        recommended_next_step="CT-PA",
+        reasoning_frame="probabilistic",
+        reasoning=_probabilistic_reasoning(),
+        position_change="maintained",
+        response_to_challenge=ResponseToChallenge(
+            challenge_addressed=False, position_justification="n/a"
+        ),
+    )
+    assert out.primary_diagnosis == out.differential[0].diagnosis_name
 
 
 def test_round0_rejects_roundN_extras():
