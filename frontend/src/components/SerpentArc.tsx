@@ -1,27 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function buildSerpentPath(ax: number, ay: number, bx: number, by: number, curve = 0.35) {
-  const dx = bx - ax;
-  const dy = by - ay;
-  const len = Math.hypot(dx, dy) || 1;
-  const px = -dy / len;
-  const py = dx / len;
-  const mx = (ax + bx) / 2 + px * len * curve;
-  const my = (ay + by) / 2 + py * len * curve;
-  const mx1 = ax + (mx - ax) * 0.9 + px * 8;
-  const my1 = ay + (my - ay) * 0.9 + py * 8;
-  const mx2 = bx + (mx - bx) * 0.9 - px * 8;
-  const my2 = by + (my - by) * 0.9 - py * 8;
-  return `M ${ax} ${ay} C ${mx1} ${my1}, ${mx2} ${my2}, ${bx} ${by}`;
-}
-
 interface SerpentArcProps {
   path: string;
-  kind?: 'antagonist' | 'consensus' | '';
+  kind?: 'antagonist' | '';
   active?: boolean;
   fadeOut?: boolean;
 }
 
+/** Debate arc — a dashed slither stroke between two agents with a traveling
+ *  head dot marking the direction of reasoning. Antagonist arcs loop (the
+ *  skeptic keeps pressing) and sprout a forked-tongue accent near the head;
+ *  specialist arcs fade once the head reaches its target. */
 export function SerpentArc({ path, kind = '', active = false, fadeOut = false }: SerpentArcProps) {
   const pathRef = useRef<SVGPathElement>(null);
   const [headPt, setHeadPt] = useState<{ x: number; y: number; t: number } | null>(null);
@@ -30,19 +19,41 @@ export function SerpentArc({ path, kind = '', active = false, fadeOut = false }:
     if (!active || !pathRef.current) return;
     const el = pathRef.current;
     const total = el.getTotalLength();
-    const start = performance.now();
     const dur = 900;
-    let raf: number;
-    const step = (now: number) => {
-      const t = Math.min(1, (now - start) / dur);
-      const p = el.getPointAtLength(total * t);
-      setHeadPt({ x: p.x, y: p.y, t });
-      if (t < 1) raf = requestAnimationFrame(step);
-      else setTimeout(() => setHeadPt(null), 400);
+    let cancelled = false;
+    let raf = 0;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const runOne = (start: number) => {
+      const step = (now: number) => {
+        if (cancelled) return;
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / dur);
+        const p = el.getPointAtLength(total * t);
+        setHeadPt({ x: p.x, y: p.y, t });
+        if (t < 1) {
+          raf = requestAnimationFrame(step);
+        } else if (kind === 'antagonist') {
+          timer = setTimeout(() => {
+            if (!cancelled) runOne(performance.now());
+          }, 450);
+        } else {
+          timer = setTimeout(() => {
+            if (!cancelled) setHeadPt(null);
+          }, 400);
+        }
+      };
+      raf = requestAnimationFrame(step);
     };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [active, path]);
+
+    runOne(performance.now());
+
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      if (timer) clearTimeout(timer);
+    };
+  }, [active, path, kind]);
 
   const opacity = fadeOut ? 0 : active ? 1 : 0.32;
 

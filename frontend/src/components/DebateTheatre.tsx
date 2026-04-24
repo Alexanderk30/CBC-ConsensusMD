@@ -5,7 +5,6 @@ import type { PatientCase } from '../types';
 import { AgentRegistry } from './AgentRegistry';
 import { CasePanel } from './CasePanel';
 import { DebateScene } from './DebateScene';
-import { Differential } from './Differential';
 import { Timeline } from './Timeline';
 import { Transcript } from './Transcript';
 import { Verdict } from './Verdict';
@@ -66,7 +65,7 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         width: '100vw',
         height: '100vh',
         display: 'grid',
-        gridTemplateColumns: '340px 1fr 380px',
+        gridTemplateColumns: '340px minmax(0, 1fr) 380px',
         gridTemplateRows: '1fr auto',
         gap: 14,
         padding: 14,
@@ -99,8 +98,7 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
             {caseErr}
           </div>
         )}
-        {patientCase && <CasePanel patientCase={patientCase} />}
-        <Differential entries={differential} />
+        {patientCase && <CasePanel patientCase={patientCase} differential={differential} />}
         <AgentRegistry state={state} />
       </div>
 

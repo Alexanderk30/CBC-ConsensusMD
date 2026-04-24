@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { AGENTS } from '../agents';
 import type { Utterance } from '../events';
+import { FormattedText } from './FormattedText';
 
 interface TranscriptProps {
   utterances: Utterance[];
@@ -73,7 +74,16 @@ export function Transcript({ utterances, activeId }: TranscriptProps) {
                   </span>
                   {targetLabel && <span className="cad-meta">→ {targetLabel}</span>}
                 </div>
-                <div className="cad-tx-text">{u.text}</div>
+                <FormattedText
+                  text={u.text}
+                  style={{
+                    fontFamily: 'var(--serif)',
+                    fontSize: 13,
+                    lineHeight: 1.5,
+                    color: 'var(--bone-0)',
+                  }}
+                />
+
               </div>
             </div>
           );

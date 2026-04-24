@@ -1,10 +1,11 @@
 interface CaduceusCrestProps {
   size?: number;
-  alive?: boolean;
 }
 
-/** Central heraldry — two serpents coiled around a staff. */
-export function CaduceusCrest({ size = 280, alive = false }: CaduceusCrestProps) {
+/** Central heraldry — two serpents coiled around a staff. Opacity is driven
+ *  by the `.cad-converging` parent class in CSS (watermark during debate,
+ *  full presence during convergence). */
+export function CaduceusCrest({ size = 280 }: CaduceusCrestProps) {
   const w = size;
   const h = size * 1.3;
   const cx = w / 2;
@@ -14,7 +15,7 @@ export function CaduceusCrest({ size = 280, alive = false }: CaduceusCrestProps)
       height={h}
       viewBox={`0 0 ${w} ${h}`}
       className="cad-crest"
-      style={{ width: w, height: h, opacity: alive ? 0.28 : 0.12 }}
+      style={{ width: w, height: h }}
     >
       <defs>
         <linearGradient id="staffG" x1="0" x2="0" y1="0" y2="1">

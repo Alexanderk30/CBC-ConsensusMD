@@ -143,18 +143,20 @@ function DeadlockBody({ output }: { output: DeadlockOutput }) {
           marginBottom: 8,
         }}
       >
-        System could not converge under adversarial review.
+        No single diagnosis held up through the fourth round.
       </div>
       <div
         style={{
           fontFamily: 'var(--serif)',
           fontSize: 13,
-          color: 'var(--bone-2)',
+          color: 'var(--bone-1)',
           fontStyle: 'italic',
+          lineHeight: 1.45,
           marginBottom: 12,
         }}
       >
-        Urgency: {output.referral_urgency}. {output.recommended_next_action}
+        The uncertainty is itself the clinical finding. Escalate with the competing hypotheses
+        on the table — {output.referral_urgency}. {output.recommended_next_action}
       </div>
       <div className="cad-label" style={{ marginBottom: 6 }}>
         Competing hypotheses

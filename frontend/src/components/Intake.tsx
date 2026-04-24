@@ -3,9 +3,62 @@ import type { CaseSummary } from '../types';
 
 interface IntakeProps {
   onLaunch: (caseId: string) => void;
+  onNewCase?: () => void;
+  onPlayDemo?: (variant: 'converge' | 'deadlock' | 'converge-skip') => void;
 }
 
-export function Intake({ onLaunch }: IntakeProps) {
+function StatBlock({
+  figure,
+  caption,
+  source,
+}: {
+  figure: string;
+  caption: string;
+  source: string;
+}) {
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '62px 1fr', columnGap: 12 }}>
+      <div
+        style={{
+          fontFamily: 'var(--serif)',
+          fontSize: 28,
+          lineHeight: 1,
+          color: 'var(--bone-0)',
+          fontWeight: 400,
+          letterSpacing: '-0.01em',
+          paddingTop: 2,
+        }}
+      >
+        {figure}
+      </div>
+      <div>
+        <div
+          style={{
+            fontFamily: 'var(--serif)',
+            fontSize: 12,
+            lineHeight: 1.4,
+            color: 'var(--bone-1)',
+          }}
+        >
+          {caption}
+        </div>
+        <div
+          className="cad-meta"
+          style={{
+            marginTop: 3,
+            fontSize: 9,
+            fontStyle: 'italic',
+            color: 'var(--bone-3)',
+          }}
+        >
+          {source}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function Intake({ onLaunch, onNewCase, onPlayDemo }: IntakeProps) {
   const [cases, setCases] = useState<CaseSummary[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +99,7 @@ export function Intake({ onLaunch }: IntakeProps) {
           }}
         >
           <div className="cad-label" style={{ marginBottom: 6 }}>
-            Caduceus · diagnostic consortium
+            ConsensusMD · diagnostic consortium
           </div>
           <div
             style={{
@@ -58,9 +111,9 @@ export function Intake({ onLaunch }: IntakeProps) {
               lineHeight: 1.05,
             }}
           >
-            Three minds <em style={{ color: 'var(--bone-2)' }}>agree.</em>
+            Three minds <em style={{ color: 'var(--bone-2)' }}>reason.</em>
             <br />
-            One holds the <em style={{ color: 'var(--artery)' }}>knife.</em>
+            One <em style={{ color: 'var(--artery)' }}>refuses.</em>
           </div>
           <div
             style={{
@@ -72,9 +125,9 @@ export function Intake({ onLaunch }: IntakeProps) {
               maxWidth: 680,
             }}
           >
-            Three frontier models debate a clinical case from three different reasoning frames.
-            A fourth — the serpent — must be disproven before consensus is rendered. No verdict
-            passes without surviving its own skeptic.
+            Built for the shift when a specialist isn't down the hall. Three frontier models
+            propose a diagnosis; a fourth is built to disagree. What reaches the clinician has
+            already survived the skeptic — so the patient doesn't have to.
           </div>
         </div>
 
@@ -160,9 +213,52 @@ export function Intake({ onLaunch }: IntakeProps) {
             borderTop: '1px solid var(--ink-3)',
             marginTop: 16,
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
           }}
         >
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            {onNewCase && (
+              <button
+                className="cad-btn"
+                style={{ padding: '10px 16px' }}
+                onClick={onNewCase}
+              >
+                + New patient intake
+              </button>
+            )}
+            {onPlayDemo && (
+              <>
+                <span className="cad-meta" style={{ color: 'var(--bone-3)', marginLeft: 4 }}>
+                  dry-run (no API):
+                </span>
+                <button
+                  className="cad-btn"
+                  style={{ padding: '10px 14px' }}
+                  onClick={() => onPlayDemo('converge')}
+                >
+                  ▷ Converge
+                </button>
+                <button
+                  className="cad-btn"
+                  style={{ padding: '10px 14px' }}
+                  onClick={() => onPlayDemo('deadlock')}
+                >
+                  ▷ Deadlock
+                </button>
+                <button
+                  className="cad-btn"
+                  style={{ padding: '10px 14px' }}
+                  onClick={() => onPlayDemo('converge-skip')}
+                  title="Jump directly to the convergence moment — for iterating on the animation"
+                >
+                  ▷▷ Skip to converge
+                </button>
+              </>
+            )}
+          </div>
           <button
             className="cad-btn primary"
             style={{ padding: '12px 24px', fontSize: 11 }}
@@ -183,7 +279,7 @@ export function Intake({ onLaunch }: IntakeProps) {
             { name: 'SONNET 4.6', role: 'Eliminative reasoning', glyph: 'Ω', ant: false },
             { name: 'GEMINI 3.1 PRO', role: 'Mechanistic reasoning', glyph: 'Γ', ant: false },
             { name: 'GPT-5.4', role: 'Probabilistic reasoning', glyph: 'Ψ', ant: false },
-            { name: 'OPHIS · OPUS 4.6', role: 'Adversarial skeptic', glyph: '†', ant: true },
+            { name: 'OPHIS · OPUS 4.6', role: 'Guards against anchoring', glyph: '†', ant: true },
           ].map((a) => (
             <div
               key={a.name}
@@ -230,8 +326,46 @@ export function Intake({ onLaunch }: IntakeProps) {
             </div>
           ))}
         </div>
+        <div className="cad-panel" style={{ padding: '14px 16px' }}>
+          <div className="cad-label" style={{ marginBottom: 12 }}>
+            Why this exists
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <StatBlock
+              figure="12M"
+              caption="US adults experience a diagnostic error in outpatient care every year — roughly 1 in 20."
+              source="National Academies of Medicine, 2015"
+            />
+            <StatBlock
+              figure="75M"
+              caption="Americans live in a designated primary-care shortage area. Over 90% of rural counties face a physician shortage; metro counties have ~3× more doctors per capita."
+              source="HRSA & Joint Economic Committee, 2024"
+            />
+            <StatBlock
+              figure="88%"
+              caption="of patients seeking a second opinion at Mayo Clinic had their diagnosis refined or revised. Only 12% were confirmed as originally diagnosed."
+              source="Van Such et al., J Eval Clin Pract, 2017"
+            />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              paddingTop: 12,
+              borderTop: '1px solid var(--ink-3)',
+              fontFamily: 'var(--serif)',
+              fontSize: 12.5,
+              fontStyle: 'italic',
+              color: 'var(--bone-1)',
+              lineHeight: 1.5,
+            }}
+          >
+            ConsensusMD is the second opinion for the clinicians who can't reach one — rural ERs,
+            overnight shifts, edge cases where the differential is wide and a specialist isn't
+            down the hall.
+          </div>
+        </div>
         <div className="cad-panel" style={{ padding: '12px 14px' }}>
-          <div className="cad-label" style={{ marginBottom: 8 }}>
+          <div className="cad-label" style={{ marginBottom: 6 }}>
             Protocol
           </div>
           <div
@@ -243,10 +377,9 @@ export function Intake({ onLaunch }: IntakeProps) {
               lineHeight: 1.5,
             }}
           >
-            Each debate runs up to 4 rounds. Convergence requires the antagonist to fail to produce
-            a credible challenge twice in a row. If that never happens, the system deadlocks and
-            returns a structured referral — also a valid output. All structured outputs are
-            schema-validated server-side.
+            Up to 4 rounds. Convergence requires the skeptic to fail to produce a credible
+            challenge twice in a row. If that never happens, the case is returned as a structured
+            referral — uncertainty treated as a finding, not a failure.
           </div>
         </div>
       </aside>

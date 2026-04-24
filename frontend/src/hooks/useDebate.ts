@@ -1,10 +1,13 @@
 import { useEffect, useReducer, useRef } from 'react';
-import type { DebateEvent } from '../types';
+import type { DebateEvent, PatientCase } from '../types';
 import { initialState, reduceEvent, type DebateState } from '../events';
+import { DEMO_SEQUENCES, playSequence, type DemoVariant } from '../demo/demoSequences';
 
 export interface UseDebateResult {
   state: DebateState;
   start: (caseId: string, maxRounds?: number) => void;
+  startWithCase: (patientCase: PatientCase, maxRounds?: number) => void;
+  playDemo: (variant: DemoVariant) => void;
   cancel: () => void;
 }
 
@@ -39,15 +42,21 @@ function reducer(state: DebateState, action: Action): DebateState {
 export function useDebate(): UseDebateResult {
   const [state, dispatch] = useReducer(reducer, initialState);
   const socketRef = useRef<WebSocket | null>(null);
+  const demoCancelRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     return () => {
       socketRef.current?.close();
+      demoCancelRef.current?.();
     };
   }, []);
 
-  const start = (caseId: string, maxRounds = 4) => {
+  const openSocket = (
+    caseId: string,
+    payload: Record<string, unknown>,
+  ) => {
     socketRef.current?.close();
+    demoCancelRef.current?.();
     dispatch({ type: 'connecting' });
 
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -57,7 +66,7 @@ export function useDebate(): UseDebateResult {
 
     ws.addEventListener('open', () => {
       dispatch({ type: 'start', caseId });
-      ws.send(JSON.stringify({ action: 'start_debate', case_id: caseId, max_rounds: maxRounds }));
+      ws.send(JSON.stringify(payload));
     });
 
     ws.addEventListener('message', (ev) => {
@@ -70,22 +79,58 @@ export function useDebate(): UseDebateResult {
     });
 
     ws.addEventListener('error', () => {
-      dispatch({ type: 'error', message: 'WebSocket connection error' });
+      // Only surface errors for the active socket — a cancelled/replaced
+      // socket's error is not interesting to the user.
+      if (socketRef.current === ws) {
+        dispatch({ type: 'error', message: 'WebSocket connection error' });
+      }
     });
 
     ws.addEventListener('close', (ev) => {
-      // If the server closed cleanly after debate_complete or error, leave
-      // the phase alone; otherwise mark as error if the debate was in flight.
-      if (state.phase === 'debating' && !ev.wasClean) {
+      // Same guard: if we've moved on (cancel, new debate, unmount), don't
+      // flip the UI into an error state for a socket the user no longer cares
+      // about. Previously this was gated on `state.phase === 'debating'` from
+      // a stale closure that always saw pre-connecting phase, so the branch
+      // never fired on real network drops.
+      if (socketRef.current !== ws) return;
+      if (!ev.wasClean) {
         dispatch({ type: 'error', message: 'WebSocket closed unexpectedly' });
       }
     });
   };
 
+  const start = (caseId: string, maxRounds = 4) => {
+    openSocket(caseId, { action: 'start_debate', case_id: caseId, max_rounds: maxRounds });
+  };
+
+  const startWithCase = (patientCase: PatientCase, maxRounds = 4) => {
+    openSocket(patientCase.case_id, { action: 'start_debate', case: patientCase, max_rounds: maxRounds });
+  };
+
+  /** Replay a scripted sequence without touching the backend/API. Feeds
+   *  events through the same reducer as a live debate, so the scene renders
+   *  identically. */
+  const playDemo = (variant: DemoVariant) => {
+    socketRef.current?.close();
+    socketRef.current = null;
+    demoCancelRef.current?.();
+
+    const seq = DEMO_SEQUENCES[variant];
+    const caseId = (seq[0]?.[1] as { case_id?: string })?.case_id ?? `demo-${variant}`;
+    dispatch({ type: 'start', caseId });
+
+    demoCancelRef.current = playSequence(seq, (event) => {
+      dispatch({ type: 'event', event });
+    });
+  };
+
   const cancel = () => {
     socketRef.current?.close();
+    socketRef.current = null;
+    demoCancelRef.current?.();
+    demoCancelRef.current = null;
     dispatch({ type: 'reset' });
   };
 
-  return { state, start, cancel };
+  return { state, start, startWithCase, playDemo, cancel };
 }

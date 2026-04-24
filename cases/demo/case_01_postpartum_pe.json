@@ -1,8 +1,12 @@
 {
   "case_id": "demo-01-postpartum-pe",
   "demographics": {
+    "name": "Maria Escudero",
     "age": 28,
     "sex": "F",
+    "weight_kg": 68,
+    "allergies": "NKDA",
+    "code_status": "Full Code",
     "relevant_context": "G1P1, 18 days postpartum from uncomplicated vaginal delivery"
   },
   "chief_complaint": "I can't catch my breath and I'm scared.",

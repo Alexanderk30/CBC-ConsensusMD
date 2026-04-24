@@ -1,9 +1,13 @@
 import type { DifferentialEntry } from '../events';
 
+/** Inline live-ranking list. Renders without its own card wrapper so it can
+ *  sit inside the CasePanel between the chief complaint and the HPI — where
+ *  a clinician would naturally read the current leading hypotheses before
+ *  diving into the narrative. */
 export function Differential({ entries }: { entries: DifferentialEntry[] }) {
   return (
-    <div className="cad-panel" style={{ padding: '12px 14px' }}>
-      <div className="cad-label" style={{ marginBottom: 10 }}>
+    <div>
+      <div className="cad-label" style={{ marginBottom: 8 }}>
         Differential · Live Ranking
       </div>
       {entries.length === 0 && (

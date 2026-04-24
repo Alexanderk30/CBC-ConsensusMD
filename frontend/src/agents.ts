@@ -1,6 +1,6 @@
 // Agent display metadata — maps backend role → visual identity (glyph, name,
 // position). The design handoff placed specialists in a diamond around a
-// central caduceus crest, with the antagonist at the bottom.
+// central crest, with the antagonist at the bottom.
 //
 // Backend model assignments (locked):
 //   probabilistic → GPT-5.4 via OpenRouter

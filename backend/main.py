@@ -107,3 +107,15 @@ def get_case(case_id: str) -> dict:
         if case.case_id == case_id:
             return case.model_dump(mode="json")
     raise HTTPException(status_code=404, detail=f"case {case_id!r} not found")
+
+
+# ── Static frontend ──────────────────────────────────────────────────
+# Serve the built Vite bundle from `frontend/dist` so a single deployment
+# (e.g. Railway) can ship backend + UI together. Mounted LAST so the API
+# routes above take precedence; unmatched paths fall through to the
+# `html=True` SPA fallback. Absent dist/ in dev, the mount is skipped.
+from fastapi.staticfiles import StaticFiles  # noqa: E402
+
+_FRONTEND_DIST = Path(__file__).resolve().parent.parent / "frontend" / "dist"
+if _FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=_FRONTEND_DIST, html=True), name="frontend")

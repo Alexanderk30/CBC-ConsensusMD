@@ -150,7 +150,15 @@ export interface CaseSummary {
 
 export interface PatientCase {
   case_id: string;
-  demographics: { age: number; sex: 'M' | 'F' | 'other'; relevant_context?: string };
+  demographics: {
+    age: number;
+    sex: 'M' | 'F' | 'other';
+    relevant_context?: string;
+    name?: string;
+    weight_kg?: number;
+    allergies?: string;
+    code_status?: string;
+  };
   chief_complaint: string;
   history_of_present_illness: string;
   past_medical_history: string[];

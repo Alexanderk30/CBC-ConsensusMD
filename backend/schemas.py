@@ -187,6 +187,14 @@ class Demographics(_Strict):
     age: int = Field(ge=0, le=120)
     sex: Sex
     relevant_context: Optional[str] = None
+    # Identifying / bedside-chart fields (optional; added for the clinician-
+    # facing UI so the case panel can read like a real chart header). The LLM
+    # prompts already ignore anything they don't actively reason over, so
+    # these have no effect on debate behaviour.
+    name: Optional[str] = None
+    weight_kg: Optional[float] = Field(default=None, gt=0, le=500)
+    allergies: Optional[str] = None
+    code_status: Optional[str] = None
 
 
 class Vitals(_Strict):

@@ -1,10 +1,11 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AGENTS, AGENT_POS, COMMITMENT_TO_CONFIDENCE, SPECIALIST_ROLES } from '../agents';
-import type { DebateState, Utterance } from '../events';
+import type { DebateState, Utterance, UtteranceHeadline } from '../events';
 import type { AgentId } from '../types';
 import { AgentNode } from './AgentNode';
 import { CaduceusCrest } from './CaduceusCrest';
-import { SerpentArc, buildSerpentPath } from './SerpentArc';
+import { SerpentArc } from './SerpentArc';
+import { buildSerpentPath } from './serpentPaths';
 
 const SCENE_W = 900;
 const SCENE_H = 640;
@@ -65,33 +66,47 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
     return out;
   }, [state.specialistOutputs, state.survivalCount]);
 
-  const [clashes, setClashes] = useState<Array<{ id: number; x: number; y: number }>>([]);
-  useEffect(() => {
-    if (!activeUtterance) return;
-    if (activeUtterance.kind === 'challenge' && activeUtterance.target) {
-      const target = AGENT_POS[activeUtterance.target];
-      const id = Date.now();
-      setClashes((c) => [...c, { id, x: target.x, y: target.y }]);
-      const t = setTimeout(() => setClashes((c) => c.filter((x) => x.id !== id)), 900);
-      return () => clearTimeout(t);
-    }
-  }, [activeUtterance?.id, activeUtterance?.kind, activeUtterance?.target]);
+  // Clash ring: renders a single keyed element whenever a challenge utterance
+  // is active. The CSS animation (cad-clash-expand, forwards) runs itself;
+  // React-side we just keep the DOM node present while the challenge is
+  // active and let the key change remount-and-replay when the next challenge
+  // arrives. No state, no effect — avoids the setState-in-effect lint and the
+  // stale-timer edge cases that came with the previous array-based pattern.
+  const clashTarget =
+    activeUtterance?.kind === 'challenge' && activeUtterance.target
+      ? AGENT_POS[activeUtterance.target]
+      : null;
+  const clashKey = activeUtterance?.id;
 
   const isConvergenceMoment = activeUtterance?.kind === 'converge';
 
   return (
-    <div ref={ref} style={{ position: 'absolute', inset: 0 }}>
-      {/* Central crest */}
+    <div
+      ref={ref}
+      className={isConvergenceMoment ? 'cad-converging' : ''}
+      style={{ position: 'absolute', inset: 0 }}
+    >
+      {/* Convergence seal — inscribed status below the staff. */}
+      {isConvergenceMoment && (
+        <div className="cad-convergence-seal">
+          <span className="mark">◆</span>
+          <span className="label">consensus reached</span>
+        </div>
+      )}
+
+      {/* Central crest — grows from background decoration to load-bearing
+          heraldry the moment convergence lands. */}
       <div
+        className="cad-crest-stage"
         style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          zIndex: 1,
+          zIndex: 3,
         }}
       >
-        <CaduceusCrest size={240} alive={isConvergenceMoment} />
+        <CaduceusCrest size={260} />
       </div>
 
       {/* Serpent arcs layer */}
@@ -117,8 +132,7 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
           const curveBase = utt.kind === 'challenge' ? 0.45 : 0.28;
           const curve = from === 'antagonist' ? -curveBase : curveBase;
           const path = buildSerpentPath(a.x, a.y, b.x, b.y, curve);
-          const kind: 'antagonist' | 'consensus' | '' =
-            utt.kind === 'challenge' ? 'antagonist' : utt.kind === 'converge' ? 'consensus' : '';
+          const kind: 'antagonist' | '' = utt.kind === 'challenge' ? 'antagonist' : '';
           return (
             <SerpentArc
               key={`${utt.id}-${age}`}
@@ -130,16 +144,6 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
           );
         })}
 
-        {/* Consensus: draw arcs from every specialist to the crest. */}
-        {isConvergenceMoment && (
-          <g>
-            {SPECIALIST_ROLES.map((role) => {
-              const p = AGENT_POS[role];
-              const path = buildSerpentPath(p.x, p.y, 0, 0, 0.15);
-              return <SerpentArc key={`conv-${role}`} path={path} kind="consensus" active />;
-            })}
-          </g>
-        )}
       </svg>
 
       {/* Agent nodes */}
@@ -161,20 +165,20 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
         );
       })}
 
-      {/* Clash rings */}
-      {clashes.map((c) => (
+      {/* Clash ring — single keyed element, remounts per challenge */}
+      {clashTarget && (
         <div
-          key={c.id}
+          key={clashKey}
           className="cad-clash"
           style={{
-            left: `calc(50% + ${c.x * scale}px)`,
-            top: `calc(50% + ${c.y * scale}px)`,
+            left: `calc(50% + ${clashTarget.x * scale}px)`,
+            top: `calc(50% + ${clashTarget.y * scale}px)`,
           }}
         >
           <div className="cad-clash-ring" />
           <div className="cad-clash-ring" style={{ animationDelay: '0.15s' }} />
         </div>
-      ))}
+      )}
 
       {/* Utterance bubble */}
       {activeUtterance && activeUtterance.from !== 'consensus' && (
@@ -187,9 +191,23 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
 function UtteranceBubble({ utt, scale }: { utt: Utterance; scale: number }) {
   if (utt.from === 'consensus') return null;
   const pos = AGENT_POS[utt.from];
-  const dx = pos.x === 0 ? 0 : pos.x > 0 ? 60 : -60;
-  const dy = pos.y < 0 ? 110 : pos.y > 0 ? -160 : 0;
-  const align = pos.x > 0 ? 'right' : 'left';
+  // Bubble placement keeps each speaker in its own airspace:
+  //   - Side agents (Gemini / GPT) → bubble alongside, vertically centered
+  //     on the node. Stays in the agent's horizontal band; never drips
+  //     down into OPHIS's territory at the bottom of the scene.
+  //   - Top-center agent (Sonnet) → bubble below, growing down.
+  //   - Bottom-center agent (OPHIS) → bubble above, growing up.
+  const isSide = pos.x !== 0;
+  const isBottom = pos.x === 0 && pos.y > 0;
+  const dx = isSide ? (pos.x > 0 ? 60 : -60) : 0;
+  const dy = isSide ? 0 : isBottom ? -70 : 70;
+  const tx = isSide
+    ? pos.x > 0
+      ? 'translateX(-100%)'
+      : 'translateX(0)'
+    : 'translateX(-50%)';
+  const ty = isSide ? 'translateY(-50%)' : isBottom ? 'translateY(-100%)' : 'translateY(0)';
+  const transform = `${tx} ${ty}`;
   const agent = AGENTS[utt.from];
   const targetName = utt.target ? AGENTS[utt.target].name : null;
   const bubbleKind =
@@ -200,7 +218,7 @@ function UtteranceBubble({ utt, scale }: { utt: Utterance; scale: number }) {
       style={{
         left: `calc(50% + ${(pos.x + dx) * scale}px)`,
         top: `calc(50% + ${(pos.y + dy) * scale}px)`,
-        transform: align === 'right' ? 'translateX(-100%)' : 'translateX(0)',
+        transform,
       }}
     >
       <div className="cad-utter-meta">
@@ -210,7 +228,98 @@ function UtteranceBubble({ utt, scale }: { utt: Utterance; scale: number }) {
         </span>
         <span>{utt.kind}</span>
       </div>
-      <div>{utt.text}</div>
+      <BubbleHeadline headline={utt.headline} />
+    </div>
+  );
+}
+
+/** Condensed scene bubble: current position + a few bullets of reasoning.
+ *  The full reasoning lives in the right-hand Transcript. */
+function BubbleHeadline({ headline }: { headline?: UtteranceHeadline }) {
+  if (!headline || (!headline.position && !headline.bullets?.length)) {
+    return null;
+  }
+  return (
+    <div>
+      {headline.position && (
+        <>
+          <div
+            className="cad-label"
+            style={{ color: 'var(--bone-3)', marginTop: 2, marginBottom: 2 }}
+          >
+            Position
+          </div>
+          <div
+            style={{
+              fontFamily: 'var(--serif)',
+              fontSize: 15,
+              color: 'var(--bone-0)',
+              lineHeight: 1.2,
+              marginBottom: 2,
+            }}
+          >
+            {headline.position}
+          </div>
+          {(headline.commitment || headline.action) && (
+            <div
+              style={{
+                fontFamily: 'var(--serif)',
+                fontSize: 12,
+                fontStyle: 'italic',
+                color: 'var(--bone-2)',
+                marginBottom: 10,
+              }}
+            >
+              {headline.commitment || headline.action}
+            </div>
+          )}
+        </>
+      )}
+      {headline.bullets && headline.bullets.length > 0 && (
+        <>
+          <div className="cad-label" style={{ color: 'var(--bone-3)', marginBottom: 4 }}>
+            Reasoning
+          </div>
+          <ul
+            style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}
+          >
+            {headline.bullets.map((b, i) => (
+              <li
+                key={i}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '12px 1fr',
+                  columnGap: 6,
+                  alignItems: 'baseline',
+                  fontFamily: 'var(--serif)',
+                  fontSize: 12.5,
+                  lineHeight: 1.4,
+                  color: 'var(--bone-0)',
+                }}
+              >
+                <span
+                  aria-hidden
+                  style={{
+                    fontFamily: 'var(--mono)',
+                    fontSize: '0.82em',
+                    color: 'var(--bone-3)',
+                  }}
+                >
+                  —
+                </span>
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   );
 }

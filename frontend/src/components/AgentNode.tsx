@@ -21,12 +21,10 @@ export function AgentNode({
 }: AgentNodeProps) {
   return (
     <div
-      className={`cad-node ${agent.kind === 'antagonist' ? 'antagonist' : ''} ${speaking ? 'speaking' : ''} ${challenged ? 'challenged' : ''}`}
+      className={`cad-node role-${agent.id} ${agent.kind === 'antagonist' ? 'antagonist' : ''} ${speaking ? 'speaking' : ''} ${challenged ? 'challenged' : ''} ${dim ? 'dim' : ''}`}
       style={{
         left: `calc(50% + ${pos.x * scale}px)`,
         top: `calc(50% + ${pos.y * scale}px)`,
-        opacity: dim ? 0.45 : 1,
-        transition: 'opacity .3s',
       }}
     >
       <div className="cad-conf">

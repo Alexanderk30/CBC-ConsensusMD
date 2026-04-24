@@ -1,4 +1,5 @@
-/* Caduceus — Medical Debate: shared styles (ported from design handoff) */
+/* ConsensusMD — shared scene styles (prefix `cad-` is historical, from the
+   original caduceus-themed design handoff). */
 
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
 
@@ -38,7 +39,9 @@
   position: absolute;
   transform: translate(-50%, -50%);
   z-index: 10;
+  transition: opacity .3s;
 }
+.cad-node.dim { opacity: 0.45; }
 .cad-node-ring {
   width: 96px; height: 96px;
   border-radius: 50%;
@@ -142,20 +145,33 @@
 
 .cad-utter {
   position: absolute;
-  max-width: 260px;
-  padding: 10px 14px;
+  width: min(300px, calc(100% - 32px));
+  max-height: 320px;
+  /* No `overflow: hidden` — it clips the overhanging CHALLENGE badge above
+     the bubble. Bullet text is already length-capped at event time via
+     `shortBullet` so content stays within max-height in practice. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding: 12px 14px 13px;
   background: oklch(0.99 0.004 85 / 0.98);
   border: 1px solid var(--ink-3);
-  border-left: 2px solid var(--bone-1);
   font-family: var(--serif);
   font-size: 13.5px;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--bone-0);
   z-index: 20;
-  backdrop-filter: blur(4px);
+  box-sizing: border-box;
   animation: cad-utter-in 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
-.cad-utter.antagonist { border-left-color: var(--artery); }
+.cad-utter ul { max-width: 100%; }
+.cad-utter li { min-width: 0; }
+/* Challenge utterances carry a faint artery wash + tinted full border
+   instead of a side stripe. The overhanging CHALLENGE badge is the primary
+   signal; the tint is secondary reinforcement. */
+.cad-utter.antagonist {
+  background: oklch(0.985 0.012 25 / 0.98);
+  border-color: oklch(0.72 0.09 25 / 0.5);
+}
 .cad-utter.antagonist::before {
   content: 'CHALLENGE';
   position: absolute;
@@ -169,7 +185,10 @@
   padding: 2px 6px;
   font-weight: 600;
 }
-.cad-utter.consensus { border-left-color: var(--ichor); }
+.cad-utter.consensus {
+  background: oklch(0.985 0.014 155 / 0.98);
+  border-color: oklch(0.55 0.10 155 / 0.5);
+}
 .cad-utter-meta {
   font-family: var(--mono);
   font-size: 9px;
@@ -190,8 +209,8 @@
 .cad-serpent-shadow { stroke: oklch(0.04 0 0 / 0.8); stroke-width: 6; filter: blur(4px); }
 .cad-serpent-body { stroke: var(--bone-1); stroke-width: 1.5; stroke-dasharray: 1 3; animation: cad-slither 1.5s linear infinite; }
 .cad-serpent-body.antagonist { stroke: var(--artery); stroke-width: 2; }
-.cad-serpent-body.consensus { stroke: var(--ichor); stroke-width: 2; animation: cad-slither 3s linear infinite; }
 @keyframes cad-slither { to { stroke-dashoffset: -16; } }
+
 
 .cad-serpent-head { fill: var(--bone-0); filter: drop-shadow(0 0 4px var(--bone-0)); }
 .cad-serpent-head.antagonist { fill: var(--artery-glow); filter: drop-shadow(0 0 6px var(--artery)); }
@@ -213,10 +232,15 @@
   padding: 8px 14px;
   border-bottom: 1px solid oklch(0.90 0.008 85);
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 70px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
+.cad-tx-row > * { min-width: 0; }
+.cad-tx-row ul { max-width: 100%; }
+.cad-tx-row li { min-width: 0; }
 .cad-tx-row.active { background: oklch(0.94 0.010 85); }
 .cad-tx-who {
   font-family: var(--mono);
@@ -228,12 +252,6 @@
 }
 .cad-tx-who.antagonist { color: var(--artery); }
 .cad-tx-who.consensus { color: var(--ichor); }
-.cad-tx-text {
-  font-family: var(--serif);
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--bone-0);
-}
 
 .cad-btn {
   background: transparent;
@@ -389,8 +407,175 @@
   left: 50%;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  opacity: 0.15;
+  opacity: 0.14;
   z-index: 2;
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Convergence moment ──────────────────────────────────────────────
+   Restraint. The four agents fade one at a time; the crest emboldens
+   from background watermark to full medical emblem; the inscribed seal
+   lands. No signatures, no snakes — just the heraldry becoming its own
+   conclusion.
+
+   Timeline (seconds):
+     0.0       HUD quiets (conf bars, rotating rings)
+     0.2       OPHIS stands down — skeptic has yielded
+     0.2       crest begins emboldening (opacity + scale)
+     0.9       Gemini fades
+     1.6       Sonnet fades
+     2.3       GPT fades
+     3.0       ◆ seal inks in
+     3.4       "consensus reached" label reveals */
+
+/* Step 1: quiet the HUD noise around each agent. */
+.cad-converging .cad-node .cad-conf {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+.cad-converging .cad-node-ring::before {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.cad-converging .cad-node-ring {
+  box-shadow: none !important;
+  border-color: var(--ink-3) !important;
+  transition: box-shadow 1s ease-out, border-color 1s ease-out;
+}
+
+/* Step 2 — agents fade one at a time. OPHIS first (the skeptic has no
+   remaining challenge), then the three specialists in sequence. Each
+   specialist dims to a near-zero presence so the crest inherits the
+   foreground. */
+.cad-converging .cad-node.role-antagonist {
+  animation: cad-stand-down 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards !important;
+}
+.cad-converging .cad-node.role-mechanistic {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.9s forwards !important;
+}
+.cad-converging .cad-node.role-eliminative {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 1.6s forwards !important;
+}
+.cad-converging .cad-node.role-probabilistic {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 2.3s forwards !important;
+}
+@keyframes cad-stand-aside {
+  to {
+    opacity: 0.08;
+    filter: saturate(0.2);
+  }
+}
+@keyframes cad-stand-down {
+  to {
+    opacity: 0.06;
+    filter: saturate(0);
+  }
+}
+
+/* Antagonist ring styling — while OPHIS is still visible during its
+   stand-down, keep the ring background quiet rather than the red-glow
+   "speaking" state it was in during the debate. */
+.cad-converging .cad-node.antagonist .cad-node-ring {
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2)) !important;
+  box-shadow: none !important;
+  transition: background 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+/* Step 3 — the crest emboldens. It was a 0.14 watermark during the
+   debate; as the agents fade, it ramps to full opacity and scales up
+   slightly. The medical emblem becomes the conclusion. */
+.cad-crest-stage {
+  transition: transform 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+.cad-converging .cad-crest-stage {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+.cad-converging .cad-crest {
+  opacity: 1;
+  transition: opacity 2.0s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+.cad-converging .cad-crest line,
+.cad-converging .cad-crest path {
+  filter: saturate(1.25) brightness(0.88);
+  transition: filter 1.6s ease-out 0.6s;
+}
+
+/* ── Scene push-in ────────────────────────────────────────────────
+   A very subtle zoom on the whole scene during convergence. Adds cinematic
+   emphasis without becoming a motion-heavy effect. */
+.cad-converging {
+  animation: cad-scene-push 5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+@keyframes cad-scene-push {
+  from { transform: scale(1); }
+  to   { transform: scale(1.03); }
+}
+
+/* ── Inscribed seal ───────────────────────────────────────────────
+   "◆ CONSENSUS REACHED" — sits just below the signature baseline. The
+   mark inks in after the third signature lands; the label unveils
+   left-to-right like a line of calligraphy being set down. */
+.cad-convergence-seal {
+  position: absolute;
+  top: calc(50% + 200px);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 6;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.cad-convergence-seal .mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ichor);
+  line-height: 1;
+  opacity: 0;
+  animation: cad-seal-mark-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 3.0s forwards;
+}
+.cad-convergence-seal .label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ichor);
+  clip-path: inset(0 100% 0 0);
+  animation: cad-seal-label-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 3.4s forwards;
+}
+@keyframes cad-seal-mark-in {
+  from { opacity: 0; transform: scale(0.7) rotate(-20deg); transform-origin: center; }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes cad-seal-label-in {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* ── Accessibility: reduced motion ─────────────────────────────────
+   Collapse the decorative convergence animations to near-instant when
+   the user has requested reduced motion. The core meaning — signatures
+   present, agents receded, seal visible — still lands, just without
+   easing or staged timing. */
+@media (prefers-reduced-motion: reduce) {
+  .cad-convergence-seal .mark,
+  .cad-convergence-seal .label,
+  .cad-crest-stage,
+  .cad-crest,
+  .cad-converging {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cad-convergence-seal .label {
+    clip-path: none !important;
+  }
+  .cad-converging {
+    transform: none !important;
+  }
 }
 
 .cad-divider {
