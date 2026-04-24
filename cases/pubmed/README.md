@@ -17,6 +17,11 @@ appear in the user-facing picker; the `/cases` endpoint reads from
 
 ### Per-case run history
 
+Detailed round-by-round trajectories live in **[EVAL_LOG.md](./EVAL_LOG.md)** —
+this README holds the index + case-data provenance; the eval log holds the
+forensic narrative (what each round did, where memorization showed up,
+what prompt fixes were applied mid-investigation and their observed effect).
+
 **`eval-01-sam-vasculopathy`**
 
 - **2026-04-24 — v1 (easy-mode) run:** converged on SAM at Round 3 / 4,
