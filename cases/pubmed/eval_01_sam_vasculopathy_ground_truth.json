@@ -1,0 +1,97 @@
+{
+  "case_id": "eval-01-sam-vasculopathy",
+  "archetype": "deadlock",
+  "expected_outcome": "deadlocked",
+
+  "competing_hypotheses": [
+    {
+      "diagnosis": "Polyarteritis nodosa (PAN)",
+      "supporting_evidence": [
+        "Acute abdominal pain with splanchnic vascular involvement (coeliac trunk dissection, splenic artery dissection with infarction)",
+        "Elevated inflammatory markers (CRP 55, ESR 23)",
+        "Middle-aged adult with acute vascular event — demographic fits"
+      ],
+      "distinguishing_test": "Total-body PET/CT to look for large- and medium-vessel inflammation; targeted angiography; consideration of visceral artery biopsy if accessible; hepatitis B serology has already returned negative, reducing prior probability."
+    },
+    {
+      "diagnosis": "Takayasu arteritis",
+      "supporting_evidence": [
+        "Large-vessel involvement (coeliac trunk) consistent with Takayasu distribution",
+        "Acute inflammatory presentation with mildly elevated ESR/CRP",
+        "Arterial stenosis and thrombus formation"
+      ],
+      "distinguishing_test": "Total-body PET/CT for wall inflammation in aorta and its main branches; MR angiography; typical Takayasu demographic is female <40, which argues against but does not exclude."
+    },
+    {
+      "diagnosis": "Segmental arterial mediolysis (SAM)",
+      "supporting_evidence": [
+        "Middle-aged adult without congenital predisposition to arterial dissection",
+        "Splanchnic artery dissection is the classic vascular distribution for SAM",
+        "Absence of significant inflammatory markers relative to the vascular burden",
+        "Negative autoimmune screening (ANA, ANCA) and normal complement",
+        "No 'string of beads' pattern on imaging to suggest fibromuscular dysplasia",
+        "No atherosclerotic disease on imaging"
+      ],
+      "distinguishing_test": "SAM is a diagnosis of exclusion applied via Kalva et al. clinical criteria. Confirmation requires exclusion of vasculitis (negative PET/CT, negative autoimmune workup — both already supportive), exclusion of FMD (imaging), exclusion of congenital connective tissue disease (history), and ideally multidisciplinary review. Vessel biopsy is definitive but rarely obtained."
+    }
+  ],
+
+  "recommended_next_action": "Admit for urgent rheumatology and vascular surgery consultation. Order total-body PET/CT and extended autoimmune panel (if not already drawn). Hold steroids pending specialty review — presumptive steroid therapy for vasculitis exposes the patient to iatrogenic harm if the diagnosis is SAM rather than a vasculitis. Therapeutic anticoagulation reasonable while workup proceeds.",
+
+  "referral_urgency": "urgent",
+
+  "narrative_notes": "Genuinely ambiguous presentation where three vascular entities remain credible with ED-level data. The treating team in the source literature initially committed to presumed vasculitis and began high-dose IV methylprednisolone before PET/CT returned negative and autoimmune workup returned clean — at which point multidisciplinary review reached SAM via clinical criteria. The correctly calibrated system behavior at the ED decision point is deadlock with these three hypotheses on the table and a recommendation for the specific workup that would distinguish them. Confident convergence on SAM from initial presentation alone would be suspicious for memorization rather than reasoning.",
+
+  "eval_metadata": {
+    "source": {
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35770291/",
+      "citation": "Minten L, Messiaen P, Van der Hilst J. Acute abdominal pain: a challenging diagnosis. Acta Gastroenterol Belg. 2022;85(1-2). DOI: 10.51821/85.4.9860",
+      "publication_year": 2022,
+      "journal": "Acta Gastroenterologica Belgica",
+      "journal_tier": "mid",
+      "access": "open access via journal website"
+    },
+
+    "ground_truth": {
+      "final_diagnosis": "Segmental arterial mediolysis (SAM)",
+      "confirmation_method": "Clinical diagnostic criteria per Kalva et al. 2011. Not biopsy-confirmed.",
+      "confirmation_strength": "moderate (criteria-based, not histologic)",
+      "diagnosis_reached_by_treating_team_via": "Negative total-body PET/CT (excluded large-vessel vasculitis), normal autoimmune workup, normal complement, absence of congenital predisposition, imaging not consistent with FMD or atherosclerosis, and multidisciplinary case review."
+    },
+
+    "selection_rationale": "Tests system calibration on an initially-mistaken acute presentation. The treating team themselves initially committed to a wrong impression (vasculitis, started IV steroids) and required additional workup plus multidisciplinary review to reach the final diagnosis. A correctly calibrated system should mirror that uncertainty at the initial-presentation decision point.",
+
+    "domain": "vascular / rheumatology",
+
+    "expected_hypothesis_coverage": {
+      "required": ["vasculitis", "SAM"],
+      "ideal": ["polyarteritis nodosa", "Takayasu arteritis", "segmental arterial mediolysis"],
+      "note": "Generic 'vasculitis' as a category plus SAM is acceptable coverage. Specific vasculitis subtypes (PAN, Takayasu) represent stronger reasoning."
+    },
+
+    "scoring": {
+      "outcome_pass_condition": "System deadlocks OR converges on vasculitis/PAN/Takayasu with SAM present in the differential and appropriate workup recommended.",
+      "outcome_fail_conditions": [
+        "Confident convergence on SAM without workup having been the reason (memorization risk)",
+        "Confident convergence on any single vasculitis without SAM in the differential at all (incomplete differential)",
+        "Convergence on aortic dissection, atherosclerotic disease, or acute abdomen from other cause (reasoning failure — these are excluded by the clinical findings)",
+        "Deadlock with hypotheses unrelated to the vascular presentation"
+      ],
+      "hypothesis_coverage_scoring": "Count of expected_hypothesis_coverage.ideal entries that appear in the system's competing_hypotheses output (fuzzy match acceptable). Also count whether 'vasculitis' generic OR any specific vasculitis subtype is present.",
+      "distinguishing_test_scoring": "Check whether the system's recommended workup includes PET/CT and/or specialist referral (rheumatology or vascular surgery)."
+    },
+
+    "memorization_risk": {
+      "level": "moderate",
+      "mitigation": "HPI prose rewritten to reduce direct text matching with source. Specific combination of findings remains distinctive enough that a system with strong memorization could still pattern-match on the finding profile.",
+      "tell_tale_sign": "If the system's reasoning cites 'Kalva criteria' or 'segmental arterial mediolysis' by name in Round 0 without being prompted by the findings, flag as likely memorization."
+    },
+
+    "limitations_acknowledged": [
+      "Ground truth is clinical-criteria-based rather than biopsy-confirmed",
+      "SAM is rare enough that probabilistic reasoning may appropriately rank it low — this is not necessarily a reasoning failure",
+      "The source paper is mid-tier; a higher-tier case with same clinical pattern would be preferred if available",
+      "The original patient's vitals were not recorded in the source; PatientCase input acknowledges this gap"
+    ]
+  }
+}

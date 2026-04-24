@@ -24,7 +24,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 
-from backend.api.websocket import CASES_DIR, router as ws_router
+from backend.api.websocket import CASES_DIR, _iter_case_files, router as ws_router
 from backend.schemas import PatientCase
 
 
@@ -62,11 +62,9 @@ def health() -> dict[str, str]:
 
 @app.get("/cases")
 def list_cases() -> list[dict[str, str]]:
-    """List demo cases with their case_id, archetype, and a one-line summary."""
+    """List every case (demo + eval) with case_id, archetype, chief complaint."""
     out: list[dict[str, str]] = []
-    for path in sorted(CASES_DIR.glob("case_*.json")):
-        if "_ground_truth" in path.name:
-            continue
+    for path in sorted(_iter_case_files(CASES_DIR)):
         try:
             case = PatientCase.model_validate_json(path.read_text())
         except ValidationError:
@@ -94,12 +92,7 @@ def list_cases() -> list[dict[str, str]]:
 def get_case(case_id: str) -> dict:
     if not _CASE_ID_PATTERN.fullmatch(case_id):
         raise HTTPException(status_code=400, detail="invalid case_id format")
-    path = CASES_DIR / f"{case_id}.json"
-    if path.exists():
-        return PatientCase.model_validate_json(path.read_text()).model_dump(mode="json")
-    for candidate in CASES_DIR.glob("case_*.json"):
-        if "_ground_truth" in candidate.name:
-            continue
+    for candidate in _iter_case_files(CASES_DIR):
         try:
             case = PatientCase.model_validate_json(candidate.read_text())
         except ValidationError:

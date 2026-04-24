@@ -37,17 +37,28 @@ from backend.schemas import PatientCase
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-CASES_DIR = Path(__file__).resolve().parents[2] / "cases" / "demo"
+# Root directory for all case corpora. Subdirectories (demo/, pubmed/, ...)
+# are scanned recursively. File prefix convention:
+#   case_*.json  — demo/showcase cases surfaced in the UI picker
+#   eval_*.json  — evaluation fixtures from published literature
+# Both are listed + loadable by the API; filenames with "_ground_truth"
+# are sidecar metadata and filtered out.
+CASES_DIR = Path(__file__).resolve().parents[2] / "cases"
+CASE_FILE_GLOB = "[ce]*_*.json"
+
+
+def _iter_case_files(root: Path):
+    """All case files under `root`, excluding ground-truth sidecars."""
+    for path in root.rglob(CASE_FILE_GLOB):
+        if "_ground_truth" in path.name:
+            continue
+        yield path
 
 
 def _load_case_by_id(case_id: str) -> PatientCase:
-    """Resolve a case_id to a PatientCase by scanning cases/demo/."""
-    candidate = CASES_DIR / f"{case_id}.json"
-    if candidate.exists():
-        return PatientCase.model_validate_json(candidate.read_text())
-    for path in CASES_DIR.glob("case_*.json"):
-        if "_ground_truth" in path.name:
-            continue
+    """Resolve a case_id to a PatientCase by scanning every case corpus
+    under cases/ (demo/, pubmed/, future subdirs)."""
+    for path in _iter_case_files(CASES_DIR):
         try:
             case = PatientCase.model_validate_json(path.read_text())
         except ValidationError:
