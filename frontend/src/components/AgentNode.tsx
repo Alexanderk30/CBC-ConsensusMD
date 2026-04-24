@@ -6,6 +6,7 @@ interface AgentNodeProps {
   scale?: number;
   speaking?: boolean;
   challenged?: boolean;
+  thinking?: boolean;
   confidence: number;
   dim?: boolean;
 }
@@ -16,12 +17,13 @@ export function AgentNode({
   scale = 1,
   speaking = false,
   challenged = false,
+  thinking = false,
   confidence,
   dim = false,
 }: AgentNodeProps) {
   return (
     <div
-      className={`cad-node role-${agent.id} ${agent.kind === 'antagonist' ? 'antagonist' : ''} ${speaking ? 'speaking' : ''} ${challenged ? 'challenged' : ''} ${dim ? 'dim' : ''}`}
+      className={`cad-node role-${agent.id} ${agent.kind === 'antagonist' ? 'antagonist' : ''} ${speaking ? 'speaking' : ''} ${challenged ? 'challenged' : ''} ${thinking ? 'thinking' : ''} ${dim ? 'dim' : ''}`}
       style={{
         left: `calc(50% + ${pos.x * scale}px)`,
         top: `calc(50% + ${pos.y * scale}px)`,

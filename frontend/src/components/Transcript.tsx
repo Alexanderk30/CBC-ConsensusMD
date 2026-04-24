@@ -18,13 +18,20 @@ export function Transcript({ utterances, activeId }: TranscriptProps) {
   return (
     <div
       className="cad-panel"
-      style={{ display: 'flex', flexDirection: 'column', minHeight: 0, flex: 1 }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        // flex-shrink: 0 so Transcript never collapses below its content when
+        // the Verdict below grows tall (post-consensus). Parent column owns
+        // the scroll.
+        flex: '1 0 auto',
+      }}
     >
       <div className="cad-panel-header">
         <div className="cad-label">Transcript · {utterances.length} exchange{utterances.length === 1 ? '' : 's'}</div>
         <div className="cad-meta">debate.log</div>
       </div>
-      <div ref={listRef} style={{ overflowY: 'auto', flex: 1 }}>
+      <div ref={listRef}>
         {utterances.length === 0 && (
           <div
             style={{

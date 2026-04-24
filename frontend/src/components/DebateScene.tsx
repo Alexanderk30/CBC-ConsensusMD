@@ -79,18 +79,33 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
   const clashKey = activeUtterance?.id;
 
   const isConvergenceMoment = activeUtterance?.kind === 'converge';
+  const isDeadlockMoment = activeUtterance?.kind === 'deadlock';
 
   return (
     <div
       ref={ref}
-      className={isConvergenceMoment ? 'cad-converging' : ''}
+      className={
+        isConvergenceMoment
+          ? 'cad-converging'
+          : isDeadlockMoment
+            ? 'cad-deadlocking'
+            : ''
+      }
       style={{ position: 'absolute', inset: 0 }}
     >
-      {/* Convergence seal — inscribed status below the staff. */}
+      {/* Resolution seal — positive (◆ filled, ichor green) or negative
+          (◇ outline, artery red). Deadlock label lands first so the viewer
+          registers "no consensus" before the scene visibly resolves. */}
       {isConvergenceMoment && (
         <div className="cad-convergence-seal">
           <span className="mark">◆</span>
           <span className="label">consensus reached</span>
+        </div>
+      )}
+      {isDeadlockMoment && (
+        <div className="cad-convergence-seal deadlock">
+          <span className="mark">◇</span>
+          <span className="label">no consensus · referral required</span>
         </div>
       )}
 
@@ -123,6 +138,11 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
         }}
       >
         {history.map(({ utt, age }) => {
+          // During the resolution moment (convergence or deadlock) the
+          // scene belongs to the seal + crest; stale debate arcs still
+          // rendered at 32% opacity would distract (or, for deadlock,
+          // read as if OPHIS is still actively attacking). Clear them.
+          if (isConvergenceMoment || isDeadlockMoment) return null;
           if (!utt.target) return null;
           const from = utt.from;
           if (from === 'consensus') return null;
@@ -152,6 +172,7 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
         const speaking = activeUtterance?.from === agent.id;
         const challenged =
           activeUtterance?.kind === 'challenge' && activeUtterance.target === agent.id;
+        const thinking = state.thinking.includes(agent.id) && !speaking;
         return (
           <AgentNode
             key={agent.id}
@@ -160,6 +181,7 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
             scale={scale}
             speaking={speaking}
             challenged={challenged}
+            thinking={thinking}
             confidence={confidences[agent.id] ?? 0.5}
           />
         );

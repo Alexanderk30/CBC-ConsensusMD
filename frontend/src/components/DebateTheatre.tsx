@@ -17,6 +17,7 @@ interface DebateTheatreProps {
 export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
   const [patientCase, setPatientCase] = useState<PatientCase | null>(null);
   const [caseErr, setCaseErr] = useState<string | null>(null);
+  const [caseCollapsed, setCaseCollapsed] = useState(false);
 
   useEffect(() => {
     if (!state.caseId) return;
@@ -65,11 +66,14 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         width: '100vw',
         height: '100vh',
         display: 'grid',
-        gridTemplateColumns: '340px minmax(0, 1fr) 380px',
+        gridTemplateColumns: caseCollapsed
+          ? '220px minmax(0, 1fr) 380px'
+          : '340px minmax(0, 1fr) 380px',
         gridTemplateRows: '1fr auto',
         gap: 14,
         padding: 14,
         boxSizing: 'border-box',
+        transition: 'grid-template-columns 320ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
     >
       {/* LEFT — Case + Differential + Registry */}
@@ -98,7 +102,14 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
             {caseErr}
           </div>
         )}
-        {patientCase && <CasePanel patientCase={patientCase} differential={differential} />}
+        {patientCase && (
+          <CasePanel
+            patientCase={patientCase}
+            differential={differential}
+            collapsed={caseCollapsed}
+            onToggleCollapsed={() => setCaseCollapsed((c) => !c)}
+          />
+        )}
         <AgentRegistry state={state} />
       </div>
 
@@ -149,7 +160,10 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         <DebateScene state={state} activeUtterance={activeUtterance} />
       </div>
 
-      {/* RIGHT — Transcript + Verdict */}
+      {/* RIGHT — Transcript + Verdict. Scrolls as a single column: at
+          convergence the Verdict grows tall (full synthesis + residual
+          uncertainty), and without column-level overflow the Verdict used
+          to land on top of the Transcript. */}
       <div
         style={{
           gridColumn: 3,
@@ -158,6 +172,7 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
           flexDirection: 'column',
           gap: 14,
           minHeight: 0,
+          overflowY: 'auto',
         }}
       >
         <Transcript utterances={state.utterances} activeId={state.activeUtteranceId} />

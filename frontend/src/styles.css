@@ -93,6 +93,50 @@
   40%, 60% { transform: translate(3px, 0); }
 }
 
+/* ── Thinking ──────────────────────────────────────────────────────
+   While the agent's API call is in flight (round_started → their
+   specialist_output / antagonist_output), the ring pulses softly and
+   the outer dashed ring speeds up dramatically — reads as "scanning /
+   processing" without competing with .speaking's solid halo. */
+.cad-node.thinking .cad-node-ring {
+  animation: cad-thinking-breathe 1.8s ease-in-out infinite;
+}
+.cad-node.thinking .cad-node-ring::before {
+  animation-duration: 4s;
+  opacity: 0.85;
+}
+.cad-node.thinking.antagonist .cad-node-ring {
+  animation-name: cad-thinking-breathe-antagonist;
+}
+@keyframes cad-thinking-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--ink-3), 0 0 8px oklch(0.50 0.020 85 / 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px var(--bone-2), 0 0 18px oklch(0.50 0.020 85 / 0.22);
+  }
+}
+@keyframes cad-thinking-breathe-antagonist {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--artery-dim), 0 0 10px oklch(0.55 0.14 30 / 0.10);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px var(--artery), 0 0 22px oklch(0.55 0.14 30 / 0.30);
+  }
+}
+/* Speaking overrides thinking — once the utterance arrives we want the
+   solid halo, not the pulse. */
+.cad-node.thinking.speaking .cad-node-ring {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cad-node.thinking .cad-node-ring,
+  .cad-node.thinking .cad-node-ring::before {
+    animation: none;
+  }
+}
+
 .cad-node-glyph {
   font-family: var(--serif);
   font-size: 32px;
@@ -273,6 +317,27 @@
 .cad-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .cad-btn.primary { border-color: var(--artery); color: var(--artery); }
 .cad-btn.primary:hover:not(:disabled) { background: var(--artery); color: var(--ink-0); }
+
+/* Small icon-style button — used for inline controls like the CasePanel
+   collapse chevron. Mono type at a single character size; no uppercase
+   transform (keeps chevron glyphs readable). */
+.cad-icon-btn {
+  border: 1px solid var(--ink-3);
+  background: transparent;
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  cursor: pointer;
+  line-height: 1;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.cad-icon-btn:hover {
+  border-color: var(--bone-1);
+  color: var(--bone-0);
+  background: oklch(0.94 0.010 85);
+}
 
 .cad-vital {
   font-family: var(--mono);
@@ -513,6 +578,73 @@
   to   { transform: scale(1.03); }
 }
 
+/* ── Deadlock resolution ──────────────────────────────────────────
+   The inverse gesture to convergence. The "no consensus" seal lands
+   FIRST (up-front negative cue at t=0) so the viewer never confuses
+   this with the positive outcome. The crest DIMS instead of
+   emboldening — there is no emblem of unity to settle on. The
+   specialists fade together (stalemate) rather than in sequence
+   (orderly handoff). The whole scene desaturates subtly.
+
+   Timeline (seconds):
+     0.0       ◇ mark inks in (artery color) — immediate negative cue
+     0.2       HUD quiets
+     0.4       "no consensus · referral required" label reveals
+     0.6       crest begins dimming
+     1.2       OPHIS fades — skeptic's job done
+     2.0       three specialists fade simultaneously
+     0.3–3.3   scene desaturates */
+
+.cad-deadlocking .cad-node .cad-conf {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+.cad-deadlocking .cad-node-ring::before {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.cad-deadlocking .cad-node-ring {
+  box-shadow: none !important;
+  border-color: var(--ink-3) !important;
+  transition: box-shadow 1s ease-out, border-color 1s ease-out;
+}
+
+.cad-deadlocking .cad-node.role-antagonist {
+  animation: cad-stand-down 1.0s cubic-bezier(0.25, 1, 0.5, 1) 1.2s forwards !important;
+}
+.cad-deadlocking .cad-node.role-mechanistic,
+.cad-deadlocking .cad-node.role-eliminative,
+.cad-deadlocking .cad-node.role-probabilistic {
+  animation: cad-stand-aside 1.1s cubic-bezier(0.25, 1, 0.5, 1) 2.0s forwards !important;
+}
+
+.cad-deadlocking .cad-node.antagonist .cad-node-ring {
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2)) !important;
+  box-shadow: none !important;
+  transition: background 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+/* Crest dims rather than brightens — no resolution to settle on. */
+.cad-deadlocking .cad-crest-stage {
+  transform: translate(-50%, -50%) scale(0.88);
+  transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+}
+.cad-deadlocking .cad-crest {
+  opacity: 0.04;
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+}
+
+/* Subtle desaturation of the whole scene — signals "no clinical
+   resolution" without being visually aggressive. */
+.cad-deadlocking {
+  animation: cad-scene-desaturate 3s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+@keyframes cad-scene-desaturate {
+  from { filter: saturate(1); }
+  to   { filter: saturate(0.82); }
+}
+
 /* ── Inscribed seal ───────────────────────────────────────────────
    "◆ CONSENSUS REACHED" — sits just below the signature baseline. The
    mark inks in after the third signature lands; the label unveils
@@ -546,6 +678,28 @@
   clip-path: inset(0 100% 0 0);
   animation: cad-seal-label-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 3.4s forwards;
 }
+/* Deadlock seal — artery tint, up-front timing, centered in the graph
+   where the crest would otherwise be. The crest dims during deadlock,
+   leaving the center empty; the "no consensus" seal fills that void
+   and becomes the sole focal point. Slightly larger type than the
+   convergence variant since it's the hero element, not a footer note. */
+.cad-convergence-seal.deadlock {
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
+.cad-convergence-seal.deadlock .mark {
+  color: var(--artery);
+  font-size: 22px;
+  animation-delay: 0s;
+  animation-duration: 0.6s;
+}
+.cad-convergence-seal.deadlock .label {
+  color: var(--artery);
+  font-size: 12px;
+  animation-delay: 0.4s;
+  animation-duration: 1.0s;
+}
 @keyframes cad-seal-mark-in {
   from { opacity: 0; transform: scale(0.7) rotate(-20deg); transform-origin: center; }
   to   { opacity: 1; transform: scale(1) rotate(0deg); }
@@ -564,7 +718,8 @@
   .cad-convergence-seal .label,
   .cad-crest-stage,
   .cad-crest,
-  .cad-converging {
+  .cad-converging,
+  .cad-deadlocking {
     animation-duration: 0.01ms !important;
     animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
@@ -573,8 +728,10 @@
   .cad-convergence-seal .label {
     clip-path: none !important;
   }
-  .cad-converging {
+  .cad-converging,
+  .cad-deadlocking {
     transform: none !important;
+    filter: none !important;
   }
 }
 

@@ -5,11 +5,61 @@ import { Differential } from './Differential';
 interface CasePanelProps {
   patientCase: PatientCase;
   differential?: DifferentialEntry[];
+  collapsed?: boolean;
+  onToggleCollapsed?: () => void;
 }
 
-export function CasePanel({ patientCase, differential }: CasePanelProps) {
+export function CasePanel({
+  patientCase,
+  differential,
+  collapsed = false,
+  onToggleCollapsed,
+}: CasePanelProps) {
   const d = patientCase.demographics;
   const v = patientCase.vitals;
+
+  // Collapsed mode: patient identity strip + Differential only. Chart
+  // sections (vitals, HPI, PMH, exam, workup) hide; the left column
+  // narrows in DebateTheatre so the debate scene can grow. Differential
+  // stays visible because it's the live state the consortium is debating.
+  if (collapsed) {
+    return (
+      <div className="cad-panel" style={{ padding: '14px 16px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 8,
+            marginBottom: 12,
+          }}
+        >
+          <div style={{ minWidth: 0 }}>
+            {d.name && (
+              <div
+                style={{
+                  fontFamily: 'var(--serif)',
+                  fontSize: 16,
+                  color: 'var(--bone-0)',
+                  lineHeight: 1.15,
+                  letterSpacing: '-0.005em',
+                }}
+              >
+                {d.name}
+              </div>
+            )}
+            <div className="cad-label" style={{ marginTop: 3, fontSize: 8 }}>
+              MRN · {patientCase.case_id}
+            </div>
+          </div>
+          {onToggleCollapsed && (
+            <CollapseToggle collapsed onClick={onToggleCollapsed} />
+          )}
+        </div>
+        {differential && <Differential entries={differential} />}
+      </div>
+    );
+  }
 
   // Build the clinical strip. Order matches how a real chart header reads:
   // identifier → demographics → weight → allergies → code status.
@@ -24,18 +74,24 @@ export function CasePanel({ patientCase, differential }: CasePanelProps) {
 
   return (
     <div className="cad-panel" style={{ padding: '14px 16px' }}>
-      {/* Chart header: MRN · LIVE */}
+      {/* Chart header: MRN · LIVE · collapse toggle */}
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'baseline',
           marginBottom: 8,
+          gap: 10,
         }}
       >
         <div className="cad-label">MRN · {patientCase.case_id}</div>
-        <div className="cad-meta">
-          <span className="cad-pulse" /> &nbsp; LIVE
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div className="cad-meta">
+            <span className="cad-pulse" /> &nbsp; LIVE
+          </div>
+          {onToggleCollapsed && (
+            <CollapseToggle collapsed={false} onClick={onToggleCollapsed} />
+          )}
         </div>
       </div>
 
@@ -189,4 +245,26 @@ function formatWorkup(workup: Record<string, unknown>): string {
   return Object.entries(workup)
     .map(([k, v]) => `${k.toUpperCase()}: ${v}`)
     .join(' · ');
+}
+
+/** Small chevron button for collapsing/expanding the chart. Styled via
+ *  `.cad-icon-btn` so the hover state is pure CSS rather than JS-driven. */
+function CollapseToggle({
+  collapsed,
+  onClick,
+}: {
+  collapsed: boolean;
+  onClick: () => void;
+}) {
+  const label = collapsed ? 'Expand chart' : 'Collapse chart';
+  return (
+    <button
+      className="cad-icon-btn"
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+    >
+      {collapsed ? '»' : '«'}
+    </button>
+  );
 }
