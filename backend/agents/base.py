@@ -206,7 +206,11 @@ async def _call_anthropic(
 
     response = await client.messages.create(
         model=model,
-        max_tokens=8000,
+        # 3000 is comfortable headroom for any of our output schemas: specialist
+        # round outputs run ~500–1500 tokens, antagonist ~300–800, consensus
+        # synthesis ~1500–2500. Lower cap = faster generation budget allocation
+        # at the provider, trimming a few seconds per call without truncating.
+        max_tokens=3000,
         system=[
             {
                 "type": "text",
