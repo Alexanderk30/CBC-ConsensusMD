@@ -206,11 +206,13 @@ async def _call_anthropic(
 
     response = await client.messages.create(
         model=model,
-        # 3000 is comfortable headroom for any of our output schemas: specialist
-        # round outputs run ~500–1500 tokens, antagonist ~300–800, consensus
-        # synthesis ~1500–2500. Lower cap = faster generation budget allocation
-        # at the provider, trimming a few seconds per call without truncating.
-        max_tokens=3000,
+        # 8000 tokens of headroom. Earlier we dropped this to 3000 hoping
+        # for a latency win; in practice Anthropic's max_tokens is a cap,
+        # not a reservation, so lowering it didn't speed anything up — it
+        # just truncated RoundN specialist outputs mid-JSON (the richer
+        # schema with position_change + response_to_challenge + full
+        # differential pushes legitimate outputs past 3000 tokens).
+        max_tokens=8000,
         system=[
             {
                 "type": "text",
