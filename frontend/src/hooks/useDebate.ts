@@ -33,6 +33,11 @@ function reducer(state: DebateState, action: Action): DebateState {
     case 'reset':
       return initialState;
     case 'error':
+      // Don't flip from a successful terminal state to error. Spurious
+      // wasClean=false closes sometimes arrive AFTER debate_complete
+      // (Starlette/Railway proxy close-handshake race), and we don't want
+      // that to stamp a red error banner over a converged verdict.
+      if (state.phase === 'complete') return state;
       return { ...state, phase: 'error', error: action.message };
   }
 }

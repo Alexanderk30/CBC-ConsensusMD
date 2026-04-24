@@ -11,9 +11,13 @@ appear in the user-facing picker; the `/cases` endpoint reads from
 
 ## Index
 
-| ID | Source | URL | Archetype | Final diagnosis |
-|---|---|---|---|---|
-| `eval-01-sam-vasculopathy` | Minten et al., *Acta Gastroenterol Belg* 2022 | https://pubmed.ncbi.nlm.nih.gov/35770291/ | deadlock | Segmental arterial mediolysis (SAM) |
+| ID | Source | URL | Archetype | Final diagnosis | System result |
+|---|---|---|---|---|---|
+| `eval-01-sam-vasculopathy` | Minten et al., *Acta Gastroenterol Belg* 2022 | https://pubmed.ncbi.nlm.nih.gov/35770291/ | deadlock | Segmental arterial mediolysis (SAM) | ✓ converged on SAM at R3 (2026-04-24) |
+
+### Per-case run history
+
+**`eval-01-sam-vasculopathy`** — converged on SAM at Round 3 / 4, survival 2/2. The three specialists all reached SAM independently via different frames (probabilistic demographics fit, mechanistic single-mediolytic-mechanism parsimony, eliminative exclusion of vasculitis/FMD/atherosclerosis). Consensus synthesis correctly flagged that heritable arteriopathy (vEDS / Marfan) remains an unresolved co-factor requiring genetic testing. The ground-truth rubric expected deadlock as the calibrated outcome; confident convergence on SAM is marked in `eval_metadata.scoring.outcome_fail_conditions` as a memorization-risk signal. Worth inspecting the Round 0 reasoning for the telltale citation of "Kalva criteria" — if present, the convergence was pattern-match, not reasoning.
 
 ## Ingestion policy
 

@@ -164,5 +164,16 @@ async def ws_debate(websocket: WebSocket) -> None:
                     )
                 except Exception:
                     pass  # client may have disconnected before we could tell them
+            else:
+                # Explicit clean close (code 1000) after a successful debate
+                # so the browser's WebSocket close event fires with
+                # wasClean=true. Without this, Starlette's on-return close
+                # races with the pending receive loop and the client sees
+                # wasClean=false, spuriously flipping the UI to an error
+                # state after a perfectly good convergence.
+                try:
+                    await websocket.close(code=1000)
+                except Exception:
+                    pass
     except WebSocketDisconnect:
         logger.info("WebSocket disconnected by client during setup")

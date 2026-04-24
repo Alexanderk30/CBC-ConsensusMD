@@ -263,8 +263,19 @@ export function deriveDifferential(state: DebateState): DifferentialEntry[] {
     candidate: 0.4,
     considered: 0.15,
   };
+  // Canonical key: lowercase + whitespace-collapse + strip a trailing
+  // parenthetical abbreviation. The last rule handles LLM phrasing drift
+  // where one specialist writes "Segmental arterial mediolysis (SAM)" and
+  // another writes "Segmental arterial mediolysis" — both should merge into
+  // one row. Trailing-only to avoid accidentally merging things like
+  // "HELLP (pregnancy-associated)" with "HELLP" + something else later.
   const canonicalize = (name: string) =>
-    name.toLowerCase().trim().replace(/\s+/g, ' ');
+    name
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/\s*\([^)]{1,10}\)\s*$/, '')
+      .trim();
 
   for (const role of SPECIALIST_ROLES) {
     const out = latest[role];
