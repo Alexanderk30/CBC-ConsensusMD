@@ -769,3 +769,121 @@
   width: 3px;
   background: var(--bone-0);
 }
+
+/* ── Floating verdict ─────────────────────────────────────────────
+   Detached from the right column so the transcript scroll is not
+   disrupted when consensus lands. Anchored to the viewport's
+   bottom-right with two states: a full card (expanded) and a small
+   clickable badge (collapsed). The 200ms ease-out-expo timing matches
+   the project's quiet-but-considered transition feel — no bounce,
+   no overshoot.
+
+   Z-index sits above the scene's resolution seal (z-index 6) and the
+   clash overlay (z-index 15) but below the error toast (z-index 100). */
+.cad-floating-verdict {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  font-family: var(--mono);
+  transition:
+    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cad-floating-verdict-expanded {
+  width: 380px;
+  max-height: min(70vh, 720px);
+  overflow-y: auto;
+  background: var(--ink-0);
+  border: 1px solid var(--ink-3);
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.08),
+    0 12px 32px oklch(0.22 0.030 210 / 0.18);
+  padding: 0;
+  /* The inner <Verdict /> already paints its own .cad-verdict surface
+     (sage tint + ichor border on converged, bone tint + bone border on
+     deadlocked). The wrapper here is just the floating chrome. */
+}
+
+.cad-floating-verdict-expanded .cad-verdict {
+  border: none;
+  margin: 0;
+}
+
+.cad-floating-verdict-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+  transition:
+    color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cad-floating-verdict-close:hover {
+  color: var(--bone-0);
+  border-color: var(--ink-3);
+  background: oklch(0.94 0.008 85);
+}
+.cad-floating-verdict-close:focus-visible {
+  outline: none;
+  border-color: var(--bone-0);
+}
+
+.cad-floating-verdict-collapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: oklch(0.98 0.012 155 / 0.95);
+  border: 1px solid var(--ichor);
+  color: var(--ichor);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.08),
+    0 6px 18px oklch(0.22 0.030 210 / 0.14);
+  transition:
+    background 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cad-floating-verdict-collapsed.deadlocked {
+  background: oklch(0.97 0.014 85 / 0.95);
+  border-color: var(--bone-2);
+  color: var(--bone-1);
+}
+.cad-floating-verdict-collapsed:hover {
+  background: oklch(0.96 0.018 155 / 1);
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.10),
+    0 10px 24px oklch(0.22 0.030 210 / 0.18);
+}
+.cad-floating-verdict-collapsed.deadlocked:hover {
+  background: oklch(0.95 0.020 85 / 1);
+}
+.cad-floating-verdict-collapsed:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--ink-0),
+    0 0 0 3px var(--bone-0);
+}
+.cad-floating-verdict-badge-label {
+  white-space: nowrap;
+}

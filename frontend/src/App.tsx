@@ -2,12 +2,23 @@ import { useState } from 'react';
 import { DebateTheatre } from './components/DebateTheatre';
 import { Intake } from './components/Intake';
 import { NewCaseIntake } from './components/NewCaseIntake';
+import { PlaybackControls } from './components/PlaybackControls';
 import { useDebate } from './hooks/useDebate';
 
 type LandingMode = 'picker' | 'intake';
 
 export default function App() {
-  const { state, start, startWithCase, playDemo, cancel } = useDebate();
+  const {
+    state,
+    start,
+    startWithCase,
+    playDemo,
+    cancel,
+    playbackMode,
+    pendingCount,
+    setPlaybackMode,
+    advance,
+  } = useDebate();
   const [mode, setMode] = useState<LandingMode>('picker');
 
   if (state.phase === 'idle') {
@@ -32,12 +43,20 @@ export default function App() {
   }
 
   return (
-    <DebateTheatre
-      state={state}
-      onReset={() => {
-        cancel();
-        setMode('picker');
-      }}
-    />
+    <>
+      <DebateTheatre
+        state={state}
+        onReset={() => {
+          cancel();
+          setMode('picker');
+        }}
+      />
+      <PlaybackControls
+        mode={playbackMode}
+        pendingCount={pendingCount}
+        onModeChange={setPlaybackMode}
+        onAdvance={advance}
+      />
+    </>
   );
 }

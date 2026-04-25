@@ -6,8 +6,8 @@ import { AgentRegistry } from './AgentRegistry';
 import { CasePanel } from './CasePanel';
 import { DebateScene } from './DebateScene';
 import { Timeline } from './Timeline';
+import { FloatingVerdict } from './FloatingVerdict';
 import { Transcript } from './Transcript';
-import { Verdict } from './Verdict';
 
 interface DebateTheatreProps {
   state: DebateState;
@@ -28,7 +28,6 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
     if (!state.caseId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPatientCase(null);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCaseErr(null);
       return;
     }
@@ -179,10 +178,10 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         <DebateScene state={state} activeUtterance={activeUtterance} />
       </div>
 
-      {/* RIGHT — Transcript + Verdict. Scrolls as a single column: at
-          convergence the Verdict grows tall (full synthesis + residual
-          uncertainty), and without column-level overflow the Verdict used
-          to land on top of the Transcript. */}
+      {/* RIGHT — Transcript only. Verdict has been detached into a
+          fixed-position floating card (see <FloatingVerdict /> below) so the
+          transcript scroll is no longer disrupted when consensus lands and
+          the verdict grows tall. */}
       <div
         style={{
           gridColumn: 3,
@@ -195,13 +194,14 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         }}
       >
         <Transcript utterances={state.utterances} activeId={state.activeUtteranceId} />
-        <Verdict state={state} />
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <button className="cad-btn" onClick={onReset}>
             ↺ New case
           </button>
         </div>
       </div>
+
+      <FloatingVerdict state={state} />
 
       {/* BOTTOM — Timeline */}
       <div style={{ gridColumn: 2, gridRow: 2 }}>
