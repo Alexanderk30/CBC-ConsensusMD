@@ -6,8 +6,8 @@
 //   probabilistic → GPT-5.4 via OpenRouter
 //   mechanistic   → Gemini 3.1 Pro via OpenRouter
 //   eliminative   → Claude Sonnet 4.6 via Anthropic
-//   antagonist    → Claude Opus 4.6 via Anthropic
-//   consensus     → Claude Opus 4.6 via Anthropic (off-stage; the crest)
+//   antagonist    → Claude Opus 4.7 via Anthropic
+//   consensus     → Claude Opus 4.7 via Anthropic (off-stage; the crest)
 //
 // The human user sees these names in the UI. The antagonist never sees
 // which underlying model produced which specialist conclusion — that
@@ -52,7 +52,7 @@ export const AGENTS: Record<AgentId, AgentMeta> = {
   },
   antagonist: {
     id: 'antagonist',
-    name: 'OPHIS · OPUS 4.6',
+    name: 'OPHIS · OPUS 4.7',
     role: 'Adversarial skeptic',
     glyph: '†',
     kind: 'antagonist',
