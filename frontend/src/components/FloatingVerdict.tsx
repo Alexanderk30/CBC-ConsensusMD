@@ -54,7 +54,6 @@ export function FloatingVerdict({ state }: FloatingVerdictProps) {
         onClick={() => setExpanded(true)}
         aria-label={`Show verdict — ${badgeLabel}`}
       >
-        <span className={`cad-pulse ${isConverged ? 'green' : 'bone'}`} />
         <span className="cad-floating-verdict-badge-label">{badgeLabel}</span>
       </button>
     );
