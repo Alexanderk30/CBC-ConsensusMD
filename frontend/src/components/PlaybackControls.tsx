@@ -38,11 +38,6 @@ export function PlaybackControls({
         display: 'flex',
         alignItems: 'center',
         gap: 10,
-        padding: '8px 14px',
-        background: 'oklch(0.97 0.006 85 / 0.95)',
-        border: '1px solid var(--ink-3)',
-        backdropFilter: 'blur(8px)',
-        boxShadow: '0 4px 16px oklch(0.22 0.030 210 / 0.08)',
       }}
       aria-label="Debate playback controls"
     >
