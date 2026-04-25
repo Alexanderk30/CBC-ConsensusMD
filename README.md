@@ -58,7 +58,7 @@ tests/                     # 75 passing unit tests (schemas, state, workarounds)
 
 | Role | Provider | Model |
 |---|---|---|
-| Probabilistic specialist | OpenRouter | GPT-5.4 (env-overridable) |
+| Probabilistic specialist | OpenRouter | GPT-5.5 (env-overridable) |
 | Mechanistic specialist | OpenRouter | Gemini 3.1 Pro Preview |
 | Eliminative specialist | Anthropic | Claude Sonnet 4.6 |
 | Antagonist | Anthropic | Claude Opus 4.7 |
@@ -70,12 +70,12 @@ ConsensusMD uses four distinct frontier models across five roles. The
 assignments were made based on specific characteristics of each model,
 not on general reasoning strength. The rationale for each:
 
-**GPT-5.4 as probabilistic specialist.** GPT-5.4 has demonstrated strong
+**GPT-5.5 as probabilistic specialist.** GPT-5.5 has demonstrated strong
 performance on benchmarks requiring numerical reasoning and base-rate-style
 probabilistic inference. The probabilistic specialist's output schema requires
 explicit base-rate estimates and risk-factor modifiers — a reasoning structure
 that aligns with the model's tendencies on structured quantitative tasks.
-Empirically, we observed that GPT-5.4 produced the most consistently
+Empirically, we observed that GPT-5.5 produced the most consistently
 structured base-rate justifications during early testing.
 
 **Gemini 3.1 Pro as mechanistic specialist.** Gemini's benchmark performance

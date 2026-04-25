@@ -46,6 +46,7 @@ export default function App() {
     <>
       <DebateTheatre
         state={state}
+        playbackMode={playbackMode}
         onReset={() => {
           cancel();
           setMode('picker');

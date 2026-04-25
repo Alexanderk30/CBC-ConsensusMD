@@ -248,6 +248,14 @@
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Fade-out applied to a scene utterance bubble that has been visible for
+   10s in auto mode without a new utterance arriving. Step-mode bubbles
+   never fade — the user is controlling the pace. */
+.cad-utter.cad-utter-fading {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
 
 .cad-serpent { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .cad-serpent-shadow { stroke: oklch(0.04 0 0 / 0.8); stroke-width: 6; filter: blur(4px); }
@@ -391,8 +399,14 @@
   pointer-events: none;
 }
 .cad-verdict.deadlocked {
-  background: linear-gradient(180deg, oklch(0.98 0.015 85 / 0.5), oklch(0.96 0.018 85 / 0.3));
-  border-color: var(--bone-2);
+  /* Mirror the converged variant's color story but in artery — converge
+     reads as green (ichor), deadlock reads as red (artery). Both are
+     terminal states; the color carries the outcome valence. */
+  background: linear-gradient(180deg, oklch(0.98 0.015 30 / 0.5), oklch(0.96 0.018 30 / 0.3));
+  border-color: var(--artery);
+}
+.cad-verdict.deadlocked::before {
+  border-color: oklch(0.55 0.14 30 / 0.3);
 }
 
 .cad-pulse {
@@ -880,9 +894,9 @@
     transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .cad-floating-verdict-collapsed.deadlocked {
-  background: oklch(0.97 0.014 85 / 0.95);
-  border-color: var(--bone-2);
-  color: var(--bone-1);
+  background: oklch(0.97 0.014 30 / 0.95);
+  border-color: var(--artery);
+  color: var(--artery);
 }
 .cad-floating-verdict-collapsed:hover {
   background: oklch(0.96 0.018 155 / 1);
@@ -891,7 +905,7 @@
     0 10px 24px oklch(0.22 0.030 210 / 0.18);
 }
 .cad-floating-verdict-collapsed.deadlocked:hover {
-  background: oklch(0.95 0.020 85 / 1);
+  background: oklch(0.95 0.020 30 / 1);
 }
 .cad-floating-verdict-collapsed:focus-visible {
   outline: none;

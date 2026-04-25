@@ -3,7 +3,7 @@
 // central crest, with the antagonist at the bottom.
 //
 // Backend model assignments (locked):
-//   probabilistic → GPT-5.4 via OpenRouter
+//   probabilistic → GPT-5.5 via OpenRouter
 //   mechanistic   → Gemini 3.1 Pro via OpenRouter
 //   eliminative   → Claude Sonnet 4.6 via Anthropic
 //   antagonist    → Claude Opus 4.7 via Anthropic
@@ -45,7 +45,7 @@ export const AGENTS: Record<AgentId, AgentMeta> = {
   },
   probabilistic: {
     id: 'probabilistic',
-    name: 'GPT-5.4',
+    name: 'GPT-5.5',
     role: 'Probabilistic reasoning',
     glyph: 'Ψ',
     kind: 'specialist',

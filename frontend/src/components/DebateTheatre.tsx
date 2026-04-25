@@ -12,9 +12,13 @@ import { Transcript } from './Transcript';
 interface DebateTheatreProps {
   state: DebateState;
   onReset: () => void;
+  /** Forwarded to DebateScene so the scene utterance bubble can decide
+   *  whether to auto-fade after a quiet interval (auto mode) or hold
+   *  until the user advances (step mode). */
+  playbackMode?: 'auto' | 'step';
 }
 
-export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
+export function DebateTheatre({ state, onReset, playbackMode }: DebateTheatreProps) {
   const [patientCase, setPatientCase] = useState<PatientCase | null>(null);
   const [caseErr, setCaseErr] = useState<string | null>(null);
   const [caseCollapsed, setCaseCollapsed] = useState(false);
@@ -180,7 +184,11 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         >
           <div className="cad-label">ConsensusMD · v0.1</div>
         </div>
-        <DebateScene state={state} activeUtterance={activeUtterance} />
+        <DebateScene
+          state={state}
+          activeUtterance={activeUtterance}
+          playbackMode={playbackMode}
+        />
       </div>
 
       {/* RIGHT — Transcript only. Verdict has been detached into a

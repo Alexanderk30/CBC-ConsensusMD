@@ -36,12 +36,12 @@ export function Verdict({ state }: { state: DebateState }) {
       >
         <div
           className="cad-label"
-          style={{ color: isConverged ? 'var(--ichor)' : 'var(--bone-1)' }}
+          style={{ color: isConverged ? 'var(--ichor)' : 'var(--artery)' }}
         >
           {isConverged ? '◆ Convened Diagnosis' : '◇ Structured Referral'}
         </div>
-        <div className="cad-meta">
-          <span className={`cad-pulse ${isConverged ? 'green' : 'bone'}`} />
+        <div className="cad-meta" style={{ color: isConverged ? 'var(--ichor)' : 'var(--artery)' }}>
+          <span className={`cad-pulse ${isConverged ? 'green' : ''}`} />
           &nbsp;&nbsp;
           {isConverged ? 'CONVERGED' : 'DEADLOCKED'} · round {consensus.final_round}
         </div>

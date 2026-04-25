@@ -278,7 +278,7 @@ export function Intake({ onLaunch, onNewCase, onPlayDemo }: IntakeProps) {
           {[
             { name: 'SONNET 4.6', role: 'Eliminative reasoning', glyph: 'Ω', ant: false },
             { name: 'GEMINI 3.1 PRO', role: 'Mechanistic reasoning', glyph: 'Γ', ant: false },
-            { name: 'GPT-5.4', role: 'Probabilistic reasoning', glyph: 'Ψ', ant: false },
+            { name: 'GPT-5.5', role: 'Probabilistic reasoning', glyph: 'Ψ', ant: false },
             { name: 'OPHIS · OPUS 4.7', role: 'Guards against anchoring', glyph: '†', ant: true },
           ].map((a) => (
             <div

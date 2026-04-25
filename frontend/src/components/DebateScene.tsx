@@ -13,6 +13,11 @@ const SCENE_H = 640;
 interface DebateSceneProps {
   state: DebateState;
   activeUtterance: Utterance | undefined;
+  /** Determines whether the scene utterance bubble auto-fades. In auto
+   *  mode, the bubble fades 10s after the last new utterance arrives so
+   *  the scene can rest visually between rounds. In step mode the user
+   *  is controlling the pace and the bubble must stay until they advance. */
+  playbackMode?: 'auto' | 'step';
 }
 
 function useSceneScale() {
@@ -34,8 +39,28 @@ function useSceneScale() {
   return [ref, scale] as const;
 }
 
-export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
+export function DebateScene({
+  state,
+  activeUtterance,
+  playbackMode = 'auto',
+}: DebateSceneProps) {
   const [ref, scale] = useSceneScale();
+  // Auto-fade the scene utterance bubble after a quiet interval. Resets
+  // every time a new utterance becomes active. Step mode never fades —
+  // the user is the clock.
+  const [bubbleFading, setBubbleFading] = useState(false);
+  useEffect(() => {
+    // Sync local "fading" state with the active-utterance prop change.
+    // The lint rule is right in general but this specific reset is
+    // exactly the effect's job: when a new utterance arrives, the
+    // bubble must be visible again.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBubbleFading(false);
+    if (playbackMode !== 'auto') return;
+    if (!activeUtterance) return;
+    const t = setTimeout(() => setBubbleFading(true), 10000);
+    return () => clearTimeout(t);
+  }, [activeUtterance?.id, playbackMode]);
 
   // Recent utterances for trailing arcs.
   const history = useMemo(() => {
@@ -204,13 +229,21 @@ export function DebateScene({ state, activeUtterance }: DebateSceneProps) {
 
       {/* Utterance bubble */}
       {activeUtterance && activeUtterance.from !== 'consensus' && (
-        <UtteranceBubble utt={activeUtterance} scale={scale} />
+        <UtteranceBubble utt={activeUtterance} scale={scale} fading={bubbleFading} />
       )}
     </div>
   );
 }
 
-function UtteranceBubble({ utt, scale }: { utt: Utterance; scale: number }) {
+function UtteranceBubble({
+  utt,
+  scale,
+  fading = false,
+}: {
+  utt: Utterance;
+  scale: number;
+  fading?: boolean;
+}) {
   if (utt.from === 'consensus') return null;
   const pos = AGENT_POS[utt.from];
   // Bubble placement keeps each speaker in its own airspace:
@@ -236,7 +269,7 @@ function UtteranceBubble({ utt, scale }: { utt: Utterance; scale: number }) {
     utt.kind === 'challenge' ? 'antagonist' : utt.kind === 'converge' ? 'consensus' : '';
   return (
     <div
-      className={`cad-utter ${bubbleKind}`}
+      className={`cad-utter ${bubbleKind} ${fading ? 'cad-utter-fading' : ''}`}
       style={{
         left: `calc(50% + ${(pos.x + dx) * scale}px)`,
         top: `calc(50% + ${(pos.y + dy) * scale}px)`,

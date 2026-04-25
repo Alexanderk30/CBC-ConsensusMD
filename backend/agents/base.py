@@ -66,9 +66,9 @@ def _role_model_map() -> dict[AgentRole, ModelSpec]:
     return {
         "probabilistic": ModelSpec(
             provider="openrouter",
-            primary_model=os.getenv("PROBABILISTIC_MODEL", "openai/gpt-5.4"),
+            primary_model=os.getenv("PROBABILISTIC_MODEL", "openai/gpt-5.5"),
             fallback_model=os.getenv(
-                "PROBABILISTIC_FALLBACK_MODEL", "openai/gpt-5"
+                "PROBABILISTIC_FALLBACK_MODEL", "openai/gpt-5.4"
             ),
         ),
         "mechanistic": ModelSpec(
