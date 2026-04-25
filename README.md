@@ -48,7 +48,8 @@ backend/
 ├── api/websocket.py       # WebSocket endpoint
 └── evaluation/runner.py   # Batch eval harness for held-out cases
 
-cases/demo/                # 4 demo cases + ground-truth sidecars
+cases/demo/                # 5 demo cases + ground-truth sidecars
+cases/pubmed/              # Held-out PubMed evaluation fixtures
 scripts/                   # run_case.py, smoke_test_agents.py
 tests/                     # 75 passing unit tests (schemas, state, workarounds)
 ```
@@ -60,8 +61,74 @@ tests/                     # 75 passing unit tests (schemas, state, workarounds)
 | Probabilistic specialist | OpenRouter | GPT-5.4 (env-overridable) |
 | Mechanistic specialist | OpenRouter | Gemini 3.1 Pro Preview |
 | Eliminative specialist | Anthropic | Claude Sonnet 4.6 |
-| Antagonist | Anthropic | Claude Opus 4.6 |
-| Consensus | Anthropic | Claude Opus 4.6 |
+| Antagonist | Anthropic | Claude Opus 4.7 |
+| Consensus | Anthropic | Claude Opus 4.7 |
+
+### Why these specific model assignments
+
+ConsensusMD uses four distinct frontier models across five roles. The
+assignments were made based on specific characteristics of each model,
+not on general reasoning strength. The rationale for each:
+
+**GPT-5.4 as probabilistic specialist.** GPT-5.4 has demonstrated strong
+performance on benchmarks requiring numerical reasoning and base-rate-style
+probabilistic inference. The probabilistic specialist's output schema requires
+explicit base-rate estimates and risk-factor modifiers — a reasoning structure
+that aligns with the model's tendencies on structured quantitative tasks.
+Empirically, we observed that GPT-5.4 produced the most consistently
+structured base-rate justifications during early testing.
+
+**Gemini 3.1 Pro as mechanistic specialist.** Gemini's benchmark performance
+on scientific reasoning tasks — particularly those requiring causal chains
+through biological processes — informed this choice. The mechanistic
+specialist's output schema requires a unifying pathophysiological mechanism
+and an explicit causal chain linking that mechanism to specific findings.
+This structured causal reasoning matched Gemini's observed strengths in
+early testing. Google DeepMind's research focus on biomedical applications
+also suggested Gemini would have strong exposure to mechanistic medical
+content during training.
+
+**Claude Sonnet 4.6 as eliminative specialist.** Anthropic's safety-focused
+calibration work makes Claude models particularly well-suited to the
+"what cannot be missed" reasoning frame. The eliminative specialist needs
+to raise uncomfortable possibilities (cancer, severe infections, vascular
+catastrophes) without hedging, and it needs to enumerate dangerous
+alternatives without false reassurance. Sonnet's balance of reasoning
+depth and response speed also fits the eliminative role's practical
+requirement of quickly enumerating danger scenarios across multiple systems.
+
+**Claude Opus 4.7 as antagonist and consensus.** Opus is the strongest
+reasoning model in the Claude family as of this implementation. The
+adversarial role requires the most robust reasoning capacity in the
+system — it has to identify weaknesses in the specialists' conclusions
+and produce grounded challenges without being deflected by surface
+plausibility. The consensus role similarly requires synthesizing full
+debate context, integrating multiple reasoning frames, and producing
+calibrated final output. Using the same model for both roles also
+creates some operational efficiency — adversarial analysis and
+synthesis both benefit from the same model's reasoning patterns.
+
+### Honest notes on the assignments
+
+Two honest acknowledgments worth making:
+
+**The assignments are principled but not rigorously evidence-based.**
+We did not run systematic comparisons of each model in each possible
+role. Our choices reflected our best judgment about each model's
+characteristics and training emphasis. A more rigorous design process
+would test all 24 possible model-to-role assignments (4 models × 6
+role permutations among the three specialist frames) and measure which
+produced the strongest reasoning quality in each frame. This is a
+legitimate next step if the project continues.
+
+**Heterogeneous models are the core design choice; specific assignments
+are secondary.** The architectural claim is that using three different
+frontier models is stronger than using three instances of the same model.
+The specific assignments above could shift without breaking the
+architecture — for instance, Gemini could reasonably handle eliminative
+reasoning, and Sonnet could reasonably handle mechanistic reasoning.
+What matters is that the three specialists are genuinely different
+models, not that they are specifically these three.
 
 **Information isolation (architectural invariant):**
 - Specialists never see each other's reasoning — only `primary_diagnosis` + commitment level.
@@ -129,7 +196,7 @@ Optional: `"max_rounds": 4` (default 4).
 
 ## Demo cases
 
-Four cases cover the full demo arc:
+Five cases cover the full demo arc:
 
 | # | Case | Archetype | Expected outcome |
 |---|---|---|---|
@@ -137,6 +204,11 @@ Four cases cover the full demo arc:
 | 2 | `demo-02-stemi` | Clean consensus (textbook inferior STEMI) | converged |
 | 3 | `demo-03-addisons` | Belief update (Addison's misdiagnosed as depression) | converged |
 | 4 | `demo-04-neuro-deadlock` | Deadlock (MS vs. neuroborreliosis vs. functional) | deadlocked |
+| 5 | `demo-05-endometriosis` | Belief update (endometriosis under an IBS + dysmenorrhea + anxiety label; 7–10 yr typical diagnostic delay) | converged |
+
+Held-out evaluation fixtures sourced from published case reports live under
+`cases/pubmed/`, with round-by-round trajectory analysis in
+[`cases/pubmed/EVAL_LOG.md`](cases/pubmed/EVAL_LOG.md).
 
 Ground-truth files (`case_XX_..._ground_truth.json`) are intentionally NOT part of the `PatientCase` schema — they are evaluation-only. Physician review of the clinical content happens separately.
 
