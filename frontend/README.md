@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# ConsensusMD frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite. Connects to the FastAPI backend over a
+WebSocket at `/ws/debate` and renders the live debate as a single-screen
+theatre.
 
-Currently, two official plugins are available:
+## Run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev          # http://localhost:5173 (proxies /cases and /ws/debate)
+npm run build        # tsc -b && vite build → dist/
+npm run preview      # serve dist/ for local QA
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+In production the backend serves `dist/` as static at `/` (see
+`backend/main.py`). Single-image Railway deploy.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Layout
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+├── App.tsx                     # Top-level router: picker → intake →
+│                               # instructions → debate
+├── components/
+│   ├── Intake.tsx              # Demo landing — case picker + dry-runs
+│   ├── NewCaseIntake.tsx       # 4-step patient-chart wizard
+│   ├── Instructions.tsx        # User-facing operating manual
+│   ├── DebateTheatre.tsx       # Main debate layout (3-column)
+│   ├── DebateScene.tsx         # Center stage: agents + crest + bubbles
+│   ├── Transcript.tsx          # Right column: full reasoning shells
+│   ├── CasePanel.tsx           # Left column: patient chart
+│   ├── AgentRegistry.tsx       # Model-name table
+│   ├── Timeline.tsx            # Bottom strip: round-by-round events
+│   ├── FloatingVerdict.tsx     # Bottom-right verdict card
+│   └── PlaybackControls.tsx    # Auto / Step playback toggle
+├── hooks/useDebate.ts          # WebSocket + reducer; single ingest()
+│                               # entry point with auto/step queue
+├── events.ts                   # DebateEvent reducer + differential
+│                               # derivation
+├── types.ts                    # PatientCase, DebateEvent unions
+├── demo/demoSequences.ts       # Recorded event traces for dry-runs
+├── utteranceBuilders.ts        # Turn schema rows into bubble text
+└── styles.css                  # Design tokens (cad-* prefix, OKLCH)
+```
+
+## Design tokens
+
+The visual system uses an OKLCH palette with `--bone-*` (warm cream
+neutrals), `--ink-*` (cool dark slate), `--ichor` (success green), and
+`--artery` / `--artery-dim` (alarm red). All panels use `.cad-panel`,
+labels use `.cad-label` (uppercase mono), serif body copy uses the
+`var(--serif)` family.
+
+See `.impeccable.md` at the repo root for the full design brief.

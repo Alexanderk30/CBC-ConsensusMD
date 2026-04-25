@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 from pathlib import Path
 
@@ -32,6 +33,27 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
+log = logging.getLogger(__name__)
+
+
+# Required env vars. Surfaced at /health so the deployed instance can be
+# probed without starting a debate, and logged at startup so the deploy
+# log shows the failure mode immediately rather than 120s into the first
+# WebSocket request.
+_REQUIRED_ENV = ("ANTHROPIC_API_KEY", "OPENROUTER_API_KEY")
+
+
+def _missing_env() -> list[str]:
+    return [k for k in _REQUIRED_ENV if not os.environ.get(k)]
+
+
+_startup_missing = _missing_env()
+if _startup_missing:
+    log.warning(
+        "Missing required env vars at startup: %s. "
+        "Debate requests will fail until these are set.",
+        ", ".join(_startup_missing),
+    )
 
 
 app = FastAPI(
@@ -56,7 +78,13 @@ _CASE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9\-]{0,63}$")
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
+def health() -> dict[str, object]:
+    """Liveness + config probe. Reports `degraded` if required API keys
+    are missing so the deploy log and uptime monitor see the failure
+    mode without having to start a real debate."""
+    missing = _missing_env()
+    if missing:
+        return {"status": "degraded", "missing_env": missing}
     return {"status": "ok"}
 
 

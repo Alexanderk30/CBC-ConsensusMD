@@ -12,6 +12,9 @@ Built for the Claude Builders Club Hackathon (April 22–26, 2026).
 **Clinician-facing decision support prototype. Not a patient-facing
 diagnostic tool.**
 
+> **Live demo:** https://cbc-lazarus-production.up.railway.app/
+> **Judges:** see [JUDGES.md](./JUDGES.md) for a 60-second tour.
+
 ---
 
 ## Quickstart
@@ -21,7 +24,7 @@ diagnostic tool.**
 python3 -m pip install -e .[dev,runtime]
 
 # Copy the env template and fill in keys
-cp .env.example .env   # edit with your ANTHROPIC_API_KEY + OPENROUTER_API_KEY
+cp .env.template .env   # edit with your ANTHROPIC_API_KEY + OPENROUTER_API_KEY
 
 # Run tests
 python3 -m pytest tests/ -q

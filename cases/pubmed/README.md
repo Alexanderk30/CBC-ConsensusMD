@@ -87,13 +87,10 @@ for p in __import__('pathlib').Path('cases/pubmed').glob('eval_*.json'):
 
 ## Wiring into the eval runner
 
-`backend/evaluation/runner.py` currently globs `case_*.json` in the target
-directory. PubMed cases use the `eval_*` prefix, so running
-`python3 -m backend.evaluation.runner cases/pubmed` today would find zero
-pairs. Either:
+`backend/evaluation/runner.py` globs `[ce]*_*.json`, which matches both
+`case_*.json` (demo) and `eval_*.json` (PubMed) without renaming. To run
+just the held-out fixtures:
 
-- Rename these to `case_*.json` (loses the PubMed-vs-demo signal in the
-  filename), or
-- Broaden the glob to `{case,eval}_*.json` in `_pair_case_files`.
-
-The latter is a two-character change and preserves the naming separation.
+```bash
+python3 -m backend.evaluation.runner cases/pubmed
+```

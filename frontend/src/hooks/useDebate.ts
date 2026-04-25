@@ -53,10 +53,19 @@ function reducer(state: DebateState, action: Action): DebateState {
 
 /** Open a WebSocket to /ws/debate, dispatch `start_debate`, and accumulate
  *  event messages into a reducer-managed DebateState. */
+/** If the backend goes silent during an active debate for this long
+ *  (no `message` events on the open WebSocket), surface a "stuck"
+ *  error rather than spin forever. Calibrated comfortably above the
+ *  longest single-agent call (~120s for Opus on a hard case) — bumps
+ *  shorter than that risked false positives during normal Round-3
+ *  reasoning. */
+const WS_STUCK_TIMEOUT_MS = 180_000;
+
 export function useDebate(): UseDebateResult {
   const [state, dispatch] = useReducer(reducer, initialState);
   const socketRef = useRef<WebSocket | null>(null);
   const demoCancelRef = useRef<(() => void) | null>(null);
+  const stuckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Playback control is local UI state, not domain state — so it stays
   // outside the reducer. Refs mirror state for closure-safe access inside
@@ -105,10 +114,32 @@ export function useDebate(): UseDebateResult {
     setPlaybackModeState(mode);
   };
 
+  const clearStuckTimer = () => {
+    if (stuckTimerRef.current !== null) {
+      clearTimeout(stuckTimerRef.current);
+      stuckTimerRef.current = null;
+    }
+  };
+
+  const armStuckTimer = (ws: WebSocket) => {
+    clearStuckTimer();
+    stuckTimerRef.current = setTimeout(() => {
+      // Only fire for the still-active socket — a stale timer from a
+      // socket the user already cancelled should be a no-op.
+      if (socketRef.current !== ws) return;
+      ws.close();
+      dispatch({
+        type: 'error',
+        message: `No event received for ${Math.round(WS_STUCK_TIMEOUT_MS / 1000)}s — the debate appears stuck. Reset and try again.`,
+      });
+    }, WS_STUCK_TIMEOUT_MS);
+  };
+
   useEffect(() => {
     return () => {
       socketRef.current?.close();
       demoCancelRef.current?.();
+      clearStuckTimer();
     };
   }, []);
 
@@ -118,6 +149,7 @@ export function useDebate(): UseDebateResult {
   ) => {
     socketRef.current?.close();
     demoCancelRef.current?.();
+    clearStuckTimer();
     setPendingEvents([]);
     dispatch({ type: 'connecting' });
 
@@ -129,9 +161,11 @@ export function useDebate(): UseDebateResult {
     ws.addEventListener('open', () => {
       dispatch({ type: 'start', caseId });
       ws.send(JSON.stringify(payload));
+      armStuckTimer(ws);
     });
 
     ws.addEventListener('message', (ev) => {
+      armStuckTimer(ws);
       try {
         const data = JSON.parse(ev.data) as DebateEvent;
         ingest(data);
@@ -144,6 +178,7 @@ export function useDebate(): UseDebateResult {
       // Only surface errors for the active socket — a cancelled/replaced
       // socket's error is not interesting to the user.
       if (socketRef.current === ws) {
+        clearStuckTimer();
         dispatch({ type: 'error', message: 'WebSocket connection error' });
       }
     });
@@ -155,6 +190,7 @@ export function useDebate(): UseDebateResult {
       // a stale closure that always saw pre-connecting phase, so the branch
       // never fired on real network drops.
       if (socketRef.current !== ws) return;
+      clearStuckTimer();
       if (!ev.wasClean) {
         dispatch({ type: 'error', message: 'WebSocket closed unexpectedly' });
       }
@@ -190,6 +226,7 @@ export function useDebate(): UseDebateResult {
     socketRef.current = null;
     demoCancelRef.current?.();
     demoCancelRef.current = null;
+    clearStuckTimer();
     setPendingEvents([]);
     dispatch({ type: 'reset' });
   };
