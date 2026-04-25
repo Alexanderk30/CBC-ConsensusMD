@@ -28,3 +28,4 @@ CLAUDE.md
 /benchmark_testing/diagnosis_arena_data
 benchmark_testing/diagnosis_results.csv
 /benchmark_testing/.ipynb_checkpoints
+*.csv
