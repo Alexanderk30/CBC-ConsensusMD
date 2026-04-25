@@ -322,6 +322,17 @@
 .cad-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .cad-btn.primary { border-color: var(--artery); color: var(--artery); }
 .cad-btn.primary:hover:not(:disabled) { background: var(--artery); color: var(--ink-0); }
+/* Selected state — used by the playback Mode toggle. Reads as "this is
+   the current setting" via inverted fill. */
+.cad-btn.active {
+  background: var(--bone-0);
+  border-color: var(--bone-0);
+  color: var(--ink-0);
+}
+.cad-btn.active:hover:not(:disabled) {
+  background: var(--bone-0);
+  color: var(--ink-0);
+}
 
 /* Small icon-style button — used for inline controls like the CasePanel
    collapse chevron. Mono type at a single character size; no uppercase
@@ -782,8 +793,12 @@
    clash overlay (z-index 15) but below the error toast (z-index 100). */
 .cad-floating-verdict {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  right: 14px;
+  /* 64px from the viewport bottom = clear of the "↺ New case" button
+     that lives at the bottom of the right column (button is ~32px tall
+     at bottom: 14px). Both expanded card and collapsed badge sit above
+     the button so it remains clickable in either state. */
+  bottom: 64px;
   z-index: 50;
   font-family: var(--mono);
   transition:

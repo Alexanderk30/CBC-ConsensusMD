@@ -11,11 +11,16 @@ interface PlaybackControlsProps {
  *
  *  Two modes:
  *   - **auto**: events from the WebSocket (or demo timer) dispatch as they
- *     arrive. This is the default and the demo-day default — every frame
- *     fires automatically as the backend produces it.
+ *     arrive. The default, and the demo-day default — every frame fires
+ *     automatically as the backend produces it.
  *   - **step**: events queue in pendingEvents instead of dispatching. The
  *     user clicks "Next" to advance one event at a time. Useful for video
- *     narration where each frame needs to be paused on. */
+ *     narration where each frame needs to be paused on.
+ *
+ *  Visual language matches the existing `.cad-btn` + `.cad-label` chrome
+ *  (mono uppercase, letter-spaced, cream-paper background, transparent
+ *  bordered buttons) so it reads as part of the same UI rather than a
+ *  bolted-on demo widget. */
 export function PlaybackControls({
   mode,
   pendingCount,
@@ -32,37 +37,32 @@ export function PlaybackControls({
         zIndex: 40,
         display: 'flex',
         alignItems: 'center',
-        gap: 12,
+        gap: 10,
         padding: '8px 14px',
-        // Dark slab so it reads against the cream scene background. Lighter
-        // ink-* values vanish; bone-0 (near-black) is the only thing on the
-        // page that contrasts cleanly against everything else in the design.
-        background: 'var(--bone-0)',
-        color: 'var(--ink-0)',
-        border: '1px solid var(--bone-0)',
-        boxShadow: '0 4px 16px oklch(0.22 0.030 210 / 0.18)',
-        fontFamily: 'var(--mono)',
-        fontSize: 10,
-        letterSpacing: '0.12em',
-        textTransform: 'uppercase',
+        background: 'oklch(0.97 0.006 85 / 0.95)',
+        border: '1px solid var(--ink-3)',
+        backdropFilter: 'blur(8px)',
+        boxShadow: '0 4px 16px oklch(0.22 0.030 210 / 0.08)',
       }}
       aria-label="Debate playback controls"
     >
-      <span style={{ color: 'var(--ink-2)', fontSize: 9, letterSpacing: '0.18em' }}>
-        Playback
-      </span>
-      <ModeButton
-        active={mode === 'auto'}
+      <span className="cad-label">Playback</span>
+      <button
+        className={`cad-btn ${mode === 'auto' ? 'active' : ''}`}
         onClick={() => onModeChange('auto')}
-        label="Auto"
         title="Events dispatch as they arrive (live debate pace)"
-      />
-      <ModeButton
-        active={mode === 'step'}
+        style={{ padding: '6px 14px' }}
+      >
+        Auto
+      </button>
+      <button
+        className={`cad-btn ${mode === 'step' ? 'active' : ''}`}
         onClick={() => onModeChange('step')}
-        label="Step"
         title="Queue events; advance manually one frame at a time (for video walkthroughs)"
-      />
+        style={{ padding: '6px 14px' }}
+      >
+        Step
+      </button>
       {mode === 'step' && (
         <>
           <div
@@ -70,82 +70,31 @@ export function PlaybackControls({
             style={{
               width: 1,
               height: 18,
-              background: 'oklch(0.55 0.022 210)',
+              background: 'var(--ink-3)',
               margin: '0 2px',
             }}
           />
           <button
-            onClick={onAdvance}
+            className={`cad-btn ${pendingCount > 0 ? 'primary' : ''}`}
             disabled={pendingCount === 0}
+            onClick={onAdvance}
             title={
               pendingCount === 0
                 ? 'Waiting for the next event…'
                 : `Advance to next event (${pendingCount} pending)`
             }
-            style={{
-              border: '1px solid',
-              borderColor: pendingCount > 0 ? 'var(--ichor)' : 'oklch(0.45 0.020 210)',
-              background: pendingCount > 0 ? 'var(--ichor)' : 'transparent',
-              color: pendingCount > 0 ? 'oklch(0.99 0 0)' : 'oklch(0.55 0.022 210)',
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              padding: '5px 14px',
-              cursor: pendingCount > 0 ? 'pointer' : 'not-allowed',
-              transition: 'all .15s',
-              fontWeight: 600,
-            }}
+            style={{ padding: '6px 14px' }}
           >
             ▶ Next
           </button>
           <span
-            style={{
-              color: pendingCount > 0 ? 'var(--ink-1)' : 'oklch(0.55 0.022 210)',
-              fontSize: 9,
-              minWidth: 80,
-              letterSpacing: '0.14em',
-            }}
+            className="cad-meta"
+            style={{ minWidth: 84, fontSize: 9, letterSpacing: '0.14em' }}
           >
             {pendingCount === 0 ? 'waiting…' : `${pendingCount} pending`}
           </span>
         </>
       )}
     </div>
-  );
-}
-
-function ModeButton({
-  active,
-  onClick,
-  label,
-  title,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-  title: string;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      title={title}
-      style={{
-        border: '1px solid',
-        borderColor: active ? 'var(--ink-0)' : 'oklch(0.45 0.020 210)',
-        background: active ? 'var(--ink-0)' : 'transparent',
-        color: active ? 'var(--bone-0)' : 'var(--ink-2)',
-        fontFamily: 'var(--mono)',
-        fontSize: 10,
-        letterSpacing: '0.18em',
-        textTransform: 'uppercase',
-        padding: '5px 12px',
-        cursor: 'pointer',
-        transition: 'all .15s',
-        fontWeight: active ? 600 : 400,
-      }}
-    >
-      {label}
-    </button>
   );
 }
