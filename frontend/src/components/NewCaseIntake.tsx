@@ -80,6 +80,65 @@ function defaultState(): FormState {
   };
 }
 
+/** Demo-fill payload used by the "▷ Fill demo data" affordance in the
+ *  intake header. A clinically distinct presentation from the five
+ *  prepared cases — elderly woman with altered mental status from a
+ *  urinary source. Selected to converge cleanly so a live walkthrough
+ *  ends on a verdict card rather than a deadlock. */
+function demoState(): FormState {
+  return {
+    name: 'Margaret Chen',
+    mrn: 'demo-urosepsis-67f',
+    age: '67',
+    sex: 'F',
+    weight_kg: '64',
+    allergies: 'Penicillin (rash)',
+    code_status: 'Full Code',
+    urgency: 'urgent',
+    relevant_context:
+      'Brought from assisted living for altered mental status. Day 2 of symptoms.',
+    chief_complaint: "She's just not herself. Confused since yesterday morning.",
+    hpi:
+      'Per facility nursing notes, the patient was at her baseline (independent ADLs, oriented x3) until two days ago when she developed mild urinary frequency. By yesterday morning she was disoriented to date, intermittently combative, and had one episode of urinary incontinence — which is new for her. No fever recorded at the facility. Family reports decreased PO intake over the past 24 hours. No headache, no focal weakness, no chest pain or shortness of breath, no abdominal pain. No falls. No new medications.',
+    hr: '112',
+    bp_systolic: '92',
+    bp_diastolic: '54',
+    spo2: '94',
+    temp_c: '38.6',
+    rr: '22',
+    pmh: [
+      'Hypertension',
+      'Type 2 diabetes — A1c 7.2 last month',
+      'Recurrent UTIs (3 in past year)',
+      'Mild cognitive impairment',
+    ].join('\n'),
+    medications: [
+      'lisinopril 20 mg daily',
+      'metformin 1000 mg BID',
+      'amlodipine 5 mg daily',
+      'donepezil 5 mg nightly',
+    ].join('\n'),
+    social_history:
+      'Lives in an assisted-living facility. Widowed. Two adult children involved in care. No tobacco. No alcohol.',
+    family_history: 'Father had a stroke at 78. Mother had Alzheimer disease.',
+    physical_exam:
+      'Elderly woman, drowsy but rousable, oriented to person only. Mucous membranes dry. Tachycardic, regular rhythm. Lungs clear. Abdomen soft, mild suprapubic tenderness. CVA tenderness on the right. No focal neurologic deficits. Skin warm. Cap refill ~3 sec.',
+    initial_workup: [
+      'Urinalysis: cloudy, leukocyte esterase large, nitrites positive, WBC >50/hpf, bacteria many',
+      'Lactate: 3.4',
+      'WBC: 18.2 with 14% bands',
+      'Cr: 1.6 (baseline 0.9)',
+      'BUN: 38',
+      'Glucose: 184',
+      'Na: 132',
+      'K: 3.8',
+      'Bicarb: 19',
+      'CXR: no acute infiltrate',
+      'Blood cultures x2: drawn',
+    ].join('\n'),
+  };
+}
+
 function normalizeId(raw: string): string {
   return raw
     .toLowerCase()
@@ -238,7 +297,20 @@ export function NewCaseIntake({ onCancel, onSubmit }: NewCaseIntakeProps) {
               Four agents review the case once you submit.
             </div>
           </div>
-          <StepIndicator step={step} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-end' }}>
+            <button
+              className="cad-btn"
+              style={{ padding: '8px 14px', fontSize: 10 }}
+              onClick={() => {
+                setForm(demoState());
+                setStep(1);
+              }}
+              title="Populate every field with a sample case (urosepsis, elderly female). Useful for live demos."
+            >
+              ▷ Fill demo data
+            </button>
+            <StepIndicator step={step} />
+          </div>
         </header>
 
         <div style={{ flex: 1, overflowY: 'auto', paddingRight: 8, minHeight: 0 }}>
