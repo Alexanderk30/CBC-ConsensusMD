@@ -89,16 +89,16 @@ def _role_model_map() -> dict[AgentRole, ModelSpec]:
         ),
         "antagonist": ModelSpec(
             provider="anthropic",
-            primary_model=os.getenv("ANTAGONIST_MODEL", "claude-opus-4-6"),
+            primary_model=os.getenv("ANTAGONIST_MODEL", "claude-opus-4-7"),
             fallback_model=os.getenv(
-                "ANTAGONIST_FALLBACK_MODEL", "claude-opus-4-5"
+                "ANTAGONIST_FALLBACK_MODEL", "claude-opus-4-6"
             ),
         ),
         "consensus": ModelSpec(
             provider="anthropic",
-            primary_model=os.getenv("CONSENSUS_MODEL", "claude-opus-4-6"),
+            primary_model=os.getenv("CONSENSUS_MODEL", "claude-opus-4-7"),
             fallback_model=os.getenv(
-                "CONSENSUS_FALLBACK_MODEL", "claude-opus-4-5"
+                "CONSENSUS_FALLBACK_MODEL", "claude-opus-4-6"
             ),
         ),
     }
