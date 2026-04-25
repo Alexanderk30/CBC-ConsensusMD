@@ -90,12 +90,8 @@ export function Instructions({ onBack }: InstructionsProps) {
           />
 
           <div
-            style={{
-              marginTop: 24,
-              padding: '20px 22px',
-              border: '1px solid var(--ink-3)',
-              background: 'oklch(0.98 0.005 85)',
-            }}
+            className="cad-panel"
+            style={{ marginTop: 24, padding: '20px 22px' }}
           >
             <div className="cad-label" style={{ marginBottom: 12 }}>
               Reading the theatre
@@ -128,12 +124,8 @@ export function Instructions({ onBack }: InstructionsProps) {
           </div>
 
           <div
-            style={{
-              marginTop: 18,
-              padding: '20px 22px',
-              border: '1px solid var(--ink-3)',
-              background: 'oklch(0.98 0.005 85)',
-            }}
+            className="cad-panel"
+            style={{ marginTop: 18, padding: '20px 22px' }}
           >
             <div className="cad-label" style={{ marginBottom: 12 }}>
               Playback controls
