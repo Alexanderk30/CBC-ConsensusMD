@@ -218,7 +218,17 @@ export function useDebate(): UseDebateResult {
     const caseId = (seq[0]?.[1] as { case_id?: string })?.case_id ?? `demo-${variant}`;
     dispatch({ type: 'start', caseId });
 
-    demoCancelRef.current = playSequence(seq, ingest);
+    // For the converge and deadlock dry-runs in auto mode, pace each card
+    // (specialist / antagonist / consensus output) exactly 3 seconds apart
+    // so the video walkthrough lands on predictable beats. Other variants
+    // (converge-skip), step mode, and the live WebSocket path keep the
+    // encoded delays — this override only touches the two recorded dry-runs.
+    const cardBeatMs =
+      playbackModeRef.current === 'auto' && (variant === 'converge' || variant === 'deadlock')
+        ? 3000
+        : undefined;
+
+    demoCancelRef.current = playSequence(seq, ingest, { cardBeatMs });
   };
 
   const cancel = () => {

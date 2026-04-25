@@ -387,16 +387,40 @@ export const DEADLOCK_SEQUENCE: TimedEvent[] = [
 // cancel function so the caller can abort mid-sequence.
 // ───────────────────────────────────────────────────────────────────
 
+/** Events that render a visible card on stage (utterance bubble or
+ *  verdict card). Used by the cardBeatMs pacing override below. */
+const CARD_EVENTS: ReadonlySet<string> = new Set([
+  'specialist_output',
+  'antagonist_output',
+  'consensus_output',
+]);
+
+export interface PlayOptions {
+  speed?: number;
+  /** Override the encoded delays so each card-producing event fires
+   *  exactly this many ms after the previous event. Plumbing events
+   *  (debate_started, round_started, round_completed, consensus_started,
+   *  debate_complete) fire concurrent with the previous event. Used by
+   *  the demo dry-runs to give the video walkthrough predictable beats —
+   *  not used by the live WebSocket path. */
+  cardBeatMs?: number;
+}
+
 export function playSequence(
   seq: TimedEvent[],
   onEvent: (e: DebateEvent) => void,
-  speed = 1,
+  opts: PlayOptions = {},
 ): () => void {
+  const { speed = 1, cardBeatMs } = opts;
   let cancelled = false;
   const timers: ReturnType<typeof setTimeout>[] = [];
   let cumulative = 0;
   for (const [delay, event] of seq) {
-    cumulative += delay / speed;
+    if (cardBeatMs !== undefined) {
+      cumulative += CARD_EVENTS.has(event.event) ? cardBeatMs : 0;
+    } else {
+      cumulative += delay / speed;
+    }
     const t = setTimeout(() => {
       if (!cancelled) onEvent(event);
     }, cumulative);
