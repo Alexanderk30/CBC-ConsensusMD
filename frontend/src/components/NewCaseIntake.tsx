@@ -156,6 +156,10 @@ function stepValid(step: number, f: FormState): boolean {
 export function NewCaseIntake({ onCancel, onSubmit }: NewCaseIntakeProps) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormState>(defaultState());
+  // Debounce the Convene button so a double-click doesn't open two
+  // WebSocket connections to the same debate before the parent has
+  // swapped this component out.
+  const [submitting, setSubmitting] = useState(false);
 
   const upd = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((s) => ({ ...s, [k]: v }));
@@ -173,7 +177,9 @@ export function NewCaseIntake({ onCancel, onSubmit }: NewCaseIntakeProps) {
   const canAdvance = stepValid(step, form);
 
   const handleSubmit = () => {
+    if (submitting) return;
     if (!stepValid(1, form) || !stepValid(2, form) || !stepValid(3, form)) return;
+    setSubmitting(true);
     onSubmit(buildPatientCase(form));
   };
 
@@ -291,8 +297,9 @@ export function NewCaseIntake({ onCancel, onSubmit }: NewCaseIntakeProps) {
                 className="cad-btn primary"
                 style={{ padding: '12px 22px' }}
                 onClick={handleSubmit}
+                disabled={submitting}
               >
-                ◆ Convene Consortium
+                {submitting ? '◆ Opening…' : '◆ Convene Consortium'}
               </button>
             )}
           </div>

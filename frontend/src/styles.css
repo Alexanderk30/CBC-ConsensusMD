@@ -286,6 +286,11 @@
 .cad-tx-row ul { max-width: 100%; }
 .cad-tx-row li { min-width: 0; }
 .cad-tx-row.active { background: oklch(0.94 0.010 85); }
+/* OPHIS rows carry a faint artery wash so the skeptic's contributions
+   are scannable at a glance. Active OPHIS row deepens the tint slightly
+   rather than swapping to the neutral bone highlight. */
+.cad-tx-row.antagonist { background: oklch(0.985 0.010 25 / 0.55); }
+.cad-tx-row.antagonist.active { background: oklch(0.97 0.018 25); }
 .cad-tx-who {
   font-family: var(--mono);
   font-size: 9px;

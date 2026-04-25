@@ -68,7 +68,7 @@ export function Transcript({ utterances, activeId }: TranscriptProps) {
           return (
             <div
               key={u.id}
-              className={`cad-tx-row ${u.id === activeId ? 'active' : ''}`}
+              className={`cad-tx-row ${whoClass} ${u.id === activeId ? 'active' : ''}`}
             >
               <div className={`cad-tx-who ${whoClass}`}>
                 {u.from === 'antagonist' ? '† ' : u.from === 'consensus' ? '◆ ' : ''}

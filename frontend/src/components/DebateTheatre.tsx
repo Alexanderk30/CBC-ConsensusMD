@@ -20,14 +20,33 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
   const [caseCollapsed, setCaseCollapsed] = useState(false);
 
   useEffect(() => {
-    if (!state.caseId) return;
+    // Clear stale case state when the session resets; otherwise a rapid
+    // reset → new-case pick would flash the previous patient's chart in
+    // the new debate until the fetch resolved. The lint rule is right in
+    // general but this specific reset is exactly the effect's job:
+    // synchronize local cache with the caseId prop.
+    if (!state.caseId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPatientCase(null);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCaseErr(null);
+      return;
+    }
+    let cancelled = false;
     fetch(`/cases/${encodeURIComponent(state.caseId)}`)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
       })
-      .then((data: PatientCase) => setPatientCase(data))
-      .catch((err) => setCaseErr(`Could not load case: ${err}`));
+      .then((data: PatientCase) => {
+        if (!cancelled) setPatientCase(data);
+      })
+      .catch((err) => {
+        if (!cancelled) setCaseErr(`Could not load case: ${err}`);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [state.caseId]);
 
   const differential = useMemo<DifferentialEntry[]>(() => deriveDifferential(state), [state]);
@@ -193,8 +212,9 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         <div
           style={{
             position: 'absolute',
-            bottom: 20,
-            left: 360,
+            bottom: 60,
+            left: '50%',
+            transform: 'translateX(-50%)',
             padding: '10px 14px',
             border: '1px solid var(--artery)',
             background: 'oklch(0.97 0.020 30)',
