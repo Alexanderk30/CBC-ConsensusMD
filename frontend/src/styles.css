@@ -83,14 +83,36 @@
   border-color: var(--artery);
   box-shadow: 0 0 0 2px var(--artery), 0 0 40px oklch(0.55 0.14 30 / 0.35);
 }
+/* ── Under challenge ───────────────────────────────────────────────
+   Replaces the previous antagonist→specialist arc visual. While OPHIS's
+   challenge utterance is the active one, the targeted specialist's ring
+   wears a sustained artery-red outline with a slow pulse — a single,
+   focused signal of "this is the agent under fire" rather than a moving
+   line on stage. */
 .cad-node.challenged .cad-node-ring {
-  animation: cad-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  border-color: var(--artery);
+  animation: cad-challenged-pulse 1.4s ease-in-out infinite;
 }
-@keyframes cad-shake {
-  10%, 90% { transform: translate(-1px, 0); }
-  20%, 80% { transform: translate(2px, 0); }
-  30%, 50%, 70% { transform: translate(-3px, 0); }
-  40%, 60% { transform: translate(3px, 0); }
+.cad-node.challenged .cad-node-glyph {
+  color: var(--artery);
+}
+@keyframes cad-challenged-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px var(--artery),
+      0 0 24px oklch(0.55 0.14 30 / 0.40);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px var(--artery),
+      0 0 44px oklch(0.55 0.14 30 / 0.65);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cad-node.challenged .cad-node-ring {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--artery);
+  }
 }
 
 /* ── Thinking ──────────────────────────────────────────────────────
@@ -256,16 +278,6 @@
   transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
-
-.cad-serpent { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.cad-serpent-shadow { stroke: oklch(0.04 0 0 / 0.8); stroke-width: 6; filter: blur(4px); }
-.cad-serpent-body { stroke: var(--bone-1); stroke-width: 1.5; stroke-dasharray: 1 3; animation: cad-slither 1.5s linear infinite; }
-.cad-serpent-body.antagonist { stroke: var(--artery); stroke-width: 2; }
-@keyframes cad-slither { to { stroke-dashoffset: -16; } }
-
-
-.cad-serpent-head { fill: var(--bone-0); filter: drop-shadow(0 0 4px var(--bone-0)); }
-.cad-serpent-head.antagonist { fill: var(--artery-glow); filter: drop-shadow(0 0 6px var(--artery)); }
 
 .cad-panel {
   background: oklch(0.99 0.004 85 / 0.92);

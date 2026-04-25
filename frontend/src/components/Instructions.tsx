@@ -69,7 +69,7 @@ export function Instructions({ onBack }: InstructionsProps) {
           <Step
             n="03"
             title="Watch the skeptic press"
-            body="OPHIS, the antagonist, reads everyone's outputs and tries to falsify the leading diagnosis. A challenge surfaces as a red arc onto the crest. The three specialists then defend, revise, or pivot. Each round is one full cycle of propose → challenge → respond."
+            body="OPHIS, the antagonist, reads everyone's outputs and tries to falsify the leading diagnosis. The challenged specialist's ring goes red while the challenge is on the table. The three specialists then defend, revise, or pivot. Each round is one full cycle of propose → challenge → respond."
           />
           <Step
             n="04"

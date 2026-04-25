@@ -4,8 +4,6 @@ import type { DebateState, Utterance, UtteranceHeadline } from '../events';
 import type { AgentId } from '../types';
 import { AgentNode } from './AgentNode';
 import { CaduceusCrest } from './CaduceusCrest';
-import { SerpentArc } from './SerpentArc';
-import { buildSerpentPath } from './serpentPaths';
 
 const SCENE_W = 900;
 const SCENE_H = 640;
@@ -61,12 +59,6 @@ export function DebateScene({
     const t = setTimeout(() => setBubbleFading(true), 10000);
     return () => clearTimeout(t);
   }, [activeUtterance?.id, playbackMode]);
-
-  // Recent utterances for trailing arcs.
-  const history = useMemo(() => {
-    const uts = state.utterances.slice(-3);
-    return uts.map((u, i, arr) => ({ utt: u, age: arr.length - 1 - i }));
-  }, [state.utterances]);
 
   // Derive per-agent confidence from the latest recorded specialist output's
   // primary commitment. Antagonist confidence proxies from survival_count.
@@ -148,48 +140,6 @@ export function DebateScene({
       >
         <CaduceusCrest size={260} />
       </div>
-
-      {/* Serpent arcs layer */}
-      <svg
-        viewBox={`${-SCENE_W / 2} ${-SCENE_H / 2} ${SCENE_W} ${SCENE_H}`}
-        preserveAspectRatio="xMidYMid meet"
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 5,
-          pointerEvents: 'none',
-        }}
-      >
-        {history.map(({ utt, age }) => {
-          // During the resolution moment (convergence or deadlock) the
-          // scene belongs to the seal + crest; stale debate arcs still
-          // rendered at 32% opacity would distract (or, for deadlock,
-          // read as if OPHIS is still actively attacking). Clear them.
-          if (isConvergenceMoment || isDeadlockMoment) return null;
-          if (!utt.target) return null;
-          const from = utt.from;
-          if (from === 'consensus') return null;
-          const a = AGENT_POS[from];
-          const b = AGENT_POS[utt.target];
-          if (!a || !b) return null;
-          const curveBase = utt.kind === 'challenge' ? 0.45 : 0.28;
-          const curve = from === 'antagonist' ? -curveBase : curveBase;
-          const path = buildSerpentPath(a.x, a.y, b.x, b.y, curve);
-          const kind: 'antagonist' | '' = utt.kind === 'challenge' ? 'antagonist' : '';
-          return (
-            <SerpentArc
-              key={`${utt.id}-${age}`}
-              path={path}
-              kind={kind}
-              active={age === 0}
-              fadeOut={age > 1}
-            />
-          );
-        })}
-
-      </svg>
 
       {/* Agent nodes */}
       {Object.values(AGENTS).map((agent) => {
