@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AGENTS, AGENT_POS, COMMITMENT_TO_CONFIDENCE, SPECIALIST_ROLES } from '../agents';
 import type { DebateState, Utterance, UtteranceHeadline } from '../events';
 import type { AgentId } from '../types';
