@@ -153,7 +153,12 @@ export function DebateTheatre({ state, onReset }: DebateTheatreProps) {
         <div
           style={{
             position: 'absolute',
-            top: 12,
+            // Pushed down so the round + survival lines don't collide with
+            // the centered PlaybackControls dock that sits at top: 18 in
+            // viewport space (the controls occupy ~38px of vertical room
+            // and the right edge of the survival line was overlapping the
+            // STEP button on standard viewport widths).
+            top: 56,
             right: 14,
             zIndex: 30,
             textAlign: 'right',
