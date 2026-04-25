@@ -4,6 +4,7 @@ import type { CaseSummary } from '../types';
 interface IntakeProps {
   onLaunch: (caseId: string) => void;
   onNewCase?: () => void;
+  onShowInstructions?: () => void;
   onPlayDemo?: (variant: 'converge' | 'deadlock' | 'converge-skip') => void;
 }
 
@@ -58,7 +59,7 @@ function StatBlock({
   );
 }
 
-export function Intake({ onLaunch, onNewCase, onPlayDemo }: IntakeProps) {
+export function Intake({ onLaunch, onNewCase, onShowInstructions, onPlayDemo }: IntakeProps) {
   const [cases, setCases] = useState<CaseSummary[] | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -229,9 +230,20 @@ export function Intake({ onLaunch, onNewCase, onPlayDemo }: IntakeProps) {
                 + New patient intake
               </button>
             )}
+            {onShowInstructions && (
+              <button
+                className="cad-btn"
+                style={{ padding: '10px 16px' }}
+                onClick={onShowInstructions}
+              >
+                ? Instructions
+              </button>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             {onPlayDemo && (
               <>
-                <span className="cad-meta" style={{ color: 'var(--bone-3)', marginLeft: 4 }}>
+                <span className="cad-meta" style={{ color: 'var(--bone-3)', marginRight: 4 }}>
                   dry-run (no API):
                 </span>
                 <button
@@ -248,25 +260,17 @@ export function Intake({ onLaunch, onNewCase, onPlayDemo }: IntakeProps) {
                 >
                   ▷ Deadlock
                 </button>
-                <button
-                  className="cad-btn"
-                  style={{ padding: '10px 14px' }}
-                  onClick={() => onPlayDemo('converge-skip')}
-                  title="Jump directly to the convergence moment — for iterating on the animation"
-                >
-                  ▷▷ Skip to converge
-                </button>
               </>
             )}
+            <button
+              className="cad-btn primary"
+              style={{ padding: '12px 24px', fontSize: 11, marginLeft: 8 }}
+              disabled={!selected}
+              onClick={() => selected && onLaunch(selected)}
+            >
+              ◆ Convene Consortium
+            </button>
           </div>
-          <button
-            className="cad-btn primary"
-            style={{ padding: '12px 24px', fontSize: 11 }}
-            disabled={!selected}
-            onClick={() => selected && onLaunch(selected)}
-          >
-            ◆ Convene Consortium
-          </button>
         </div>
       </div>
 
