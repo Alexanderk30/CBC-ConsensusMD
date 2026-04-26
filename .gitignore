@@ -38,3 +38,4 @@ CLAUDE.md
 /benchmark_testing/.ipynb_checkpoints
 benchmark_testing/diagnosis_results.csv
 *.csv
+.gastown-ignore
