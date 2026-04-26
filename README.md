@@ -19,22 +19,57 @@ diagnostic tool.**
 
 ## Quickstart
 
+### 1. Install + configure
+
 ```bash
-# Install
+# Backend (Python 3.11+)
 python3 -m pip install -e .[dev,runtime]
 
-# Copy the env template and fill in keys
-cp .env.template .env   # edit with your ANTHROPIC_API_KEY + OPENROUTER_API_KEY
+# Frontend (Node 20+)
+cd frontend && npm install && cd ..
 
-# Run tests
+# Env vars — fill in ANTHROPIC_API_KEY + OPENROUTER_API_KEY
+cp .env.template .env
+```
+
+### 2. Verify the install
+
+```bash
+# Backend tests (90 should pass, ~0.2s)
 python3 -m pytest tests/ -q
 
-# Run a case end-to-end (hits real APIs; ~3-5 min on Opus)
-python3 scripts/run_case.py cases/demo/case_02_stemi.json
-
-# Start the FastAPI server (frontend connects via WebSocket)
-uvicorn backend.main:app --reload --port 8000
+# Frontend type-check + production bundle
+cd frontend && npm run build && cd ..
 ```
+
+### 3. Run locally — two terminals
+
+```bash
+# Terminal 1 — FastAPI (serves /cases, /ws/debate, /health)
+uvicorn backend.main:app --reload --port 8000
+
+# Terminal 2 — Vite dev server (proxies /cases and /ws/debate to :8000)
+cd frontend && npm run dev
+# → open http://localhost:5173
+```
+
+### 4. Single CLI run (no UI)
+
+```bash
+# Hits real APIs end-to-end. ~3–5 min on Opus.
+python3 scripts/run_case.py cases/demo/case_02_stemi.json
+```
+
+### 5. Production build — one image, both layers
+
+```bash
+# Local Docker build (multi-stage: vite → python). Same image Railway runs.
+docker build -t consensusmd .
+docker run -p 8000:8000 --env-file .env consensusmd
+# → open http://localhost:8000
+```
+
+The deployed Railway instance at the URL above is built from the same `Dockerfile`.
 
 ## Architecture
 
@@ -51,10 +86,13 @@ backend/
 ├── api/websocket.py       # WebSocket endpoint
 └── evaluation/runner.py   # Batch eval harness for held-out cases
 
+frontend/                  # React 19 + Vite UI; built dist/ served by the
+                           # backend at "/" via StaticFiles in production
 cases/demo/                # 5 demo cases + ground-truth sidecars
 cases/pubmed/              # Held-out PubMed evaluation fixtures
 scripts/                   # run_case.py, smoke_test_agents.py
-tests/                     # 75 passing unit tests (schemas, state, workarounds)
+tests/                     # 90 passing unit tests (schemas, state,
+                           # WebSocket, evaluation, integration)
 ```
 
 **Model assignments (locked):**
@@ -229,20 +267,30 @@ Scores convergence-rate, outcome-match rate, converged-case accuracy (fuzzy prim
 
 ## Security & secrets
 
-- `.env` and `.env.example` are both gitignored (`.env.*` pattern). Never commit credentials.
+- `.env` is gitignored. The committed `.env.template` ships only placeholder
+  keys (the `!.env.template` exception in `.gitignore` keeps it tracked while
+  any real `.env*` file stays out).
 - API keys are read only via `os.environ` / `python-dotenv` in `backend/agents/base.py`.
-- `GET /cases` and `GET /cases/{id}` read from `cases/demo/` only — the path is not user-parameterized.
+- `GET /health` reports `{"status":"degraded","missing_env":[...]}` when the
+  required keys are absent so the deploy log catches missing credentials
+  before the first WebSocket request.
+- `GET /cases` and `GET /cases/{id}` read from `cases/` (recursive) — the
+  path is not user-parameterized; case IDs are validated against
+  `^[a-z0-9][a-z0-9\-]{0,63}$`.
 
 ---
 
 ## Tests
 
 ```bash
-python3 -m pytest tests/ -q
+python3 -m pytest tests/ -q          # all 90, ~0.2s
+python3 -m pytest tests/test_debate_state.py -v   # focused subset
 ```
 
-**Coverage** (75 tests):
+**Coverage** (90 tests across 6 files):
 - `test_schema_validation.py` — 39 tests: every cross-field schema rule, `additionalProperties: false`, Round-0/Round-N boundary.
-- `test_debate_state.py` — 31 tests: information isolation, leading-diagnosis algorithm (Q3), termination state machine (Q2), round-over-round deltas (Q5), supporting-evidence normalization (Q4), anonymous-ID stability.
+- `test_debate_state.py` — 32 tests: information isolation, leading-diagnosis algorithm, termination state machine, round-over-round deltas, supporting-evidence normalization, anonymous-ID stability.
+- `test_evaluation.py` — 6 tests: fuzzy primary-diagnosis matching used by the eval harness.
 - `test_parse_stringified_nested.py` — 5 tests: the Claude tool_use stringified-object workaround with an allowlist guard.
-- `test_evaluation.py` — fuzzy primary-diagnosis matching used by the eval harness.
+- `test_websocket.py` — 5 tests: case lookup, payload validation, error event shape.
+- `test_run_debate_integration.py` — 3 tests: orchestrator end-to-end with mocked agent calls.
