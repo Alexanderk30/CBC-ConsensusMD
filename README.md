@@ -293,5 +293,10 @@ python3 -m pytest tests/test_debate_state.py -v   # focused subset
 - `test_debate_state.py` — 32 tests: information isolation, leading-diagnosis algorithm, termination state machine, round-over-round deltas, supporting-evidence normalization, anonymous-ID stability.
 - `test_evaluation.py` — 6 tests: fuzzy primary-diagnosis matching used by the eval harness.
 - `test_parse_stringified_nested.py` — 5 tests: the Claude tool_use stringified-object workaround with an allowlist guard.
+- `test_evaluation.py` — fuzzy primary-diagnosis matching used by the eval harness.
+
+
+## Dataset used for testing
+https://huggingface.co/datasets/shzyk/DiagnosisArena
 - `test_websocket.py` — 5 tests: case lookup, payload validation, error event shape.
 - `test_run_debate_integration.py` — 3 tests: orchestrator end-to-end with mocked agent calls.

@@ -1,0 +1,11 @@
+These rows were not answered due to model refusal and removed from the dataset.
+Opus refusal:
+row 454: Sycosis vaccinatum
+row 480: Severe Influenza A (H3N2) infection
+row 502: Severe Mpox in a patient with advanced HIV
+row 635: Laryngeal histoplasmosis
+row 636: Brucella melitensis soft tissue abscess related to ventriculoperitoneal shunt
+row 700: Listeria monocytogenes ST87 bacteremia in pregnancy
+
+Open AI refused no rows.
+Gemini refused no rows.
