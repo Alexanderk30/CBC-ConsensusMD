@@ -106,17 +106,56 @@ export const initialState: DebateState = {
   thinking: [],
 };
 
-/** Which specialist (if any) the antagonist's challenge "targets" visually. */
+/** Which specialist (if any) the antagonist's challenge "targets" visually.
+ *  Tolerant of LLM phrasing drift between the antagonist's `challenged_diagnosis`
+ *  and a specialist's `primary_diagnosis` ("MS" vs "Multiple sclerosis (RRMS)",
+ *  parenthetical qualifiers, hyphenation) by falling back from exact normalized
+ *  match to substring containment to leading-token overlap. The red ring on
+ *  the targeted node is the only visual signal that a challenge is live, so
+ *  silently failing to find a target would lose that signal. */
 function challengeTarget(
   challenged: string,
   specialistsAtRound: Partial<Record<Role, SpecialistOutput>>,
 ): AgentId | undefined {
-  const normalize = (s: string) => s.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  const normalize = (s: string) =>
+    s.toLowerCase().replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
   const challengedNorm = normalize(challenged);
+  if (!challengedNorm) return undefined;
+
+  // Pass 1: exact normalized match.
   for (const role of SPECIALIST_ROLES) {
     const out = specialistsAtRound[role];
     if (out && normalize(out.primary_diagnosis) === challengedNorm) return role;
   }
+
+  // Pass 2: substring containment in either direction. Catches the common
+  // pattern where one side carries a parenthetical qualifier the other drops.
+  for (const role of SPECIALIST_ROLES) {
+    const out = specialistsAtRound[role];
+    if (!out) continue;
+    const primaryNorm = normalize(out.primary_diagnosis);
+    if (!primaryNorm) continue;
+    if (challengedNorm.includes(primaryNorm) || primaryNorm.includes(challengedNorm)) {
+      return role;
+    }
+  }
+
+  // Pass 3: leading-token overlap (first significant word matches). Catches
+  // abbreviation/expansion cases where neither side is a substring of the
+  // other but they share a discriminating noun (e.g. "Pulmonary embolism" vs
+  // "PE with hemodynamic stability"). Two-token minimum on either side keeps
+  // accidental matches on common stopwords (e.g. "Acute") from firing.
+  const challengedTokens = challengedNorm.split(' ');
+  for (const role of SPECIALIST_ROLES) {
+    const out = specialistsAtRound[role];
+    if (!out) continue;
+    const primaryTokens = normalize(out.primary_diagnosis).split(' ');
+    if (primaryTokens.length < 2 || challengedTokens.length < 2) continue;
+    if (primaryTokens[0] === challengedTokens[0] && primaryTokens[1] === challengedTokens[1]) {
+      return role;
+    }
+  }
+
   return undefined;
 }
 
