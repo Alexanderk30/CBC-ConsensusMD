@@ -73,7 +73,7 @@ Gemini. Single-deployment Railway image; 90 passing tests.
 ## Run locally
 
 ```bash
-python3 -m pip install -e .[dev,runtime]
+python3 -m pip install -e '.[dev,runtime]'
 cp .env.template .env   # add your ANTHROPIC_API_KEY + OPENROUTER_API_KEY
 python3 -m pytest tests/ -q
 uvicorn backend.main:app --reload --port 8000

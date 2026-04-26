@@ -23,7 +23,7 @@ diagnostic tool.**
 
 ```bash
 # Backend (Python 3.11+)
-python3 -m pip install -e .[dev,runtime]
+python3 -m pip install -e '.[dev,runtime]'
 
 # Frontend (Node 20+)
 cd frontend && npm install && cd ..
