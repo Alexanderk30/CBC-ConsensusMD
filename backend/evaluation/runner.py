@@ -131,8 +131,12 @@ async def evaluate_case(case_path: Path, ground_truth_path: Path) -> CaseResult:
 
 
 def _pair_case_files(case_dir: Path) -> list[tuple[Path, Path]]:
+    """Find case/ground-truth pairs under `case_dir`. Recurses so mixed
+    corpora (cases/demo, cases/pubmed, ...) can be evaluated together by
+    pointing at `cases/`. Accepts both `case_*.json` (demo) and
+    `eval_*.json` (published-literature fixtures)."""
     pairs: list[tuple[Path, Path]] = []
-    for path in sorted(case_dir.glob("case_*.json")):
+    for path in sorted(case_dir.rglob("[ce]*_*.json")):
         if "_ground_truth" in path.name:
             continue
         gt_path = path.with_name(path.stem + "_ground_truth.json")

@@ -66,9 +66,9 @@ def _role_model_map() -> dict[AgentRole, ModelSpec]:
     return {
         "probabilistic": ModelSpec(
             provider="openrouter",
-            primary_model=os.getenv("PROBABILISTIC_MODEL", "openai/gpt-5.4"),
+            primary_model=os.getenv("PROBABILISTIC_MODEL", "openai/gpt-5.5"),
             fallback_model=os.getenv(
-                "PROBABILISTIC_FALLBACK_MODEL", "openai/gpt-5"
+                "PROBABILISTIC_FALLBACK_MODEL", "openai/gpt-5.4"
             ),
         ),
         "mechanistic": ModelSpec(
@@ -89,16 +89,16 @@ def _role_model_map() -> dict[AgentRole, ModelSpec]:
         ),
         "antagonist": ModelSpec(
             provider="anthropic",
-            primary_model=os.getenv("ANTAGONIST_MODEL", "claude-opus-4-6"),
+            primary_model=os.getenv("ANTAGONIST_MODEL", "claude-opus-4-7"),
             fallback_model=os.getenv(
-                "ANTAGONIST_FALLBACK_MODEL", "claude-opus-4-5"
+                "ANTAGONIST_FALLBACK_MODEL", "claude-opus-4-6"
             ),
         ),
         "consensus": ModelSpec(
             provider="anthropic",
-            primary_model=os.getenv("CONSENSUS_MODEL", "claude-opus-4-6"),
+            primary_model=os.getenv("CONSENSUS_MODEL", "claude-opus-4-7"),
             fallback_model=os.getenv(
-                "CONSENSUS_FALLBACK_MODEL", "claude-opus-4-5"
+                "CONSENSUS_FALLBACK_MODEL", "claude-opus-4-6"
             ),
         ),
     }
@@ -206,6 +206,12 @@ async def _call_anthropic(
 
     response = await client.messages.create(
         model=model,
+        # 8000 tokens of headroom. Earlier we dropped this to 3000 hoping
+        # for a latency win; in practice Anthropic's max_tokens is a cap,
+        # not a reservation, so lowering it didn't speed anything up — it
+        # just truncated RoundN specialist outputs mid-JSON (the richer
+        # schema with position_change + response_to_challenge + full
+        # differential pushes legitimate outputs past 3000 tokens).
         max_tokens=8000,
         system=[
             {

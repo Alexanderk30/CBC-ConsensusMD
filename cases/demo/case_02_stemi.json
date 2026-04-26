@@ -1,8 +1,12 @@
 {
   "case_id": "demo-02-stemi",
   "demographics": {
+    "name": "Robert Halvorsen",
     "age": 62,
-    "sex": "M"
+    "sex": "M",
+    "weight_kg": 88,
+    "allergies": "NKDA",
+    "code_status": "Full Code"
   },
   "chief_complaint": "Crushing chest pain for the past hour.",
   "history_of_present_illness": "Sudden onset of substernal chest pressure radiating to left jaw and left arm, started one hour ago while mowing the lawn. Associated with nausea, one episode of vomiting, profuse diaphoresis. Rates the pain 9/10. Not relieved by rest. No prior similar episodes.",

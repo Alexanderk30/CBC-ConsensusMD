@@ -1,8 +1,12 @@
 {
   "case_id": "demo-05-endometriosis",
   "demographics": {
+    "name": "Amara Okonjo",
     "age": 29,
     "sex": "F",
+    "weight_kg": 62,
+    "allergies": "NKDA",
+    "code_status": "Full Code",
     "relevant_context": "Attempting conception × 14 months; nulligravid"
   },
   "chief_complaint": "I'm tired of being told this is just bad periods.",

@@ -1,0 +1,930 @@
+/* ConsensusMD — shared scene styles (prefix `cad-` is historical, from the
+   original caduceus-themed design handoff). */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --ink-0: oklch(0.96 0.006 85);
+  --ink-1: oklch(0.98 0.005 85);
+  --ink-2: oklch(0.93 0.008 85);
+  --ink-3: oklch(0.85 0.010 85);
+  --bone-0: oklch(0.22 0.030 210);
+  --bone-1: oklch(0.38 0.028 210);
+  --bone-2: oklch(0.55 0.022 210);
+  --bone-3: oklch(0.68 0.018 210);
+  --artery: oklch(0.55 0.14 30);
+  --artery-dim: oklch(0.72 0.08 30);
+  --artery-glow: oklch(0.62 0.16 30);
+  --vein: oklch(0.48 0.10 230);
+  --ichor: oklch(0.58 0.12 155);
+  --serif: 'Fraunces', 'Times New Roman', serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+
+.cad-root {
+  background: var(--ink-0);
+  color: var(--bone-0);
+  font-family: var(--sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.cad-mono { font-family: var(--mono); letter-spacing: 0.02em; }
+.cad-serif { font-family: var(--serif); font-feature-settings: 'ss01'; }
+.cad-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--bone-2); }
+.cad-meta { font-family: var(--mono); font-size: 10px; color: var(--bone-3); letter-spacing: 0.06em; }
+
+.cad-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: opacity .3s;
+}
+.cad-node.dim { opacity: 0.45; }
+.cad-node-ring {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-3);
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+}
+.cad-node-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px dashed var(--ink-3);
+  opacity: 0.5;
+  animation: cad-rotate 60s linear infinite;
+}
+.cad-node-ring::after {
+  content: '';
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  border: 1px solid oklch(0.85 0.010 85 / 0.8);
+}
+@keyframes cad-rotate { to { transform: rotate(360deg); } }
+
+.cad-node.speaking .cad-node-ring {
+  border-color: var(--bone-0);
+  box-shadow: 0 0 0 2px var(--bone-0), 0 0 24px oklch(0.22 0.030 210 / 0.2);
+}
+.cad-node.antagonist .cad-node-ring {
+  border-color: var(--artery-dim);
+  background: linear-gradient(180deg, oklch(0.97 0.020 30), oklch(0.93 0.030 30));
+}
+.cad-node.antagonist.speaking .cad-node-ring {
+  border-color: var(--artery);
+  box-shadow: 0 0 0 2px var(--artery), 0 0 40px oklch(0.55 0.14 30 / 0.35);
+}
+/* ── Under challenge ───────────────────────────────────────────────
+   Replaces the previous antagonist→specialist arc visual. While OPHIS's
+   challenge utterance is the active one, the targeted specialist's ring
+   wears a sustained artery-red outline with a slow pulse — a single,
+   focused signal of "this is the agent under fire" rather than a moving
+   line on stage. */
+.cad-node.challenged .cad-node-ring {
+  border-color: var(--artery);
+  animation: cad-challenged-pulse 1.4s ease-in-out infinite;
+}
+.cad-node.challenged .cad-node-glyph {
+  color: var(--artery);
+}
+@keyframes cad-challenged-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px var(--artery),
+      0 0 24px oklch(0.55 0.14 30 / 0.40);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px var(--artery),
+      0 0 44px oklch(0.55 0.14 30 / 0.65);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cad-node.challenged .cad-node-ring {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--artery);
+  }
+}
+
+/* ── Thinking ──────────────────────────────────────────────────────
+   While the agent's API call is in flight (round_started → their
+   specialist_output / antagonist_output), the ring pulses softly and
+   the outer dashed ring speeds up dramatically — reads as "scanning /
+   processing" without competing with .speaking's solid halo. */
+.cad-node.thinking .cad-node-ring {
+  animation: cad-thinking-breathe 1.8s ease-in-out infinite;
+}
+.cad-node.thinking .cad-node-ring::before {
+  animation-duration: 4s;
+  opacity: 0.85;
+}
+.cad-node.thinking.antagonist .cad-node-ring {
+  animation-name: cad-thinking-breathe-antagonist;
+}
+@keyframes cad-thinking-breathe {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--ink-3), 0 0 8px oklch(0.50 0.020 85 / 0.08);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px var(--bone-2), 0 0 18px oklch(0.50 0.020 85 / 0.22);
+  }
+}
+@keyframes cad-thinking-breathe-antagonist {
+  0%, 100% {
+    box-shadow: 0 0 0 1px var(--artery-dim), 0 0 10px oklch(0.55 0.14 30 / 0.10);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px var(--artery), 0 0 22px oklch(0.55 0.14 30 / 0.30);
+  }
+}
+/* Speaking overrides thinking — once the utterance arrives we want the
+   solid halo, not the pulse. */
+.cad-node.thinking.speaking .cad-node-ring {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cad-node.thinking .cad-node-ring,
+  .cad-node.thinking .cad-node-ring::before {
+    animation: none;
+  }
+}
+
+.cad-node-glyph {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--bone-1);
+  font-weight: 400;
+  font-style: italic;
+}
+.cad-node.antagonist .cad-node-glyph { color: var(--artery-glow); }
+
+.cad-node-label {
+  position: absolute;
+  top: 108px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+.cad-node-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bone-1);
+}
+.cad-node.antagonist .cad-node-name { color: var(--artery-glow); }
+.cad-node-role {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--bone-2);
+  margin-top: 3px;
+}
+
+.cad-conf {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: oklch(0.90 0.008 85);
+  overflow: hidden;
+}
+.cad-conf-fill {
+  height: 100%;
+  background: var(--bone-1);
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-node.antagonist .cad-conf-fill { background: var(--artery); }
+
+.cad-utter {
+  position: absolute;
+  width: min(300px, calc(100% - 32px));
+  max-height: 320px;
+  /* No `overflow: hidden` — it clips the overhanging CHALLENGE badge above
+     the bubble. Bullet text is already length-capped at event time via
+     `shortBullet` so content stays within max-height in practice. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding: 12px 14px 13px;
+  background: oklch(0.99 0.004 85 / 0.98);
+  border: 1px solid var(--ink-3);
+  font-family: var(--serif);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--bone-0);
+  z-index: 20;
+  box-sizing: border-box;
+  animation: cad-utter-in 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-utter ul { max-width: 100%; }
+.cad-utter li { min-width: 0; }
+/* Challenge utterances carry a faint artery wash + tinted full border
+   instead of a side stripe. The overhanging CHALLENGE badge is the primary
+   signal; the tint is secondary reinforcement. */
+.cad-utter.antagonist {
+  background: oklch(0.985 0.012 25 / 0.98);
+  border-color: oklch(0.72 0.09 25 / 0.5);
+}
+.cad-utter.antagonist::before {
+  content: 'CHALLENGE';
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  background: var(--artery);
+  color: oklch(0.99 0 0);
+  padding: 2px 6px;
+  font-weight: 600;
+}
+.cad-utter.consensus {
+  background: oklch(0.985 0.014 155 / 0.98);
+  border-color: oklch(0.55 0.10 155 / 0.5);
+}
+.cad-utter-meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--bone-3);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+@keyframes cad-utter-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Fade-out applied to a scene utterance bubble that has been visible for
+   10s in auto mode without a new utterance arriving. Step-mode bubbles
+   never fade — the user is controlling the pace. */
+.cad-utter.cad-utter-fading {
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.cad-panel {
+  background: oklch(0.99 0.004 85 / 0.92);
+  border: 1px solid var(--ink-3);
+  backdrop-filter: blur(8px);
+}
+.cad-panel-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--ink-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cad-tx-row {
+  padding: 8px 14px;
+  border-bottom: 1px solid oklch(0.90 0.008 85);
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.cad-tx-row > * { min-width: 0; }
+.cad-tx-row ul { max-width: 100%; }
+.cad-tx-row li { min-width: 0; }
+.cad-tx-row.active { background: oklch(0.94 0.010 85); }
+/* OPHIS rows carry a faint artery wash so the skeptic's contributions
+   are scannable at a glance. Active OPHIS row deepens the tint slightly
+   rather than swapping to the neutral bone highlight. */
+.cad-tx-row.antagonist { background: oklch(0.985 0.010 25 / 0.55); }
+.cad-tx-row.antagonist.active { background: oklch(0.97 0.018 25); }
+.cad-tx-who {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--bone-2);
+  text-transform: uppercase;
+  padding-top: 2px;
+}
+.cad-tx-who.antagonist { color: var(--artery); }
+.cad-tx-who.consensus { color: var(--ichor); }
+
+.cad-btn {
+  background: transparent;
+  border: 1px solid var(--ink-3);
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.cad-btn:hover:not(:disabled) {
+  border-color: var(--bone-1);
+  color: var(--bone-0);
+  background: oklch(0.94 0.010 85);
+}
+.cad-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.cad-btn.primary { border-color: var(--artery); color: var(--artery); }
+.cad-btn.primary:hover:not(:disabled) { background: var(--artery); color: var(--ink-0); }
+/* Selected state — used by the playback Mode toggle. Reads as "this is
+   the current setting" via inverted fill. */
+.cad-btn.active {
+  background: var(--bone-0);
+  border-color: var(--bone-0);
+  color: var(--ink-0);
+}
+.cad-btn.active:hover:not(:disabled) {
+  background: var(--bone-0);
+  color: var(--ink-0);
+}
+
+/* Small icon-style button — used for inline controls like the CasePanel
+   collapse chevron. Mono type at a single character size; no uppercase
+   transform (keeps chevron glyphs readable). */
+.cad-icon-btn {
+  border: 1px solid var(--ink-3);
+  background: transparent;
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  cursor: pointer;
+  line-height: 1;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.cad-icon-btn:hover {
+  border-color: var(--bone-1);
+  color: var(--bone-0);
+  background: oklch(0.94 0.010 85);
+}
+
+.cad-vital {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--bone-2);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.cad-vital-val { color: var(--bone-0); font-weight: 500; }
+
+.cad-case {
+  border: 1px solid var(--ink-3);
+  padding: 14px 16px;
+  background: oklch(0.97 0.006 85 / 0.6);
+}
+.cad-case-title {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--bone-0);
+  margin-bottom: 2px;
+}
+
+.cad-verdict {
+  background: linear-gradient(180deg, oklch(0.98 0.012 155 / 0.5), oklch(0.96 0.015 155 / 0.3));
+  border: 1px solid var(--ichor);
+  padding: 18px 20px;
+  position: relative;
+}
+.cad-verdict::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid oklch(0.58 0.12 155 / 0.3);
+  pointer-events: none;
+}
+.cad-verdict.deadlocked {
+  /* Mirror the converged variant's color story but in artery — converge
+     reads as green (ichor), deadlock reads as red (artery). Both are
+     terminal states; the color carries the outcome valence. */
+  background: linear-gradient(180deg, oklch(0.98 0.015 30 / 0.5), oklch(0.96 0.018 30 / 0.3));
+  border-color: var(--artery);
+}
+.cad-verdict.deadlocked::before {
+  border-color: oklch(0.55 0.14 30 / 0.3);
+}
+
+.cad-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--artery);
+  display: inline-block;
+  animation: cad-pulse 1.2s ease-in-out infinite;
+}
+.cad-pulse.green { background: var(--ichor); animation-duration: 2s; }
+.cad-pulse.bone { background: var(--bone-1); }
+@keyframes cad-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.4; box-shadow: 0 0 0 4px transparent; }
+}
+
+.cad-timeline {
+  height: 36px;
+  position: relative;
+  border-top: 1px solid var(--ink-3);
+  border-bottom: 1px solid var(--ink-3);
+  background: oklch(0.94 0.008 85);
+}
+.cad-playhead {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  background: var(--bone-0);
+  box-shadow: 0 0 0 1px var(--bone-0);
+  transition: left 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.cad-clash {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+}
+.cad-clash-ring {
+  border: 1px solid var(--artery);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: cad-clash-expand 0.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+}
+@keyframes cad-clash-expand {
+  from { width: 0; height: 0; opacity: 1; border-width: 2px; }
+  to { width: 140px; height: 140px; opacity: 0; border-width: 0.5px; }
+}
+
+.cad-diff-row {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid oklch(0.90 0.008 85);
+  align-items: center;
+}
+.cad-diff-name {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--bone-0);
+}
+.cad-diff-name.dim { color: var(--bone-3); }
+.cad-diff-bar {
+  height: 3px;
+  background: oklch(0.90 0.008 85);
+  position: relative;
+  margin-top: 3px;
+}
+.cad-diff-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: var(--bone-1);
+  transition: width 0.8s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.cad-diff-bar-fill.lead { background: var(--ichor); }
+.cad-diff-bar-fill.dissent { background: var(--artery); }
+.cad-diff-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--bone-1);
+  text-align: right;
+}
+
+.cad-crest {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.14;
+  z-index: 2;
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Convergence moment ──────────────────────────────────────────────
+   Restraint. The four agents fade one at a time; the crest emboldens
+   from background watermark to full medical emblem; the inscribed seal
+   lands. No signatures, no snakes — just the heraldry becoming its own
+   conclusion.
+
+   Timeline (seconds):
+     0.0       HUD quiets (conf bars, rotating rings)
+     0.2       OPHIS stands down — skeptic has yielded
+     0.2       crest begins emboldening (opacity + scale)
+     0.9       Gemini fades
+     1.6       Sonnet fades
+     2.3       GPT fades
+     3.0       ◆ seal inks in
+     3.4       "consensus reached" label reveals */
+
+/* Step 1: quiet the HUD noise around each agent. */
+.cad-converging .cad-node .cad-conf {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+.cad-converging .cad-node-ring::before {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.cad-converging .cad-node-ring {
+  box-shadow: none !important;
+  border-color: var(--ink-3) !important;
+  transition: box-shadow 1s ease-out, border-color 1s ease-out;
+}
+
+/* Step 2 — agents fade one at a time. OPHIS first (the skeptic has no
+   remaining challenge), then the three specialists in sequence. Each
+   specialist dims to a near-zero presence so the crest inherits the
+   foreground. */
+.cad-converging .cad-node.role-antagonist {
+  animation: cad-stand-down 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards !important;
+}
+.cad-converging .cad-node.role-mechanistic {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.9s forwards !important;
+}
+.cad-converging .cad-node.role-eliminative {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 1.6s forwards !important;
+}
+.cad-converging .cad-node.role-probabilistic {
+  animation: cad-stand-aside 0.9s cubic-bezier(0.25, 1, 0.5, 1) 2.3s forwards !important;
+}
+@keyframes cad-stand-aside {
+  to {
+    opacity: 0.08;
+    filter: saturate(0.2);
+  }
+}
+@keyframes cad-stand-down {
+  to {
+    opacity: 0.06;
+    filter: saturate(0);
+  }
+}
+
+/* Antagonist ring styling — while OPHIS is still visible during its
+   stand-down, keep the ring background quiet rather than the red-glow
+   "speaking" state it was in during the debate. */
+.cad-converging .cad-node.antagonist .cad-node-ring {
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2)) !important;
+  box-shadow: none !important;
+  transition: background 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+/* Step 3 — the crest emboldens. It was a 0.14 watermark during the
+   debate; as the agents fade, it ramps to full opacity and scales up
+   slightly. The medical emblem becomes the conclusion. */
+.cad-crest-stage {
+  transition: transform 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+.cad-converging .cad-crest-stage {
+  transform: translate(-50%, -50%) scale(1.18);
+}
+.cad-converging .cad-crest {
+  opacity: 1;
+  transition: opacity 2.0s cubic-bezier(0.22, 1, 0.36, 1) 0.4s;
+}
+.cad-converging .cad-crest line,
+.cad-converging .cad-crest path {
+  filter: saturate(1.25) brightness(0.88);
+  transition: filter 1.6s ease-out 0.6s;
+}
+
+/* ── Scene push-in ────────────────────────────────────────────────
+   A very subtle zoom on the whole scene during convergence. Adds cinematic
+   emphasis without becoming a motion-heavy effect. */
+.cad-converging {
+  animation: cad-scene-push 5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+@keyframes cad-scene-push {
+  from { transform: scale(1); }
+  to   { transform: scale(1.03); }
+}
+
+/* ── Deadlock resolution ──────────────────────────────────────────
+   The inverse gesture to convergence. The "no consensus" seal lands
+   FIRST (up-front negative cue at t=0) so the viewer never confuses
+   this with the positive outcome. The crest DIMS instead of
+   emboldening — there is no emblem of unity to settle on. The
+   specialists fade together (stalemate) rather than in sequence
+   (orderly handoff). The whole scene desaturates subtly.
+
+   Timeline (seconds):
+     0.0       ◇ mark inks in (artery color) — immediate negative cue
+     0.2       HUD quiets
+     0.4       "no consensus · referral required" label reveals
+     0.6       crest begins dimming
+     1.2       OPHIS fades — skeptic's job done
+     2.0       three specialists fade simultaneously
+     0.3–3.3   scene desaturates */
+
+.cad-deadlocking .cad-node .cad-conf {
+  opacity: 0;
+  transition: opacity 0.8s ease-out;
+}
+.cad-deadlocking .cad-node-ring::before {
+  animation-play-state: paused;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
+.cad-deadlocking .cad-node-ring {
+  box-shadow: none !important;
+  border-color: var(--ink-3) !important;
+  transition: box-shadow 1s ease-out, border-color 1s ease-out;
+}
+
+.cad-deadlocking .cad-node.role-antagonist {
+  animation: cad-stand-down 1.0s cubic-bezier(0.25, 1, 0.5, 1) 1.2s forwards !important;
+}
+.cad-deadlocking .cad-node.role-mechanistic,
+.cad-deadlocking .cad-node.role-eliminative,
+.cad-deadlocking .cad-node.role-probabilistic {
+  animation: cad-stand-aside 1.1s cubic-bezier(0.25, 1, 0.5, 1) 2.0s forwards !important;
+}
+
+.cad-deadlocking .cad-node.antagonist .cad-node-ring {
+  background: linear-gradient(180deg, var(--ink-1), var(--ink-2)) !important;
+  box-shadow: none !important;
+  transition: background 0.4s ease-out, box-shadow 0.4s ease-out;
+}
+
+/* Crest dims rather than brightens — no resolution to settle on. */
+.cad-deadlocking .cad-crest-stage {
+  transform: translate(-50%, -50%) scale(0.88);
+  transition: transform 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+}
+.cad-deadlocking .cad-crest {
+  opacity: 0.04;
+  transition: opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.6s;
+}
+
+/* Subtle desaturation of the whole scene — signals "no clinical
+   resolution" without being visually aggressive. */
+.cad-deadlocking {
+  animation: cad-scene-desaturate 3s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+@keyframes cad-scene-desaturate {
+  from { filter: saturate(1); }
+  to   { filter: saturate(0.82); }
+}
+
+/* ── Inscribed seal ───────────────────────────────────────────────
+   "◆ CONSENSUS REACHED" — sits just below the signature baseline. The
+   mark inks in after the third signature lands; the label unveils
+   left-to-right like a line of calligraphy being set down. */
+.cad-convergence-seal {
+  position: absolute;
+  top: calc(50% + 200px);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 6;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.cad-convergence-seal .mark {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--ichor);
+  line-height: 1;
+  opacity: 0;
+  animation: cad-seal-mark-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 3.0s forwards;
+}
+.cad-convergence-seal .label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--ichor);
+  clip-path: inset(0 100% 0 0);
+  animation: cad-seal-label-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) 3.4s forwards;
+}
+/* Deadlock seal — artery tint, up-front timing, centered in the graph
+   where the crest would otherwise be. The crest dims during deadlock,
+   leaving the center empty; the "no consensus" seal fills that void
+   and becomes the sole focal point. Slightly larger type than the
+   convergence variant since it's the hero element, not a footer note. */
+.cad-convergence-seal.deadlock {
+  top: 50%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
+.cad-convergence-seal.deadlock .mark {
+  color: var(--artery);
+  font-size: 22px;
+  animation-delay: 0s;
+  animation-duration: 0.6s;
+}
+.cad-convergence-seal.deadlock .label {
+  color: var(--artery);
+  font-size: 12px;
+  animation-delay: 0.4s;
+  animation-duration: 1.0s;
+}
+@keyframes cad-seal-mark-in {
+  from { opacity: 0; transform: scale(0.7) rotate(-20deg); transform-origin: center; }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes cad-seal-label-in {
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* ── Accessibility: reduced motion ─────────────────────────────────
+   Collapse the decorative convergence animations to near-instant when
+   the user has requested reduced motion. The core meaning — signatures
+   present, agents receded, seal visible — still lands, just without
+   easing or staged timing. */
+@media (prefers-reduced-motion: reduce) {
+  .cad-convergence-seal .mark,
+  .cad-convergence-seal .label,
+  .cad-crest-stage,
+  .cad-crest,
+  .cad-converging,
+  .cad-deadlocking {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cad-convergence-seal .label {
+    clip-path: none !important;
+  }
+  .cad-converging,
+  .cad-deadlocking {
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+.cad-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-3), transparent);
+  margin: 10px 0;
+}
+
+.cad-case-list-item {
+  border: 1px solid var(--ink-3);
+  padding: 14px 16px;
+  background: oklch(0.97 0.006 85 / 0.7);
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+.cad-case-list-item:hover {
+  border-color: var(--bone-1);
+  background: oklch(0.94 0.010 85);
+}
+.cad-case-list-item.selected {
+  border-color: var(--bone-0);
+  background: oklch(0.93 0.012 85);
+}
+.cad-case-list-item.selected::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--bone-0);
+}
+
+/* ── Floating verdict ─────────────────────────────────────────────
+   Detached from the right column so the transcript scroll is not
+   disrupted when consensus lands. Anchored to the viewport's
+   bottom-right with two states: a full card (expanded) and a small
+   clickable badge (collapsed). The 200ms ease-out-expo timing matches
+   the project's quiet-but-considered transition feel — no bounce,
+   no overshoot.
+
+   Z-index sits above the scene's resolution seal (z-index 6) and the
+   clash overlay (z-index 15) but below the error toast (z-index 100). */
+.cad-floating-verdict {
+  position: fixed;
+  right: 14px;
+  /* 64px from the viewport bottom = clear of the "↺ New case" button
+     that lives at the bottom of the right column (button is ~32px tall
+     at bottom: 14px). Both expanded card and collapsed badge sit above
+     the button so it remains clickable in either state. */
+  bottom: 64px;
+  z-index: 50;
+  font-family: var(--mono);
+  transition:
+    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cad-floating-verdict-expanded {
+  width: 380px;
+  max-height: min(70vh, 720px);
+  overflow-y: auto;
+  background: var(--ink-0);
+  border: 1px solid var(--ink-3);
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.08),
+    0 12px 32px oklch(0.22 0.030 210 / 0.18);
+  padding: 0;
+  /* The inner <Verdict /> already paints its own .cad-verdict surface
+     (sage tint + ichor border on converged, bone tint + bone border on
+     deadlocked). The wrapper here is just the floating chrome. */
+}
+
+.cad-floating-verdict-expanded .cad-verdict {
+  border: none;
+  margin: 0;
+}
+
+.cad-floating-verdict-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--bone-1);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+  transition:
+    color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 150ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cad-floating-verdict-close:hover {
+  color: var(--bone-0);
+  border-color: var(--ink-3);
+  background: oklch(0.94 0.008 85);
+}
+.cad-floating-verdict-close:focus-visible {
+  outline: none;
+  border-color: var(--bone-0);
+}
+
+.cad-floating-verdict-collapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: oklch(0.98 0.012 155 / 0.95);
+  border: 1px solid var(--ichor);
+  color: var(--ichor);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.08),
+    0 6px 18px oklch(0.22 0.030 210 / 0.14);
+  transition:
+    background 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cad-floating-verdict-collapsed.deadlocked {
+  background: oklch(0.97 0.014 30 / 0.95);
+  border-color: var(--artery);
+  color: var(--artery);
+}
+.cad-floating-verdict-collapsed:hover {
+  background: oklch(0.96 0.018 155 / 1);
+  box-shadow:
+    0 1px 2px oklch(0.22 0.030 210 / 0.10),
+    0 10px 24px oklch(0.22 0.030 210 / 0.18);
+}
+.cad-floating-verdict-collapsed.deadlocked:hover {
+  background: oklch(0.95 0.020 30 / 1);
+}
+.cad-floating-verdict-collapsed:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--ink-0),
+    0 0 0 3px var(--bone-0);
+}
+.cad-floating-verdict-badge-label {
+  white-space: nowrap;
+}

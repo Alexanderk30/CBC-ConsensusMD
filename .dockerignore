@@ -1,0 +1,42 @@
+# Never ship secrets
+.env
+.env.*
+!.env.template
+
+# Python churn
+**/__pycache__/
+**/*.py[cod]
+**/*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Frontend churn — node_modules is reinstalled inside the image; dist is
+# rebuilt inside the image. Don't bloat the build context with either.
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDE / OS noise
+.vscode/
+.idea/
+.DS_Store
+.git/
+.github/
+
+# Design / spec files not needed at runtime
+design_handoff_caduceus/
+*.md
+!README.md
+
+# Tests aren't executed in the image build
+tests/
+
+# Runtime artifacts from local dev
+cases/runs/
+*.log
+
+# Docker metadata itself
+Dockerfile
+.dockerignore

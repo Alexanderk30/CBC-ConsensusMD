@@ -22,10 +22,19 @@ dist/
 # Runtime artifacts
 cases/runs/
 *.log
+
+# Frontend build + deps
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Local agent / project notes
 CLAUDE.md
+
+# Benchmark data pipeline — large artifacts and ad-hoc datasets
 /testing-dataset
 /anaconda_projects
 /benchmark_testing/diagnosis_arena_data
-benchmark_testing/diagnosis_results.csv
 /benchmark_testing/.ipynb_checkpoints
+benchmark_testing/diagnosis_results.csv
 *.csv

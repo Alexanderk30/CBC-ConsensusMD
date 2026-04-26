@@ -1,8 +1,12 @@
 {
   "case_id": "demo-03-addisons",
   "demographics": {
+    "name": "Denise Whitfield",
     "age": 42,
-    "sex": "F"
+    "sex": "F",
+    "weight_kg": 55,
+    "allergies": "NKDA",
+    "code_status": "Full Code"
   },
   "chief_complaint": "I'm exhausted all the time and I almost fainted yesterday.",
   "history_of_present_illness": "5-month history of progressive fatigue, decreased appetite with 12-lb weight loss, and intermittent nausea. Over the past 6 weeks, increasing dizziness on standing. Yesterday nearly lost consciousness when standing up from a chair. Reports unusual salt cravings, eating pickles straight from the jar. Has been seen twice in the past 4 months and told she has depression or possible chronic fatigue syndrome.",
