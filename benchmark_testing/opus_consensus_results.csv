@@ -1,0 +1,193 @@
+correct,predicted,consensus_reached,score
+Cutaneous meningeal heterotopia (CMH),"Primary cutaneous meningioma, Type I (congenital cutaneous meningothelial heterotopia / rudimentary meningocele)",1,2
+Scrotal ulceration secondary to induction chemotherapy with ATRA,"Malignancy-associated Sweet syndrome (acute febrile neutrophilic dermatosis), necrotic/ulcerative genital variant, arising during post-chemotherapy neutrophil recovery",1,0
+Familial cerebral cavernous malformations,"Familial cerebral cavernous malformation type 1 (CCM1, KRIT1) with hyperkeratotic cutaneous capillary-venous malformations (HCCVMs)",1,2
+Microvenular hemangioma (MVH),Acquired progressive lymphangioma (benign lymphangioendothelioma),1,0
+Left maxillary giant cell reparative granuloma (GCRG),"Giant cell reparative granuloma (central giant cell granuloma), aggressive variant, of the left maxillary sinus",1,2
+Metastatic Crohn disease,Metastatic Crohn disease (vulvar manifestation),1,2
+Segmental stiff skin syndrome (SSS),Deep morphea (morphea profunda),0,0
+Primary cutaneous trichosporonosis caused by Trichosporon mycotoxinivorans,Deep cutaneous trichosporonosis due to Trichosporon mycotoxinivorans,1,2
+Aquagenic syringeal acrokeratoderma (ASA),Aquagenic keratoderma (transient reactive papulotranslucent acrokeratoderma),1,2
+Facial discoid dermatosis (FDD),Facial Psoriasis (Sebopsoriasis / Facial-predominant Plaque Psoriasis),1,0
+Acute dacryocystitis with secondary optic nerve injury,Compressive optic neuropathy with optic nerve infarction secondary to orbital cellulitis from Streptococcus pyogenes lacrimal sac abscess,1,2
+Kaposiform hemangioendothelioma (KHE) of the internal auditory canal,Kaposiform hemangioendothelioma of the cerebellopontine angle,1,1
+Gadolinium-associated plaques (GAP),Gadolinium Deposition Disease (GDD),1,0
+Iatrogenic hypercalcemia,error: ,,0
+Primary oral histoplasmosis,Disseminated histoplasmosis with oral manifestation (Histoplasma capsulatum),1,1
+Giant macroprolactinoma,Giant prolactinoma (macroprolactinoma),1,2
+Nodular amyloid,"Primary cutaneous nodular amyloidosis (AL type, localized)",1,2
+ERK inhibitor-associated retinopathy (ERKAR),ERK inhibitor-associated serous retinopathy (ulixertinib-induced retinopathy),1,2
+Follicular thyroid carcinoma with manubrial invasion,Follicular thyroid carcinoma metastatic to the manubrium,1,2
+Drug-induced ANCA vasculitis secondary to hydralazine,Levamisole-induced vasculitis (cocaine-levamisole vasculopathy),1,0
+Saturday night retinopathy with orbital compression syndrome,"Orbital compartment syndrome from prolonged positional compression during substance-induced unconsciousness, with secondary combined central retinal artery occlusion and choroidal ischemia",1,2
+Antimelanoma differentiation associated gene 5 clinically amyopathic dermatomyositis,Anti-MDA5 antibody-associated amyopathic dermatomyositis with rapidly progressive interstitial lung disease,1,2
+Postinfectious altered bowel habits with C. difficile colonization,"Post-infectious irritable bowel syndrome (PI-IBS) following Clostridioides difficile infection, with coincidental C. difficile colonization",1,2
+Cutaneous silica granuloma,Silica granuloma (delayed foreign body granulomatous reaction to traumatically embedded silica from land mine explosion),1,2
+Drug-induced bilateral choroidal detachment,Carfilzomib-induced bilateral serous choroidal detachment,1,2
+Chemical burns of the pharynx and esophagus due to e-cigarette injury,Caustic thermal and chemical burn of the upper aerodigestive tract due to e-cigarette battery explosion,1,1
+Histiocytoid Sweet syndrome,Leukemia Cutis (Myeloid Sarcoma) secondary to Therapy-Related Myeloid Neoplasm,1,0
+BayÃÂ©s syndrome (Advanced interatrial block with paroxysmal atrial arrhythmias),Atrial cardiomyopathy (fibrotic atrial myopathy) with advanced interatrial block (BayÃÂ©s syndrome) manifesting as tachycardia-bradycardia syndrome,1,2
+IgG4-related rhinosinusitis with concurrent Streptococcus constellatus bacterial rhinosinusitis,IgG4-related disease of the paranasal sinuses with orbital apex syndrome,1,1
+Nevocytic ciliary body nevus with extrascleral extension,Ciliary body melanocytoma with extrascleral (episcleral) extension,1,0
+Extensive dermatophytosis due to autosomal recessive CARD9 deficiency (homozygous Q289X mutation),Disseminated (generalized) dermatophytosis due to Trichophyton rubrum (Trichophyton rubrum syndrome) with suspected underlying CARD9 deficiency,1,2
+Extrafacial granuloma faciale,Angiolymphoid hyperplasia with eosinophilia (ALHE),1,0
+ST-segment elevation due to myocardial metastasis from squamous cell carcinoma of the lung,Myocardial metastasis from lung cancer causing ST-elevation pseudoinfarction pattern with malignant pericardial effusion and impending cardiac tamponade,1,2
+Toxic encephalopathy due to systemic absorption of topical ketamine-amitriptyline-lidocaine compound,Delirium due to systemic absorption of topical compounded ketamine-amitriptyline-lidocaine (KAL) cream,1,2
+Cardiac Memory (T-wave memory),Cardiac memory (T-wave memory) following prolonged right ventricular pacing,1,2
+Primary cutaneous cryptococcosis (PCC),Primary cutaneous cryptococcosis (Cryptococcus neoformans) due to fingolimod-induced immunosuppression,1,2
+Cutaneous plasmablastic posttransplantation lymphoproliferative disorder (pPTLD),Post-transplant lymphoproliferative disorder Ã¢ÂÂ plasmablastic lymphoma (monomorphic PTLD),1,2
+Nevus comedonicus,Porokeratotic eccrine ostial and dermal duct nevus (PEODDN),1,0
+Metastatic Crohn disease,Metastatic Crohn disease (cutaneous Crohn disease),1,2
+Invasive squamous cell carcinoma arising in a seborrheic keratosis of the eyelid,Squamous cell carcinoma arising within a seborrheic keratosis (clear cell/glycogen-rich variant),1,2
+Position-dependent ventricular tachycardia induced by displaced PICC line,PICC line malposition-induced ventricular arrhythmia (mechanical endocardial irritation from catheter tip displaced to the tricuspid valve),1,2
+Pseudoepitheliomatous hyperplasia,Pseudoepitheliomatous hyperplasia secondary to tattoo pigment reaction to titanium dioxide (white ink),1,2
+Left posterior fascicular ventricular tachycardia (LPF-VT) associated with anti-ERBB2 therapy,Monomorphic ventricular tachycardia secondary to trastuzumab/pertuzumab (anti-ERBB2)-induced cardiomyopathy,1,1
+Atypical hand-foot-mouth disease,Atypical hand-foot-and-mouth disease (enteroviral vesiculobullous eruption) in an immunocompromised host,1,2
+Drug-induced dermatomyositis secondary to ipilimumab therapy,Ipilimumab-induced dermatomyositis (immune checkpoint inhibitor-related dermatomyositis),1,2
+Eosinophilic angiocentric sclerosis related to IgG4 with isolated eyelid involvement,IgG4-related ophthalmic disease (IgG4-related dacryoadenitis and periorbital disease),1,1
+Isorhythmic atrioventricular dissociation (AVD) with atrial ectopic rhythm and junctional rhythm,Accelerated junctional rhythm with isorhythmic atrioventricular dissociation (P-wave mimicry),1,2
+Borderline-borderline leprosy,"Borderline lepromatous leprosy (BL leprosy, Hansen disease)",1,1
+Traumatic brain injury with early post-traumatic seizure,"Diffuse Axonal Injury (DAI), Grade I",1,0
+Inverse psoriasiform eruption with secondary impetiginization,Pembrolizumab-induced inverse psoriasis (immune checkpoint inhibitorÃ¢ÂÂrelated psoriasiform dermatitis),1,1
+Bidirectional ventricular tachycardia due to digoxin effect with concurrent hypokalemia,Bidirectional ventricular tachycardia due to digoxin toxicity potentiated by hypokalemia,1,2
+Progressive mucinous histiocytosis (PMH),Hereditary Progressive Mucinous Histiocytosis (HPMH),1,2
+Juvenile-onset neuronal intranuclear inclusion disease (NIID),Neuronal Intranuclear Inclusion Disease (NIID),1,2
+Macular lymphocytic arteritis,Lymphocytic thrombophilic arteritis (LTA),1,1
+Infranodal second-degree type 1 AV block,Infra-nodal (His-Purkinje) second-degree AV block due to degenerative conduction system disease (Lenegre-Lev disease),1,2
+Arnold nerve neuropathy due to tympanostomy tube irritation,Arnold nerve cough reflex (vagal ear-cough reflex) secondary to tympanostomy tube stimulation of the auricular branch of the vagus nerve,1,2
+Eosinophilic annular erythema (EAE),Eosinophilic annular erythema (immune checkpoint inhibitor-related),1,2
+Atrial flutter with 1:1 conduction,Atrial flutter with 1:1 AV conduction facilitated by amiodarone administration without adequate AV nodal blockade,1,2
+Anastrozole-associated uveitis with cystoid macular edema,Anastrozole-induced uveitis with cystoid macular edema,1,2
+Ostium secundum atrial septal defect (OS-ASD),Secundum Atrial Septal Defect (Ostium Secundum ASD),1,2
+Neurocristic hamartoma,Plaque-type blue nevus,1,0
+Type I cryoglobulinemia associated with multiple myeloma,Type I cryoglobulinemic vasculopathy secondary to IgG-ÃÂº multiple myeloma,1,2
+Synchysis scintillans with morning glory disc anomaly and chronic retinal detachment,Cholesterolosis of the anterior chamber (anterior chamber cholesterol crystals) secondary to chronic retinal detachment with morning glory disc anomaly,1,1
+Tertiary amine-induced epithelial keratopathy,Methylene diphenyl diisocyanate (MDI) keratopathy Ã¢ÂÂ toxic intraepithelial corneal opacities from diisocyanate vapor exposure during polyurethane foam insulation spraying,1,0
+Apocrine poroma,Trichoblastoma with sebaceous and poroid differentiation (sebaceotrichoblastoma),1,0
+Intralymphatic histiocytosis,Intralymphatic histiocytosis associated with orthopedic metallic implant (reverse total shoulder arthroplasty),1,2
+Septic shock with anuric kidney failure,Non-dihydropyridine calcium channel blocker toxicity (verapamil or diltiazem overdose),1,0
+Tear of the rectus femoris muscle presenting as a pseudotumor,Fascial dehiscence (muscle hernia) of the rectus femoris,1,1
+Pagetoid reticulosis (Woringer-Kolopp disease),Pagetoid reticulosis (Woringer-Kolopp disease),0,2
+Cholecystocardial syndrome (CCS) due to poorly differentiated adenocarcinoma of the pancreaticoduodenal junction,Coronary artery vasospasm (Prinzmetal/variant angina) secondary to malignant duodenal tumor at the pancreaticoduodenal junction,1,0
+Poikilodermatous mycosis fungoides (PMF) stage IB disease,"Hypopigmented mycosis fungoides, CD8+ cytotoxic variant (stage IB, T2N0M0B0)",1,1
+Three-vessel obstructive coronary artery disease,Three-vessel coronary artery disease with chronic stable angina pectoris (CCS Class I-II),1,2
+Cytomegalovirus (CMV) cutaneous ulcers,Cytomegalovirus (CMV) anogenital ulceration,1,2
+Nonkeratinizing squamous cell carcinoma of the nasal mucosa with Schneiderian features,"Inverted Papilloma (Schneiderian Papilloma, Inverted Type) of the Nasal Vestibule",1,0
+Foreign body (bee stinger) embedded in the laryngeal surface of the epiglottis,Bee stinger foreign body embedded in the laryngeal surface of the epiglottis,1,2
+Low-grade chondrosarcoma of the mastoid with facial nerve involvement,"Low-grade chondrosarcoma (grade I) of the temporal bone, arising in the fallopian canal/stylomastoid foramen region",1,2
+Deficiency of the interleukin-36 receptor antagonist (DITRA),Generalized Pustular Psoriasis due to Deficiency of IL-36 Receptor Antagonist (DITRA),1,2
+Eosinophilic annular erythema (EAE),Eosinophilic annular erythema,1,2
+"Overlap of bullous pemphigoid, anti-p200 pemphigoid, and anti-laminin-332 mucous membrane pemphigoid with anti-CNTN1-positive inflammatory polyneuropathy",Anti-p200 (anti-laminin ÃÂ³1) pemphigoid with concurrent anti-laminin-332 mucous membrane pemphigoid and anti-CNTN1 autoimmune nodopathy,1,1
+Orthodromic Atrioventricular Reentrant Tachycardia (AVRT) with left posterior accessory pathway,Orthodromic Atrioventricular Reciprocating Tachycardia (AVRT) via a Left Lateral Accessory Pathway (Wolff-Parkinson-White Syndrome),1,1
+Disseminated Strongyloides stercoralis infection with ocular involvement (choroiditis),Strongyloides stercoralis hyperinfection syndrome (disseminated strongyloidiasis),1,1
+Severe Hyperkalemia,Severe hyperkalemia with progressive cardiac toxicity,1,2
+Enhanced S-cone syndrome (ESCS),"Fundus albipunctatus, progressive form (RDH5-related retinopathy with cone/rod dystrophy)",1,0
+CAR-T therapyÃ¢ÂÂassociated toxic reaction with grade 3 cytokine release syndrome,CAR-T cell-mediated cutaneous graft-versus-host-like disease (off-tumor CAR-T skin toxicity) with concurrent cytokine release syndrome,1,1
+"Rosacea-like angiosarcoma (Cutaneous angiosarcoma, stage IIB - T2aN0M0G2)",Cutaneous angiosarcoma of the face,1,2
+Sinus node dysfunction in the donor heart's right atrium,Multi-level donor conduction system injury (SA node + AV node/His-Purkinje) post-biatrial heart transplant with dual P-wave phenomenon,1,1
+Myopericarditis,Acute myopericarditis,1,2
+Bilateral traumatic vidian nerve injury,Vidian nerve injury (nerve of the pterygoid canal) secondary to comminuted sphenoid sinus fracture with vidian canal disruption,1,2
+Accelerated atrioventricular junctional tachycardia with isorhythmic atrioventricular dissociation,Isorhythmic Atrioventricular Dissociation due to Accelerated Junctional (Nonparoxysmal Junctional) Rhythm in the Setting of Third-Trimester Pregnancy,1,2
+Caruncular melanoma,"Amelanotic malignant melanoma of the caruncle (de novo, without primary acquired melanosis)",1,2
+Cutaneous vasculopathy associated with axitinib therapy,Axitinib-induced hand-foot skin reaction (VEGFR-TKI vasculopathic variant / acral erythrodysesthesia),1,2
+Cutaneous Colletotrichum gloeosporioides infection,"Cutaneous infection by Colletotrichum species (angioinvasive cutaneous fungal infection, likely Colletotrichum gloeosporioides complex)",1,2
+Type 2 myocardial infarction secondary to right coronary artery vasospasm,Coronary artery vasospasm (Prinzmetal/variant angina) of the dominant right coronary artery,1,1
+Porokeratotic eccrine ostial and dermal duct nevus (PEODDN),Porokeratotic Eccrine Ostial and Dermal Duct Nevus (PEODDN),1,2
+"Progressive Ataxia and Palatal Tremor (PAPT), sporadic type",Progressive Ataxia with Palatal Tremor (PAPT),1,2
+Neutrophilic sebaceous adenitis (NSA),Lupus miliaris disseminatus faciei (LMDF),1,0
+Anti-TIF-1ÃÂ³ juvenile dermatomyositis (JDM),"Juvenile Dermatomyositis (JDM), anti-TIF-1ÃÂ³ (anti-p155/140) positive",1,2
+Idiopathic follicular mucinosis,Primary (Idiopathic) Follicular Mucinosis (Alopecia Mucinosa) Ã¢ÂÂ Segmental/Linear Type,1,2
+Epidermolysis bullosa pruriginosa (EBP),"Dystrophic epidermolysis bullosa pruriginosa, dominant (COL7A1-related)",1,2
+Telangiectatic metastatic breast carcinoma (TMBC),Cutaneous metastasis of breast carcinoma Ã¢ÂÂ telangiectatic type (carcinoma telangiectoides),1,2
+PD-1Ã¢ÂÂassociated circumorificial plasmacytosis (CP),Pembrolizumab-induced plasma cell gingivitis (immune checkpoint inhibitor-related immune adverse event),1,1
+Annular epidermolytic ichthyosis (AEI),"Epidermolytic Ichthyosis (Bullous Congenital Ichthyosiform Erythroderma) due to KRT1 mutation (c.482T>C, p.L161P)",1,1
+Intra-atrial reentrant tachycardia (IART) with variable atrioventricular block,Intra-atrial reentrant tachycardia (IART) with 2:1 conduction,1,1
+"Junctional epidermolysis bullosa with renal and respiratory involvement (junctional EB-RR), skin and mucosa-limited variant",Junctional Epidermolysis Bullosa due to homozygous ITGA3 mutation (integrin ÃÂ±3 deficiency) Ã¢ÂÂ attenuated/hypomorphic phenotype,1,1
+Mature teratoma of the mandible,Mature teratoma of the mandible,1,2
+Chronically retained intravitreal air with altitude-dependent ocular pain,Retained intraocular gas expansion at altitude causing ocular pain (Boyle's Law effect),1,2
+Keloidal scleroderma,Keloidal/nodular scleroderma (keloidal morphea),1,2
+Linear atrophoderma of Moulin,Linear atrophoderma of Moulin,1,2
+Acrodermatitis continua of Hallopeau (ACH),Psoriatic arthritis with acrodermatitis continua of Hallopeau,1,1
+Cerebral amyloid angiopathy (CAA) with concurrent immune thrombocytopenic purpura,Cerebral Amyloid Angiopathy (CAA) with catastrophic multifocal intracerebral hemorrhage precipitated by severe immune thrombocytopenic purpura (ITP)-related thrombocytopenia,1,2
+Inverse lichen planus,Mycosis Fungoides (Patch-Stage Cutaneous T-Cell Lymphoma),1,0
+Hypomagnesemia secondary to glucose-mediated osmotic diuresis,Osmotic diuresis-induced renal magnesium wasting due to poorly controlled type 2 diabetes mellitus,1,2
+Wolff-Parkinson-White (WPW) syndrome presenting with ventricular fibrillation,Wolff-Parkinson-White syndrome with ventricular fibrillation secondary to pre-excited atrial fibrillation,1,2
+Reversible cerebral vasoconstriction syndrome (RCVS),Synthetic cannabinoid-induced toxic leukoencephalopathy,1,0
+Irritant (popper) contact dermatitis,"Chemical burn (caustic ulcer) of the penis due to alkyl nitrite (""Jungle Juice"") contact",1,1
+Retinopathy associated with the use of hair dye aromatic amines (RAHDAA),Bilateral acute exudative polymorphous vitelliform maculopathy (BAEPVM) secondary to para-phenylenediamine (PPD) exposure,1,1
+Pyoderma with Staphylococcus simulans,Orf (Ecthyma Contagiosum) Ã¢ÂÂ Parapoxvirus Infection,1,0
+Inflammation-induced ocular neuropathy associated with SARS-CoV-2Ã¢ÂÂinduced panuveitis,SARS-CoV-2-associated optic neuritis with retinal vasculitis (right eye),1,1
+Eruptive pruritic papular porokeratosis (EPPP),Disseminated Superficial Actinic Porokeratosis (DSAP),1,1
+Myopic macular pit,Scleral pit associated with pathologic myopia,1,2
+Definite bilateral MÃÂ©niÃÂ¨re disease,Bilateral MÃÂ©niÃÂ¨re's disease,1,2
+Vagus-mediated paroxysmal atrioventricular block (VP-AVB),Vagally-mediated (cardioinhibitory) syncope with paroxysmal atrioventricular block (reflex asystolic syncope),1,2
+CTLA-4 deficiency with autoimmune choroiditis,Autoimmune choroidopathy secondary to common variable immunodeficiency (CVID),1,1
+Primary invasive lobular breast carcinoma in heterotopic cutaneous breast tissue,Primary apocrine adenocarcinoma of the axilla,1,0
+Tumors of the follicular infundibulum (TFI),"Tumor of the follicular infundibulum (infundibuloma), eruptive/plaque-type variant",1,2
+Anetoderma associated with SDHB mutation,Anetoderma associated with SDHB germline mutation (hereditary paraganglioma-pheochromocytoma syndrome),1,2
+Parkinsonian tremor-induced ECG artifacts (pseudo-arrhythmias),Parkinsonian tremor artifact on ECG/telemetry mimicking cardiac arrhythmia (pseudoarrhythmia),1,2
+Cutaneous angiosarcoma,Cutaneous angiosarcoma of the scalp and face,1,2
+Short-coupled polymorphic ventricular tachycardia/ventricular fibrillation (SC-PMVT/VF) variant of idiopathic ventricular fibrillation,Short-coupled ventricular fibrillation (short-coupled variant of torsade de pointes),1,2
+Petrified ear,Auricular ossificans (endochondral ossification of the auricular cartilage),1,2
+COVID-19 with transient transmural ischemic injury due to coronary vasospasm or coronary thrombus with subsequent lysis,Brugada phenocopy secondary to transient hyperkalemia/metabolic derangement during hemodialysis for COVID-19-associated acute kidney injury,1,0
+Trifascicular heart block (Bifascicular block with first-degree AV block progressing to complete heart block),Trifascicular block (first-degree AV block + right bundle branch block + left anterior fascicular block) with intermittent complete (third-degree) atrioventricular block Ã¢ÂÂ Lev-LenÃÂ¨gre disease,1,2
+Bilateral nasopharyngeal mucopyoceles,Infected Tornwaldt cysts (bilateral),1,1
+Lymphomatosis cerebri variant of diffuse large B-cell lymphoma (DLBCL),"Lymphomatosis Cerebri (Primary CNS Lymphoma, Diffuse Large B-Cell Lymphoma, non-germinal center/activated B-cell subtype)",1,2
+Fibrous cephalic plaque (FCP) associated with tuberous sclerosis complex (TSC),Tuberous Sclerosis Complex (fibrous cephalic plaque with angiofibromas),1,2
+Bifascicular block with infra-Hisian Wenckebach block,Infra-Hisian block (trifascicular conduction disease) causing cardiogenic syncope,1,1
+Papillary hemangioma,Intravascular papillary endothelial hyperplasia (Masson tumor),1,2
+Acrodermatitis continua of Hallopeau (ACH),Acrodermatitis continua of Hallopeau,1,2
+Radioiodine-refractory vesicular thyroid carcinoma (VTC) with sinonasal metastasis,"Metastatic vesicular (follicular) thyroid carcinoma Ã¢ÂÂ primary left thyroid with sinonasal, rib (5th rib), and vertebral (L4) metastases",1,2
+Pheochromocytoma-induced cardiomyopathy,Takotsubo cardiomyopathy secondary to pheochromocytoma,1,2
+Eruptive squamous atypia (keratoacanthoma),Eruptive verrucous actinic keratoses following fractional CO2 laser resurfacing,1,0
+Suspected extracranial ectopic pituitary tissue in nasopharynx,Ectopic pituitary tissue (pituitary choristoma) via persistent craniopharyngeal canal,1,2
+Cutaneous cytomegalovirus (CMV) infection,Cytomegalovirus (CMV) perianal ulcers (CMV mucocutaneous disease),1,2
+Febrile ulceronecrotic Mucha-Habermann disease (FUMHD),Febrile Ulceronecrotic Mucha-Habermann Disease (FUMHD),1,2
+Bidirectional ventricular tachycardia due to aconitine poisoning,Aconitine poisoning causing bidirectional ventricular tachycardia and acute myocardial injury,1,2
+Lentiginous junctional nevus with atypia,Acral melanoma in situ arising from BRAF-inhibitor (encorafenib)-induced paradoxical MAPK pathway activation,1,0
+Linear or annular lupus erythematosus panniculitis of the scalp (LALPS),Linear lupus panniculitis (lupus profundus),1,1
+Nodular colloid degeneration of the tongue,Oral Colloid Degeneration (Adult Colloid Milium) of the Tongue,1,2
+Giant cell tumor of soft tissue (GCT-ST),Giant cell tumor of bone (osteoclastoma) of the orbit and skull base,1,0
+Transient left abducens (cranial nerve VI) nerve palsy,Abducens nerve (CN VI) palsy secondary to local anesthetic diffusion from sphenopalatine ganglion block,1,2
+Large middle cerebral artery territory embolic stroke,"Cardioembolic ischemic stroke of the right middle cerebral artery territory secondary to permanent atrial fibrillation, with concurrent pacemaker ventricular undersensing causing competitive pacing during ventricular bigeminy",1,2
+Achalasia type II,"Achalasia, Type II (panesophageal pressurization pattern)",1,2
+Halo scalp ring (pressure necrosis),Caput succedaneum with pressure necrosis (ischemic scalp necrosis from prolonged obstructed labor in occiput posterior position),1,1
+Dominant dystrophic epidermolysis bullosa (EB),"Dominant Dystrophic Epidermolysis Bullosa (DDEB), Cockayne-Touraine type",1,2
+"BRASH syndrome (Bradycardia, Renal failure, AV blockade, Shock, and Hyperkalemia)",Hyperkalemia-induced severe cardiac conduction disturbance (extreme first-degree AV block with sinus bradycardia) secondary to drug-induced hyperkalemia in the setting of acute-on-chronic kidney injury,1,1
+Drug-induced blepharitis and ectropion associated with TNF-ÃÂ± inhibitors (infliximab and adalimumab),TNF-ÃÂ± inhibitor-induced paradoxical psoriasiform dermatitis of the eyelids,1,1
+Erdafitinib-associated retinopathy,Paraneoplastic vitelliform maculopathy (cancer-associated retinopathy spectrum),1,0
+Bullous pilomatricoma,Pilomatricoma (pilomatrixoma) with secondary lymphangiectasia (bullous/lymphangiectatic pilomatricoma),1,2
+Mature cystic teratoma of the cerebellopontine angle (CPA),Cerebellopontine angle dermoid cyst,0,1
+Complete orbital enucleation as a complication of functional endoscopic sinus surgery (FESS),Iatrogenic globe extrusion (inadvertent enucleation) during endoscopic sinus surgery,1,2
+Hemosiderotic fibrolipomatous tumor (HFLT),Hemosiderotic fibrolipomatous tumor (HFLT),1,2
+Adult-onset immunodeficiency due to IFN-ÃÂ³ autoantibodies,Anti-IFN-ÃÂ³ autoantibody-associated immunodeficiency with disseminated Talaromyces marneffei and nontuberculous mycobacterial co-infection,1,2
+FIP1L1-PDGFRAÃ¢ÂÂpositive chronic eosinophilic leukemia (CEL) with associated generalized eruptive histiocytosis (GEH),Myeloid/lymphoid neoplasm with eosinophilia and FIP1L1-PDGFRA rearrangement with secondary cutaneous non-Langerhans cell histiocytosis,1,1
+Blastic plasmacytoid dendritic cell neoplasm (BPDCN) with polyradiculopathy,"Leptomeningeal infiltration (neoplastic meningitis) due to acute myeloid leukemia (AML), likely monocytic subtype (AML-M5/M4), with leukemia cutis and cauda equina syndrome",1,0
+Nocardia brasiliensis skin infection,Sporotrichoid cutaneous nocardiosis (Nocardia brasiliensis),1,2
+Lipodystrophia centrifugalis abdominalis infantilis (LCAI),Localized involutional lipoatrophy of childhood (idiopathic lipoatrophy),1,1
+Chikungunya virus-induced bilateral stromal keratouveitis,Chikungunya virus-associated stromal immune keratitis,1,1
+Endophthalmitis associated with an intraocular foreign body,Exogenous bacterial endophthalmitis secondary to retained intraocular foreign body (Cellulosimicrobium cellulans) with post-infectious inner retinal dimpling from resolved cotton-wool spots,1,2
+Well-differentiated liposarcoma,Well-differentiated liposarcoma (atypical lipomatous tumor) of the hypopharynx,1,2
+Nonsexually acquired genital ulceration (NSAGU)/LipschÃÂ¼tz ulcers associated with Mycoplasma fermentans infection,LipschÃÂ¼tz ulcer (ulcus vulvae acutum) associated with Mycoplasma fermentans infection,1,2
+Drug-induced eczematous dermatitis secondary to secukinumab therapy,Paradoxical eczema (de novo eczematous dermatitis) induced by biologic therapy (anti-TNF/anti-IL-12/23) for psoriasis,1,1
+Optic nerve head drusen,Bilateral Optic Nerve Head Drusen (Buried) with Secondary Optic Atrophy,1,2
+Netherton syndrome,Netherton Syndrome,1,2
+"Intravascular NK/T-cell lymphoma, nasal type",Intravascular NK/T-cell lymphoma,1,2
+Bidirectional ventricular tachycardia (BVT) induced by cocaine use with associated myocardial injury,Cocaine-induced acute myocardial infarction via coronary vasospasm,1,0
+Choanal atresia with USP9X gene mutation,Peitho syndrome (USP9X-related syndromic disorder),1,0
+Subacute left ventricular free wall rupture (LVFWR) complicating acute myocardial infarction,Acute ST-elevation myocardial infarction of the inferoposterolateral wall (left circumflex artery occlusion) complicated by left ventricular free wall rupture with hemopericardium and cardiac tamponade,1,2
+Acute lymphoblastic leukemia relapse,CNS relapse of acute lymphoblastic leukemia with leptomeningeal and orbital infiltration causing bilateral proptosis,1,2
+Axillary web syndrome (AWS),Mondor disease Ã¢ÂÂ lymphatic variant (superficial lymphatic thrombosis / axillary web syndrome),1,2
+Mediastinal metastasis of lung cancer with bilateral pulmonary artery stenosis,Mediastinal mass (recurrent/metastatic lung cancer) causing extrinsic compression of bilateral pulmonary arteries with secondary obstructive right heart failure (acute cor pulmonale),1,2
+Benign lymphangioendothelioma (BLAE),Benign lymphangioendothelioma (acquired progressive lymphangioma),1,2
+Fibrofatty residua of involuted infantile hemangioma,Nevus lipomatosus cutaneus superficialis (classical/Hoffmann-Zurhelle type),1,0
+Glioblastoma (World Health Organization grade IV) with optic nerve invasion and intraocular extension,"Diffuse astrocytoma of the optic nerve, IDH-mutant, ATRX-lost (WHO grade 2Ã¢ÂÂ3, astrocytoma molecular subtype)",1,0
+Prurigo pigmentosa,Prurigo pigmentosa,1,2
+Prurigo pigmentosa,Prurigo pigmentosa (Nagashima disease),1,2
+Pseudoxanthoma elasticum-like disorder with coagulation deficiency,Pseudoxanthoma elasticum-like disorder with multiple coagulation factor deficiency due to GGCX (gamma-glutamyl carboxylase) deficiency,1,2
+Xanthoma disseminatum,Xanthoma disseminatum (Montgomery syndrome),1,2
+Coronary Artery Disease (CAD) with Giant R-wave Syndrome,Coronary artery vasospasm (Prinzmetal/variant angina) with ischemia-induced polymorphic ventricular tachycardia,1,0
+Cerebrospinal fluid (CSF) venous fistula causing spontaneous intracranial hypotension (SIH),Spinal dural arteriovenous fistula (SDAVF) at T12 (Type I spinal dural AVF),1,0
+,,3,267
+,,,378
+,,,70.63%
