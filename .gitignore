@@ -30,4 +30,12 @@ frontend/dist/
 frontend/.vite/
 =======
 CLAUDE.md
+<<<<<<< HEAD
 >>>>>>> 9b16f30 (update gitignore)
+=======
+/testing-dataset
+/anaconda_projects
+/benchmark_testing/diagnosis_arena_data
+benchmark_testing/diagnosis_results.csv
+/benchmark_testing/.ipynb_checkpoints
+>>>>>>> 86a8ae2 (set up benchmark testing pipeline)
