@@ -7,7 +7,7 @@ from tqdm import tqdm
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
-df = pd.read_csv("diagnosis_results.csv", encoding="latin-1")
+df = pd.read_csv("opus_consensus_results.csv", encoding="latin-1")
 scores = []
 
 for i, row in enumerate(tqdm(df.itertuples(), total=len(df))):
@@ -37,9 +37,9 @@ Just provide the score as a single number (0, 1, or 2), nothing else.
 
     if i % 10 == 0:
         df["score"] = pd.array(scores + [None] * (len(df) - len(scores)))
-        df.to_csv("diagnosis_results.csv", index=False)
+        df.to_csv("opus_consensus_results.csv", index=False)
 
 df["score"] = scores
-df.to_csv("diagnosis_results.csv", index=False, encoding="latin-1")
+df.to_csv("opus_consensus_results.csv", index=False, encoding="latin-1")
 print(df.head())
 print(f"\nMean score: {df['score'].mean():.3f}")

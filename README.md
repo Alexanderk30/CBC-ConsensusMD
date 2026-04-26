@@ -48,9 +48,9 @@ backend/
 ├── api/websocket.py       # WebSocket endpoint
 └── evaluation/runner.py   # Batch eval harness for held-out cases
 
-cases/demo/                # 4 demo cases + ground-truth sidecars
+cases/demo/                # 5 demo cases + ground-truth sidecars
 scripts/                   # run_case.py, smoke_test_agents.py
-tests/                     # 75 passing unit tests (schemas, state, workarounds)
+tests/                     # 90 passing unit tests (schemas, state, workarounds)
 ```
 
 **Model assignments (locked):**
@@ -129,7 +129,7 @@ Optional: `"max_rounds": 4` (default 4).
 
 ## Demo cases
 
-Four cases cover the full demo arc:
+Five cases cover the full demo arc:
 
 | # | Case | Archetype | Expected outcome |
 |---|---|---|---|
@@ -137,6 +137,7 @@ Four cases cover the full demo arc:
 | 2 | `demo-02-stemi` | Clean consensus (textbook inferior STEMI) | converged |
 | 3 | `demo-03-addisons` | Belief update (Addison's misdiagnosed as depression) | converged |
 | 4 | `demo-04-neuro-deadlock` | Deadlock (MS vs. neuroborreliosis vs. functional) | deadlocked |
+| 5 | `demo-05-endometriosis` | Delayed diagnosis (endometriosis misdiagnosed as IBS) | converged |
 
 Ground-truth files (`case_XX_..._ground_truth.json`) are intentionally NOT part of the `PatientCase` schema — they are evaluation-only. Physician review of the clinical content happens separately.
 
@@ -166,8 +167,12 @@ Scores convergence-rate, outcome-match rate, converged-case accuracy (fuzzy prim
 python3 -m pytest tests/ -q
 ```
 
-**Coverage** (75 tests):
+**Coverage** (90 tests):
 - `test_schema_validation.py` — 39 tests: every cross-field schema rule, `additionalProperties: false`, Round-0/Round-N boundary.
 - `test_debate_state.py` — 31 tests: information isolation, leading-diagnosis algorithm (Q3), termination state machine (Q2), round-over-round deltas (Q5), supporting-evidence normalization (Q4), anonymous-ID stability.
 - `test_parse_stringified_nested.py` — 5 tests: the Claude tool_use stringified-object workaround with an allowlist guard.
 - `test_evaluation.py` — fuzzy primary-diagnosis matching used by the eval harness.
+
+
+## Dataset used for testing
+https://huggingface.co/datasets/shzyk/DiagnosisArena
