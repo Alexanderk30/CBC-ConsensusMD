@@ -100,8 +100,8 @@ Concretely, Claude was the primary author of:
   rendering path that fixed a stray 404 banner on form-submitted
   debates.
 
-Of the 42 commits in the project's git history, the majority list
-Claude (Opus 4.7) as a `Co-Authored-By` because Claude wrote the
+Of the 47 commits in the project's git history at time of writing,
+43 list Claude (Opus 4.7) as a `Co-Authored-By` — Claude wrote the
 diff and the human author reviewed and shipped it.
 
 ### How quality was maintained

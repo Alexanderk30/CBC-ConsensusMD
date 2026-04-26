@@ -90,9 +90,15 @@ def health() -> dict[str, object]:
 
 @app.get("/cases")
 def list_cases() -> list[dict[str, str]]:
-    """List every case (demo + eval) with case_id, archetype, chief complaint."""
+    """List the demo cases the user-facing picker should surface (case_id,
+    archetype, chief complaint). Excludes evaluation fixtures under
+    cases/pubmed/ — those are reachable by case_id via GET /cases/{id} and
+    via the WebSocket path, but should not appear in the demo picker
+    (`cases/pubmed/README.md` documents this intent)."""
     out: list[dict[str, str]] = []
     for path in sorted(_iter_case_files(CASES_DIR)):
+        if not path.name.startswith("case_"):
+            continue
         try:
             case = PatientCase.model_validate_json(path.read_text())
         except ValidationError:
