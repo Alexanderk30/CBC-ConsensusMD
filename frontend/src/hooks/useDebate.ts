@@ -11,6 +11,11 @@ export interface UseDebateResult {
   startWithCase: (patientCase: PatientCase, maxRounds?: number) => void;
   playDemo: (variant: DemoVariant) => void;
   cancel: () => void;
+  /** Set when the debate was launched via startWithCase (the form path).
+   *  The case is sent inline in the WS payload but never written to disk,
+   *  so /cases/{caseId} would 404 — DebateTheatre renders the chart panel
+   *  from this prop instead of fetching. Null for prepared / demo runs. */
+  inlineCase: PatientCase | null;
   // Playback control — when mode === 'step', incoming events are queued
   // instead of dispatched. The user advances one event at a time via
   // `advance()`. Switching back to auto flushes the queue.
@@ -72,6 +77,7 @@ export function useDebate(): UseDebateResult {
   // long-lived event handlers (WS message, demo timer).
   const [playbackMode, setPlaybackModeState] = useState<PlaybackMode>('auto');
   const [pendingEvents, setPendingEvents] = useState<DebateEvent[]>([]);
+  const [inlineCase, setInlineCase] = useState<PatientCase | null>(null);
   const playbackModeRef = useRef<PlaybackMode>('auto');
   // Sync the ref outside render so long-lived event handlers (WS message,
   // demo timer) can read the current mode via closure-safe ref access.
@@ -198,10 +204,12 @@ export function useDebate(): UseDebateResult {
   };
 
   const start = (caseId: string, maxRounds = 4) => {
+    setInlineCase(null);
     openSocket(caseId, { action: 'start_debate', case_id: caseId, max_rounds: maxRounds });
   };
 
   const startWithCase = (patientCase: PatientCase, maxRounds = 4) => {
+    setInlineCase(patientCase);
     openSocket(patientCase.case_id, { action: 'start_debate', case: patientCase, max_rounds: maxRounds });
   };
 
@@ -213,6 +221,7 @@ export function useDebate(): UseDebateResult {
     socketRef.current = null;
     demoCancelRef.current?.();
     setPendingEvents([]);
+    setInlineCase(null);
 
     const seq = DEMO_SEQUENCES[variant];
     const caseId = (seq[0]?.[1] as { case_id?: string })?.case_id ?? `demo-${variant}`;
@@ -238,6 +247,7 @@ export function useDebate(): UseDebateResult {
     demoCancelRef.current = null;
     clearStuckTimer();
     setPendingEvents([]);
+    setInlineCase(null);
     dispatch({ type: 'reset' });
   };
 
@@ -247,6 +257,7 @@ export function useDebate(): UseDebateResult {
     startWithCase,
     playDemo,
     cancel,
+    inlineCase,
     playbackMode,
     pendingCount: pendingEvents.length,
     setPlaybackMode,

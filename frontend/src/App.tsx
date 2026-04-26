@@ -15,6 +15,7 @@ export default function App() {
     startWithCase,
     playDemo,
     cancel,
+    inlineCase,
     playbackMode,
     pendingCount,
     setPlaybackMode,
@@ -51,6 +52,7 @@ export default function App() {
     <>
       <DebateTheatre
         state={state}
+        inlineCase={inlineCase}
         playbackMode={playbackMode}
         onReset={() => {
           cancel();

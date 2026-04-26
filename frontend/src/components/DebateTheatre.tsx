@@ -16,9 +16,13 @@ interface DebateTheatreProps {
    *  whether to auto-fade after a quiet interval (auto mode) or hold
    *  until the user advances (step mode). */
   playbackMode?: 'auto' | 'step';
+  /** Set when the debate was started via the patient-intake form. The
+   *  case JSON exists only in the WS payload, so /cases/{caseId} would
+   *  404 — we use this directly instead of fetching. */
+  inlineCase?: PatientCase | null;
 }
 
-export function DebateTheatre({ state, onReset, playbackMode }: DebateTheatreProps) {
+export function DebateTheatre({ state, onReset, playbackMode, inlineCase }: DebateTheatreProps) {
   const [patientCase, setPatientCase] = useState<PatientCase | null>(null);
   const [caseErr, setCaseErr] = useState<string | null>(null);
   const [caseCollapsed, setCaseCollapsed] = useState(false);
@@ -32,6 +36,15 @@ export function DebateTheatre({ state, onReset, playbackMode }: DebateTheatrePro
     if (!state.caseId) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setPatientCase(null);
+      setCaseErr(null);
+      return;
+    }
+    // Form-submitted debates ship the case JSON inline through useDebate.
+    // The case is never written to disk, so /cases/{caseId} would 404 —
+    // skip the fetch and render the chart panel directly from the prop.
+    if (inlineCase && inlineCase.case_id === state.caseId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPatientCase(inlineCase);
       setCaseErr(null);
       return;
     }
@@ -50,7 +63,7 @@ export function DebateTheatre({ state, onReset, playbackMode }: DebateTheatrePro
     return () => {
       cancelled = true;
     };
-  }, [state.caseId]);
+  }, [state.caseId, inlineCase]);
 
   const differential = useMemo<DifferentialEntry[]>(() => deriveDifferential(state), [state]);
   const activeUtterance = useMemo(
