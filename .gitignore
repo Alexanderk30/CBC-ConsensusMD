@@ -22,8 +22,12 @@ dist/
 # Runtime artifacts
 cases/runs/
 *.log
+<<<<<<< HEAD
 
 # Frontend build + deps
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
+=======
+CLAUDE.md
+>>>>>>> 9b16f30 (update gitignore)
