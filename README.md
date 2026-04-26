@@ -14,6 +14,7 @@ diagnostic tool.**
 
 > **Live demo:** https://cbc-lazarus-production.up.railway.app/
 > **Judges:** see [JUDGES.md](./JUDGES.md) for a 60-second tour.
+> **AI use disclosure:** see [CLAUDE_IMPLEMENTATION.md](./CLAUDE_IMPLEMENTATION.md) for an honest account of how Claude was used both inside the product (as the antagonist and consensus models) and during the build (Claude Code as the implementation collaborator).
 
 ---
 

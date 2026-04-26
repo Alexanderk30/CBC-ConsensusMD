@@ -81,6 +81,16 @@ uvicorn backend.main:app --reload --port 8000
 cd frontend && npm install && npm run dev
 ```
 
+## How Claude was used
+
+ConsensusMD uses Claude in two distinct ways: as a load-bearing
+component of the product (Opus 4.7 as antagonist + consensus, Sonnet
+4.6 as eliminative specialist) and as the implementation collaborator
+during the build (Claude Code with Opus 4.7). For an honest account
+of what was AI-driven and what was developer-driven —
+including what Claude did *not* do — see
+[CLAUDE_IMPLEMENTATION.md](./CLAUDE_IMPLEMENTATION.md).
+
 ## What this is not
 
 - Not a medical device.
